@@ -21,7 +21,7 @@ public class AddArtist implements ActionListener {
 	public AddArtist() {
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(200, 400);
+		frame.setSize(300, 300);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		
@@ -39,14 +39,14 @@ public class AddArtist implements ActionListener {
 		JLabel label4 = new JLabel("Occupation:");
 		JLabel label5 = new JLabel("Biographical Notes:");
 		
-		JPanel centerPanel = new JPanel(new GridLayout(7,1));
+		JPanel centerPanel = new JPanel(new GridLayout(5,1));
 		centerPanel.add(name);
 		centerPanel.add(culture);
 		centerPanel.add(gender);
 		centerPanel.add(occupation);
 		centerPanel.add(notes);
 		
-		JPanel westPanel = new JPanel(new GridLayout(7,1));
+		JPanel westPanel = new JPanel(new GridLayout(5,1));
 		westPanel.add(label1);
 		westPanel.add(label2);
 		westPanel.add(label3);
