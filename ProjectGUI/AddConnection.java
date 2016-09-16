@@ -2,6 +2,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,7 +24,7 @@ public class AddConnection implements ActionListener {
 	public AddConnection() {
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(200, 400);
+		frame.setSize(300, 400);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		
@@ -45,21 +46,23 @@ public class AddConnection implements ActionListener {
 		JLabel label6 = new JLabel("Social Notes:");
 		JLabel label7 = new JLabel("Bibliography:");
 		
-		JPanel centerPanel = new JPanel(new FlowLayout());
-		centerPanel.add(label1);
+		JPanel centerPanel = new JPanel(new GridLayout(7,1));
 		centerPanel.add(baseName);
-		centerPanel.add(label2);
 		centerPanel.add(otherName);
-		centerPanel.add(label3);
 		centerPanel.add(date);
-		centerPanel.add(label4);
 		centerPanel.add(type);
-		centerPanel.add(label5);
 		centerPanel.add(location);
-		centerPanel.add(label6);
 		centerPanel.add(socialNotes);
-		centerPanel.add(label7);
 		centerPanel.add(bib);
+		
+		JPanel westPanel = new JPanel(new GridLayout(7,1));
+		westPanel.add(label1);
+		westPanel.add(label2);
+		westPanel.add(label3);
+		westPanel.add(label4);
+		westPanel.add(label5);
+		westPanel.add(label6);
+		westPanel.add(label7);
 		
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(reset);
@@ -67,7 +70,7 @@ public class AddConnection implements ActionListener {
 		
 		frame.add(centerPanel,BorderLayout.CENTER);
 		frame.add(southPanel, BorderLayout.SOUTH);
-		
+		frame.add(westPanel, BorderLayout.WEST);
 		
 		reset.addActionListener(this);
 		search.addActionListener(this);

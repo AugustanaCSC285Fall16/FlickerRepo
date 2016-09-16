@@ -46,8 +46,7 @@ public class HomeScreen implements ActionListener {
 		northPanel.add(artists);
 		northPanel.add(connections);
 
-		JPanel centerPanel = new JPanel(new BorderLayout()); // curently does
-																// nothing
+		JPanel centerPanel = new JPanel(new BorderLayout()); // currently does nothing. this is where the table goes
 
 		bigPanel = new JPanel(new BorderLayout());
 		bigPanel.add(northPanel, BorderLayout.NORTH);
@@ -67,9 +66,7 @@ public class HomeScreen implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == search) {
 			Search search = new Search();
-
-			System.out.println("hi");
-
+			
 			JPanel southPanel = new JPanel(new GridLayout(1, 3));
 			JButton clear = new JButton("Clear");
 			JButton edit = new JButton("Edit");
@@ -82,7 +79,6 @@ public class HomeScreen implements ActionListener {
 			bigPanel.add(southPanel, BorderLayout.SOUTH);
 			bigPanel.revalidate();
 
-			System.out.println("bye");
 		} else if (event.getSource() == add) {
 			Object[] options = { "Add Artist", "Add Connection" };
 			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",

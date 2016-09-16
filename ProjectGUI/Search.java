@@ -1,6 +1,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -22,7 +23,7 @@ public class Search implements ActionListener {
 	public Search() {
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(200, 400);
+		frame.setSize(200, 300);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		
@@ -44,21 +45,24 @@ public class Search implements ActionListener {
 		JLabel label6 = new JLabel("Occupation:");
 		JLabel label7 = new JLabel("Location:");
 		
-		JPanel centerPanel = new JPanel(new FlowLayout());
-		centerPanel.add(label1);
+		JPanel centerPanel = new JPanel(new GridLayout(7,1));
 		centerPanel.add(name);
-		centerPanel.add(label2);
 		centerPanel.add(date);
-		centerPanel.add(label3);
 		centerPanel.add(type);
-		centerPanel.add(label4);
 		centerPanel.add(culture);
-		centerPanel.add(label5);
 		centerPanel.add(gender);
-		centerPanel.add(label6);
 		centerPanel.add(occupation);
-		centerPanel.add(label7);
 		centerPanel.add(location);
+		
+		JPanel westPanel = new JPanel(new GridLayout(7,1));
+		westPanel.add(label1);
+		westPanel.add(label2);
+		westPanel.add(label3);
+		westPanel.add(label4);
+		westPanel.add(label5);
+		westPanel.add(label6);
+		westPanel.add(label7);
+		
 		
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(reset);
@@ -66,6 +70,7 @@ public class Search implements ActionListener {
 		
 		frame.add(centerPanel,BorderLayout.CENTER);
 		frame.add(southPanel, BorderLayout.SOUTH);
+		frame.add(westPanel, BorderLayout.WEST);
 		
 		
 		reset.addActionListener(this);
