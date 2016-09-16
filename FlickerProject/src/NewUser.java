@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -64,7 +65,12 @@ public class NewUser implements ActionListener {
 			int option=JOptionPane.showConfirmDialog(frame,"Is this correct?");
 			if(option==0){
 				frame.dispose();
-				HomeScreen homeScreen = new HomeScreen();
+				try {
+					HomeScreen homeScreen = new HomeScreen();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} else if (event.getSource() == cancel){
 			frame.dispose();
