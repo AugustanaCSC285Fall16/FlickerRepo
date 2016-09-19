@@ -57,6 +57,7 @@ public class NewUser implements ActionListener {
 		cancel.addActionListener(this);
 
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 
 	}
 

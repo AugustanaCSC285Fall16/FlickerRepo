@@ -18,8 +18,8 @@ public class AddConnection implements ActionListener {
 	private JTextField location;
 	private JTextField socialNotes;
 	private JTextField bib;
-	private JButton reset;
-	private JButton search;
+	private JButton add;
+	private JButton cancel;
 
 	public AddConnection() {
 		frame = new JFrame("Search");
@@ -35,8 +35,8 @@ public class AddConnection implements ActionListener {
 		location = new JTextField(15);
 		socialNotes = new JTextField(15);
 		bib = new JTextField(15);
-		reset = new JButton("Reset");
-		search = new JButton("Search");
+		add = new JButton("Add");
+		cancel = new JButton("Cancel");
 		
 		JLabel label1 = new JLabel("Base Name:");
 		JLabel label2 = new JLabel("Other Name:");
@@ -65,25 +65,26 @@ public class AddConnection implements ActionListener {
 		westPanel.add(label7);
 		
 		JPanel southPanel = new JPanel(new FlowLayout());
-		southPanel.add(reset);
-		southPanel.add(search);
+		southPanel.add(add);
+		southPanel.add(cancel);
 		
 		frame.add(centerPanel,BorderLayout.CENTER);
 		frame.add(southPanel, BorderLayout.SOUTH);
 		frame.add(westPanel, BorderLayout.WEST);
 		
-		reset.addActionListener(this);
-		search.addActionListener(this);
+		add.addActionListener(this);
+		cancel.addActionListener(this);
 
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		if(event.getSource() == reset){
+		if(event.getSource() == add){
 			//search things
 			frame.dispose();
-		} else if (event.getSource() == search){
+		} else if (event.getSource() == cancel){
 			//reset fields
 			frame.dispose();
 		}

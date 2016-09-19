@@ -1,3 +1,10 @@
+/*
+ * Creates the home screen for the program. From here,
+ * a user can navigate to other screens to access the 
+ * data stored in a file. The data is then displayed
+ * on the larger part of the screen for the user to
+ * browse through.
+ */
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -61,6 +68,7 @@ public class HomeScreen implements ActionListener {
 		connections.addActionListener(this);
 
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 	}
 	/*
 	 * Creates Table

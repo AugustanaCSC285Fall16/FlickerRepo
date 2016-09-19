@@ -10,10 +10,10 @@ import javax.swing.*;
 public class AddArtist implements ActionListener {
 
 	private JFrame frame;
-	private JTextField name;
-	private JTextField culture;
-	private JTextField gender;
-	private JTextField occupation;
+	private JComboBox<String> name;
+	private JComboBox<String> culture;
+	private JComboBox<String> gender;
+	private JComboBox<String> occupation;
 	private JTextField notes;
 	private JButton add;
 	private JButton cancel;
@@ -25,10 +25,10 @@ public class AddArtist implements ActionListener {
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		
-		name = new JTextField(15);
-		culture = new JTextField(15);
-		gender = new JTextField(15);
-		occupation = new JTextField(15);
+		name = new JComboBox<>(new String[] {"White", "Black"});
+		culture = new JComboBox<>(new String[] {"White", "Black"});
+		gender = new JComboBox<>(new String[] {"White", "Black"});
+		occupation = new JComboBox<>(new String[] {"White", "Black"});
 		notes = new JTextField(15);
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
@@ -66,6 +66,7 @@ public class AddArtist implements ActionListener {
 		cancel.addActionListener(this);
 
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 
 	}
 

@@ -77,6 +77,7 @@ public class Search implements ActionListener {
 		search.addActionListener(this);
 
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 
 	}
 
@@ -88,6 +89,13 @@ public class Search implements ActionListener {
 			
 		} else if (event.getSource() == reset){
 			//reset fields
+			name.setText("");
+			date.setText("");
+			type.setText("");
+			culture.setText("");
+			gender.setText("");
+			occupation.setText("");
+			location.setText("");
 		}
 	}
 

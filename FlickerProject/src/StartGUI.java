@@ -45,6 +45,7 @@ public class StartGUI implements ActionListener{
 		submit.addActionListener(this);
 		
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 	}
 	
 	
