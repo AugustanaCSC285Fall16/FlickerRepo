@@ -1,14 +1,9 @@
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
+
 
 public class StartGUI implements ActionListener{
 	private JFrame frame;
@@ -58,6 +53,13 @@ public class StartGUI implements ActionListener{
 			frame.dispose();
 			NewUser newUser = new NewUser();
 			
+		} else {
+			try {
+				HomeScreen launchProgram = new HomeScreen();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

@@ -1,24 +1,9 @@
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Vector;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import com.opencsv.CSVReader;
 
@@ -31,6 +16,7 @@ public class HomeScreen implements ActionListener {
 	private JButton artists;
 	private JButton connections;
 	private JPanel bigPanel;
+	private JTable tableDisplay;
 
 	public HomeScreen() throws IOException {
 		frame = new JFrame();
@@ -56,12 +42,9 @@ public class HomeScreen implements ActionListener {
 
 		// creates centerPanel that displays the table of data
 		JPanel centerPanel = new JPanel(new BorderLayout()); 
-		JTable table = createTable();
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-		table.setDefaultRenderer(Object.class, centerRenderer);
-		JScrollPane scrollPane = new JScrollPane(table);
-	    table.setFillsViewportHeight(true);
+		tableDisplay = displayTable();
+		JScrollPane scrollPane = new JScrollPane(tableDisplay);
+		tableDisplay.setFillsViewportHeight(true);
 	    centerPanel.add(scrollPane);
 		
 		bigPanel = new JPanel(new BorderLayout());
@@ -82,27 +65,29 @@ public class HomeScreen implements ActionListener {
 	/*
 	 * Creates Table
 	 */
-	public static JTable createTable() throws IOException {
+	public JTable displayTable() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader("Edges.csv"));
 	     String [] nextLine = reader.readNext();
-	     Vector columnNames = new Vector(nextLine.length,10);
+	     Vector<String> columnNames = new Vector<String>(nextLine.length,10);
 	     if((nextLine) != null) {
 	    	 for(int i = 0; i < nextLine.length; i++) {
 	    		 columnNames.add(nextLine[i]);
 	    	 }
 	     }
-	     Vector data = new Vector(10,10);
+	     Vector<Vector<String>> data = new Vector<Vector<String>>(10,10);
 	     while ((nextLine = reader.readNext()) != null) {
 	        // nextLine[] is an array of values from the line
-	        Vector row = new Vector(nextLine.length,10);
+	        Vector<String> row = new Vector<String>(nextLine.length,10);
 	        for(int i = 0; i < nextLine.length; i++) {
 	        	row.add(nextLine[i]);
 	        }
 	        data.add(row);
 	     }
-	     
-	     JTable table = new JTable(data, columnNames);
-	     return table;
+	    JTable table = new JTable(data, columnNames);
+	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		table.setDefaultRenderer(Object.class, centerRenderer);
+	    return table;
 	}
 
 
