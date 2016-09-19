@@ -21,7 +21,7 @@ public class HomeScreen implements ActionListener {
 	private JButton edit;
 	private JButton artists;
 	private JButton connections;
-	 JPanel bigPanel;
+	private JPanel bigPanel;
 	private JTable tableDisplay;
 
 	public HomeScreen() throws IOException {
@@ -50,6 +50,8 @@ public class HomeScreen implements ActionListener {
 		// creates centerPanel that displays the table of data
 		JPanel centerPanel = new JPanel(new BorderLayout()); 
 		tableDisplay = displayTable();
+		//ArtistTableModel tableModel = new ArtistTableModel("Edges.csv");
+		//tableDisplay = new JTable(tableModel.getData(),tableModel.getColumns());
 		JScrollPane scrollPane = new JScrollPane(tableDisplay);
 		tableDisplay.setFillsViewportHeight(true);
 	    centerPanel.add(scrollPane);
@@ -82,10 +84,10 @@ public class HomeScreen implements ActionListener {
 	    		 columnNames.add(nextLine[i]);
 	    	 }
 	     }
-	     Vector<Vector<String>> data = new Vector<Vector<String>>(10,10);
+	     Vector<Object> data = new Vector<Object>(10,10);
 	     while ((nextLine = reader.readNext()) != null) {
 	        // nextLine[] is an array of values from the line
-	        Vector<String> row = new Vector<String>(nextLine.length,10);
+	        Vector<Object> row = new Vector<Object>(nextLine.length,10);
 	        for(int i = 0; i < nextLine.length; i++) {
 	        	row.add(nextLine[i]);
 	        }
