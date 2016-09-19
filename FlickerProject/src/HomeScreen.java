@@ -104,6 +104,8 @@ public class HomeScreen implements ActionListener {
 		if (source == search) {
 			Search search = new Search();
 			
+			//wait here
+			
 			JPanel southPanel = new JPanel(new GridLayout(1, 3));
 			JButton clear = new JButton("Clear");
 			JButton edit = new JButton("Edit");

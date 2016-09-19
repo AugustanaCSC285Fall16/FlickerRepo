@@ -19,8 +19,11 @@ public class Search implements ActionListener {
 	private JTextField location;
 	private JButton reset;
 	private JButton search;
+	private boolean inUse;
 
 	public Search() {
+		inUse = true;
+		
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(200, 300);
@@ -80,13 +83,17 @@ public class Search implements ActionListener {
 		frame.setLocationRelativeTo(null);
 
 	}
+	
+	public boolean inUse(){
+		return inUse;
+	}
 
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource() == search){
 			//search things
+			inUse = false;
 			frame.dispose();
-			
-			
+
 		} else if (event.getSource() == reset){
 			//reset fields
 			name.setText("");

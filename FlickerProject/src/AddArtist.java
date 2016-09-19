@@ -15,6 +15,12 @@ public class AddArtist implements ActionListener {
 	private JComboBox<String> gender;
 	private JComboBox<String> occupation;
 	private JTextField notes;
+	private JPanel namePanel;
+	private JPanel culturePanel;
+	private JPanel genderPanel;
+	private JPanel occupationPanel;
+	private JPanel notesPanel;
+
 	private JButton add;
 	private JButton cancel;
 
@@ -25,11 +31,11 @@ public class AddArtist implements ActionListener {
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		
-		name = new JComboBox<>(new String[] {"White", "Black"});
-		culture = new JComboBox<>(new String[] {"White", "Black"});
-		gender = new JComboBox<>(new String[] {"White", "Black"});
-		occupation = new JComboBox<>(new String[] {"White", "Black"});
-		notes = new JTextField(15);
+		name = new JComboBox<>(new String[] {"","White", "Black"});
+		culture = new JComboBox<>(new String[] {"","White", "Black"});
+		gender = new JComboBox<>(new String[] {"","White", "Black"});
+		occupation = new JComboBox<>(new String[] {"","White", "Black"});
+		notes = new JTextField(10);
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
 		
@@ -37,14 +43,26 @@ public class AddArtist implements ActionListener {
 		JLabel label2 = new JLabel("Cultural ID:");
 		JLabel label3 = new JLabel("Gender:");
 		JLabel label4 = new JLabel("Occupation:");
-		JLabel label5 = new JLabel("Biographical Notes:");
+		JLabel label5 = new JLabel("Biography:");
+		
+		namePanel = new JPanel(new FlowLayout());
+		culturePanel = new JPanel(new FlowLayout());
+		genderPanel = new JPanel(new FlowLayout());
+		occupationPanel = new JPanel(new FlowLayout());
+		notesPanel = new JPanel(new FlowLayout());
+		
+		namePanel.add(name);
+		culturePanel.add(culture);
+		genderPanel.add(gender);
+		occupationPanel.add(occupation);
+		notesPanel.add(notes);
 		
 		JPanel centerPanel = new JPanel(new GridLayout(5,1));
-		centerPanel.add(name);
-		centerPanel.add(culture);
-		centerPanel.add(gender);
-		centerPanel.add(occupation);
-		centerPanel.add(notes);
+		centerPanel.add(namePanel);
+		centerPanel.add(culturePanel);
+		centerPanel.add(genderPanel);
+		centerPanel.add(occupationPanel);
+		centerPanel.add(notesPanel);
 		
 		JPanel westPanel = new JPanel(new GridLayout(5,1));
 		westPanel.add(label1);
