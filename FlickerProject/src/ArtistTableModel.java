@@ -2,11 +2,12 @@ import java.awt.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
 
 import com.opencsv.CSVReader;
 
-public class Table {
+public class ArtistTableModel implements TableModel{
 	// data fields
 	//private static final int VECTOR_SIZE = 10;
 	private Vector<String> data;
@@ -15,7 +16,7 @@ public class Table {
 	private CSVReader reader;
 	
 	// constructor
-	public Table(String file) throws IOException {
+	public ArtistTableModel(String file) throws IOException {
 		reader = new CSVReader(new FileReader(file));
 	    columns = createColumnNamesVector(reader);
 	    data = createDataVector(reader);
@@ -53,5 +54,59 @@ public class Table {
 	    	 }
 	     }
 	     return columns;
+	}
+
+	@Override
+	public void addTableModelListener(TableModelListener arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Class<?> getColumnClass(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getColumnCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getColumnName(int arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getRowCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Object getValueAt(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isCellEditable(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void removeTableModelListener(TableModelListener arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setValueAt(Object arg0, int arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
 	}
 }

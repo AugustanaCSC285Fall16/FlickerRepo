@@ -52,10 +52,10 @@ public class StartGUI implements ActionListener{
 		if(event.getSource() == add){
 			frame.dispose();
 			NewUser newUser = new NewUser();
-			
 		} else {
 			try {
 				HomeScreen launchProgram = new HomeScreen();
+				frame.dispose();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

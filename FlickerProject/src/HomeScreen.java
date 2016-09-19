@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
-
 import com.opencsv.CSVReader;
 
 public class HomeScreen implements ActionListener {
@@ -15,7 +14,7 @@ public class HomeScreen implements ActionListener {
 	private JButton edit;
 	private JButton artists;
 	private JButton connections;
-	private JPanel bigPanel;
+	 JPanel bigPanel;
 	private JTable tableDisplay;
 
 	public HomeScreen() throws IOException {
@@ -30,6 +29,7 @@ public class HomeScreen implements ActionListener {
 		edit = new JButton("Edit");
 		artists = new JButton("Artists");
 		connections = new JButton("Connections");
+		artists.setEnabled(false);
 
 		JPanel westPanel = new JPanel(new GridLayout(3, 1));
 		westPanel.add(search);
@@ -65,7 +65,7 @@ public class HomeScreen implements ActionListener {
 	/*
 	 * Creates Table
 	 */
-	public JTable displayTable() throws IOException {
+	private JTable displayTable() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader("Edges.csv"));
 	     String [] nextLine = reader.readNext();
 	     Vector<String> columnNames = new Vector<String>(nextLine.length,10);
@@ -92,7 +92,8 @@ public class HomeScreen implements ActionListener {
 
 
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == search) {
+		Object source = event.getSource();
+		if (source == search) {
 			Search search = new Search();
 			
 			JPanel southPanel = new JPanel(new GridLayout(1, 3));
@@ -107,7 +108,7 @@ public class HomeScreen implements ActionListener {
 			bigPanel.add(southPanel, BorderLayout.SOUTH);
 			bigPanel.revalidate();
 
-		} else if (event.getSource() == add) {
+		} else if (source == add) {
 			Object[] options = { "Add Artist", "Add Connection" };
 			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
@@ -118,7 +119,7 @@ public class HomeScreen implements ActionListener {
 				connections.setPressedIcon(new ImageIcon());
 				AddConnection newConnection = new AddConnection();
 			}
-		} else if (event.getSource() == edit) {
+		} else if (source == edit) {
 
 			JPanel southPanel = new JPanel(new GridLayout(1, 2));
 			JButton edit = new JButton("Edit");
@@ -130,6 +131,14 @@ public class HomeScreen implements ActionListener {
 			bigPanel.add(southPanel, BorderLayout.SOUTH);
 			bigPanel.revalidate();
 
+		} else if(source == connections) {
+			connections.setEnabled(false);
+			artists.setEnabled(true);
+			bigPanel.revalidate();
+		} else {
+			artists.setEnabled(false);
+			connections.setEnabled(true);
+			bigPanel.revalidate();
 		}
 	}
 }
