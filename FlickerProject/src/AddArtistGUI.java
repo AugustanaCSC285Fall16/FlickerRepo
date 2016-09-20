@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -101,9 +103,28 @@ public class AddArtistGUI implements ActionListener {
 		return southPanel;
 	}
 
+	private ArrayList<String> saveNewPersonData(){
+		ArrayList<String> newPersonData = new ArrayList<String>();
+		newPersonData.add((String)name.getSelectedItem().toString());
+		newPersonData.add((String)culture.getSelectedItem().toString());
+		newPersonData.add((String)gender.getSelectedItem().toString());
+		newPersonData.add((String)occupation.getSelectedItem().toString());
+		newPersonData.add(notes.getText());
+		return newPersonData;
+		
+	}
+	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
-			// search things
+			// add things
+			ArrayList<String> personData = saveNewPersonData();
+			PersonList personList = new PersonList(personData);
+			try {
+				personList.writePersonData();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			// Send this arraylist to filewriter to append to end of csv
 			frame.dispose();
 		} else if (event.getSource() == cancel) {
 			// reset fields

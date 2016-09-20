@@ -31,10 +31,11 @@ public class HomeScreenGUI implements ActionListener {
 		artists = new JButton("Artists");
 		connections = new JButton("Connections");
 		artists.setEnabled(false);
+		tableDisplay = displayTable("DataFiles/PersonData.csv");
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(500, 400);
+		frame.setSize(1000, 1000);
 		frame.setTitle("Home");
 		frame.setLayout(new BorderLayout());
 		frame.add(createWestPanel(), BorderLayout.WEST);
@@ -52,8 +53,8 @@ public class HomeScreenGUI implements ActionListener {
 	/*
 	 * Creates Table
 	 */
-	private JTable displayTable() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader("Edges.csv"));
+	private JTable displayTable(String fileName) throws IOException {
+		CSVReader reader = new CSVReader(new FileReader(fileName));
 	     String [] nextLine = reader.readNext();
 	     Vector<String> columnNames = new Vector<String>(nextLine.length,10);
 	     if((nextLine) != null) {
@@ -94,11 +95,9 @@ public class HomeScreenGUI implements ActionListener {
 		return northPanel;
 	}
 
-	
+		// creates tablePanel that displays the table of data
 	private JPanel createTablePanel() throws IOException{
-		// creates centerPanel that displays the table of data
 		JPanel tablePanel = new JPanel(new BorderLayout()); 
-		tableDisplay = displayTable();
 		//ArtistTableModel tableModel = new ArtistTableModel("Edges.csv");
 		//tableDisplay = new JTable(tableModel.getData(),tableModel.getColumns());
 		JScrollPane scrollPane = new JScrollPane(tableDisplay);
@@ -160,10 +159,22 @@ public class HomeScreenGUI implements ActionListener {
 		} else if(source == connections) {
 			connections.setEnabled(false);
 			artists.setEnabled(true);
+			try {
+				tableDisplay = displayTable("DataFiles/ConnectionData.csv");
+				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			centerPanel.revalidate();
 		} else {
 			artists.setEnabled(false);
 			connections.setEnabled(true);
+			try {
+				tableDisplay = displayTable("DataFiles/PersonData.csv");
+				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			centerPanel.revalidate();
 		}
 	}

@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -94,9 +95,22 @@ public class AddConnectionGUI implements ActionListener {
 		return southPanel;
 	}
 
+//	private ArrayList<String> saveNewConnectionData(){
+//		ArrayList<String> newPersonData = new ArrayList<String>();
+//		newPersonData.add((String)name.getSelectedItem().toString());
+//		newPersonData.add((String)culture.getSelectedItem().toString());
+//		newPersonData.add((String)gender.getSelectedItem().toString());
+//		newPersonData.add((String)occupation.getSelectedItem().toString());
+//		newPersonData.add(notes.getText());
+//		return newPersonData;
+//		
+	//}
+	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
 			// search things
+			//ArrayList<String> ConnectionData = saveNewConnectionData();
+			// send to filewriter to get appended to csv
 			frame.dispose();
 		} else if (event.getSource() == cancel) {
 			// reset fields

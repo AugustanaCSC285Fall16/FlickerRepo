@@ -57,7 +57,7 @@ public class SearchGUI implements ActionListener {
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
 	private JPanel createCenterPanel() {
