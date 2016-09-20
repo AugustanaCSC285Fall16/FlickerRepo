@@ -23,6 +23,8 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton connections;
 	private JPanel centerPanel;
 	private JTable tableDisplay;
+	
+	private SearchGUI searchGUI;
 
 	public HomeScreenGUI() throws IOException {
 		search = new JButton("Search");
@@ -118,10 +120,10 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			SearchGUI searchGUI = new SearchGUI();
+			searchGUI = new SearchGUI(this);
 			
-			//wait here
-			
+		} else if(source == searchGUI.search) {
+
 			JPanel southPanel = new JPanel(new GridLayout(1, 3));
 			JButton clear = new JButton("Clear");
 			JButton edit = new JButton("Edit");
