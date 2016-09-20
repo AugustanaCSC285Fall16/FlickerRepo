@@ -27,11 +27,15 @@ public class AddArtistGUI implements ActionListener {
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
-	private JButton add;
+	JButton add;
 	private JButton cancel;
+	
+	HomeScreenGUI home;
 
-	public AddArtistGUI() {
+	public AddArtistGUI(HomeScreenGUI home) {
 
+		this.home=home;
+		
 		name = new JComboBox<>(new String[] { "", "White", "Black" });
 		culture = new JComboBox<>(new String[] { "", "White", "Black" });
 		gender = new JComboBox<>(new String[] { "", "White", "Black" });
@@ -102,8 +106,12 @@ public class AddArtistGUI implements ActionListener {
 		southPanel.add(cancel);
 		return southPanel;
 	}
+	
+	void makeVisible(){
+		frame.setVisible(true);
+	}
 
-	private ArrayList<String> saveNewPersonData(){
+	public ArrayList<String> saveNewPersonData(){
 		ArrayList<String> newPersonData = new ArrayList<String>();
 		newPersonData.add((String)name.getSelectedItem().toString());
 		newPersonData.add((String)culture.getSelectedItem().toString());
@@ -116,7 +124,6 @@ public class AddArtistGUI implements ActionListener {
 	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
-			// add things
 			ArrayList<String> personData = saveNewPersonData();
 			PersonList personList = new PersonList(personData);
 			try {
@@ -124,8 +131,8 @@ public class AddArtistGUI implements ActionListener {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			// Send this arraylist to filewriter to append to end of csv
 			frame.dispose();
+			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();

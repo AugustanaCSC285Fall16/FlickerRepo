@@ -14,8 +14,7 @@ public class SearchGUI implements ActionListener {
 	private JTextField occupation;
 	private JTextField location;
 	private JButton reset;
-	private JButton search;
-	private boolean inUse;
+	JButton search;
 	private JLabel nameLabel;
 	private JLabel dateLabel;
 	private JLabel typeLabel;
@@ -23,8 +22,13 @@ public class SearchGUI implements ActionListener {
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel locationLabel;
+	
+	HomeScreenGUI home;
 
-	public SearchGUI() {
+	public SearchGUI(HomeScreenGUI home) {
+		
+		this.home=home;
+		
 		name = new JTextField(15);
 		date = new JTextField(15);
 		type = new JTextField(15);
@@ -34,7 +38,6 @@ public class SearchGUI implements ActionListener {
 		location = new JTextField(15);
 		reset = new JButton("Reset");
 		search = new JButton("Search");
-		inUse = true;
 		nameLabel = new JLabel("Name:");
 		dateLabel = new JLabel("Date:");
 		typeLabel = new JLabel("Type:");
@@ -55,7 +58,6 @@ public class SearchGUI implements ActionListener {
 		reset.addActionListener(this);
 		search.addActionListener(this);
 
-		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
@@ -91,15 +93,15 @@ public class SearchGUI implements ActionListener {
 		return southPanel;
 	}
 
-	public boolean inUse() {
-		return inUse;
+	void makeVisible(){
+		frame.setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == search) {
 			// search things
-			inUse = false;
 			frame.dispose();
+			home.actionPerformed(event);
 
 		} else if (event.getSource() == reset) {
 			// reset fields

@@ -1,9 +1,6 @@
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -25,10 +22,15 @@ public class AddConnectionGUI implements ActionListener {
 	private JLabel locationLabel;
 	private JLabel socialLabel;
 	private JLabel bibLabel;
-	private JButton add;
+	JButton add;
 	private JButton cancel;
+	
+	HomeScreenGUI home;
 
-	public AddConnectionGUI() {
+	public AddConnectionGUI(HomeScreenGUI home) {
+		
+		this.home = home;
+		
 		baseName = new JTextField(15);
 		otherName = new JTextField(15);
 		date = new JTextField(15);
@@ -59,7 +61,6 @@ public class AddConnectionGUI implements ActionListener {
 		add.addActionListener(this);
 		cancel.addActionListener(this);
 
-		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
@@ -94,17 +95,22 @@ public class AddConnectionGUI implements ActionListener {
 		southPanel.add(cancel);
 		return southPanel;
 	}
+	void makeVisible(){
+		frame.setVisible(true);
+	}
 
 //	private ArrayList<String> saveNewConnectionData(){
-//		ArrayList<String> newPersonData = new ArrayList<String>();
-//		newPersonData.add((String)name.getSelectedItem().toString());
-//		newPersonData.add((String)culture.getSelectedItem().toString());
-//		newPersonData.add((String)gender.getSelectedItem().toString());
-//		newPersonData.add((String)occupation.getSelectedItem().toString());
-//		newPersonData.add(notes.getText());
-//		return newPersonData;
+//		ArrayList<String> newConnectionData = new ArrayList<String>();
+//		newConnectionData.add((String)baseName.getSelectedItem().toString());
+//		newConnectionData.add((String)targetName.getSelectedItem().toString());
+//		newConnectionData.add((String)date.getSelectedItem().toString());
+//		newConnectionData.add((String)type.getSelectedItem().toString());
+//		newConnectionData.add((String)location.getSelectedItem().toString());
+//		newConnectionData.add(socialNotes.getText());
+//		newConnectionData.add(bib.getText());
+//		return newConnectionData;
 //		
-	//}
+//	}
 	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
@@ -112,6 +118,7 @@ public class AddConnectionGUI implements ActionListener {
 			//ArrayList<String> ConnectionData = saveNewConnectionData();
 			// send to filewriter to get appended to csv
 			frame.dispose();
+			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();
