@@ -22,9 +22,12 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton artists;
 	private JButton connections;
 	private JPanel centerPanel;
+	private JPanel southPanel;
 	private JTable tableDisplay;
 	
 	private SearchGUI searchGUI;
+	private AddArtistGUI artistGUI;
+	private AddConnectionGUI connectionGUI;
 
 	public HomeScreenGUI() throws IOException {
 		search = new JButton("Search");
@@ -33,6 +36,12 @@ public class HomeScreenGUI implements ActionListener {
 		artists = new JButton("Artists");
 		connections = new JButton("Connections");
 		artists.setEnabled(false);
+		
+		searchGUI = new SearchGUI(this);
+		artistGUI = new AddArtistGUI(this);
+		connectionGUI = new AddConnectionGUI(this);
+		
+		southPanel = new JPanel();
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,11 +129,11 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			searchGUI = new SearchGUI(this);
-			
+			searchGUI.makeVisible();
 		} else if(source == searchGUI.search) {
+			southPanel.removeAll();
 
-			JPanel southPanel = new JPanel(new GridLayout(1, 3));
+			southPanel = new JPanel(new GridLayout(1, 3));
 			JButton clear = new JButton("Clear");
 			JButton edit = new JButton("Edit");
 			JButton export = new JButton("Export");
@@ -135,21 +144,26 @@ public class HomeScreenGUI implements ActionListener {
 
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();
-
 		} else if (source == add) {
 			Object[] options = { "Add Artist", "Add Connection" };
 			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 			if (val == 0) { // if artist
-				artists.setPressedIcon(new ImageIcon());
-				AddArtistGUI newArtist = new AddArtistGUI();
+				artistGUI.makeVisible();
 			} else if (val == 1) { // if connection
-				connections.setPressedIcon(new ImageIcon());
-				AddConnectionGUI newConnection = new AddConnectionGUI();
+				connectionGUI.makeVisible();
 			}
+		} else if (source == artistGUI.add){
+			System.out.println("successfully waited");
+			//waiting for user to click add in the artistGUI
+		} else if (source == connectionGUI.add){
+			System.out.println("successfully waited");
+			//waiting for user to click add in the connectionGUI
 		} else if (source == edit) {
+			
+			southPanel.removeAll();
 
-			JPanel southPanel = new JPanel(new GridLayout(1, 2));
+			southPanel = new JPanel(new GridLayout(1, 2));
 			JButton edit = new JButton("Edit");
 			JButton searchEdit = new JButton("Search for Edit");
 
@@ -163,7 +177,7 @@ public class HomeScreenGUI implements ActionListener {
 			connections.setEnabled(false);
 			artists.setEnabled(true);
 			centerPanel.revalidate();
-		} else {
+		} else if(source == artists){
 			artists.setEnabled(false);
 			connections.setEnabled(true);
 			centerPanel.revalidate();

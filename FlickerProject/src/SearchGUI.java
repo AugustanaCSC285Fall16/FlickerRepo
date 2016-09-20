@@ -58,7 +58,6 @@ public class SearchGUI implements ActionListener {
 		reset.addActionListener(this);
 		search.addActionListener(this);
 
-		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 
 	}
@@ -94,7 +93,9 @@ public class SearchGUI implements ActionListener {
 		return southPanel;
 	}
 
-
+	void makeVisible(){
+		frame.setVisible(true);
+	}
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == search) {

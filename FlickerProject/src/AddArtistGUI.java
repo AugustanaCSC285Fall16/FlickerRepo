@@ -25,11 +25,15 @@ public class AddArtistGUI implements ActionListener {
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
-	private JButton add;
+	JButton add;
 	private JButton cancel;
+	
+	HomeScreenGUI home;
 
-	public AddArtistGUI() {
+	public AddArtistGUI(HomeScreenGUI home) {
 
+		this.home=home;
+		
 		name = new JComboBox<>(new String[] { "", "White", "Black" });
 		culture = new JComboBox<>(new String[] { "", "White", "Black" });
 		gender = new JComboBox<>(new String[] { "", "White", "Black" });
@@ -100,11 +104,16 @@ public class AddArtistGUI implements ActionListener {
 		southPanel.add(cancel);
 		return southPanel;
 	}
+	
+	void makeVisible(){
+		frame.setVisible(true);
+	}
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
 			// search things
 			frame.dispose();
+			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();

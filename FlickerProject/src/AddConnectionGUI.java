@@ -24,10 +24,15 @@ public class AddConnectionGUI implements ActionListener {
 	private JLabel locationLabel;
 	private JLabel socialLabel;
 	private JLabel bibLabel;
-	private JButton add;
+	JButton add;
 	private JButton cancel;
+	
+	HomeScreenGUI home;
 
-	public AddConnectionGUI() {
+	public AddConnectionGUI(HomeScreenGUI home) {
+		
+		this.home = home;
+		
 		baseName = new JTextField(15);
 		otherName = new JTextField(15);
 		date = new JTextField(15);
@@ -58,7 +63,6 @@ public class AddConnectionGUI implements ActionListener {
 		add.addActionListener(this);
 		cancel.addActionListener(this);
 
-		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
@@ -93,11 +97,15 @@ public class AddConnectionGUI implements ActionListener {
 		southPanel.add(cancel);
 		return southPanel;
 	}
+	void makeVisible(){
+		frame.setVisible(true);
+	}
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
 			// search things
 			frame.dispose();
+			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();
