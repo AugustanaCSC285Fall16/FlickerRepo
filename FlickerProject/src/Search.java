@@ -84,14 +84,13 @@ public class Search implements ActionListener {
 
 	}
 	
-	public boolean inUse(){
-		return inUse;
+	public boolean inUse(boolean use){
+		return use;
 	}
 
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource() == search){
 			//search things
-			inUse = false;
 			frame.dispose();
 
 		} else if (event.getSource() == reset){

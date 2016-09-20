@@ -38,13 +38,13 @@ public class AddConnection implements ActionListener {
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
 		
-		JLabel label1 = new JLabel("Base Name:");
-		JLabel label2 = new JLabel("Other Name:");
-		JLabel label3 = new JLabel("Date:");
-		JLabel label4 = new JLabel("Type:");
-		JLabel label5 = new JLabel("Location:");
-		JLabel label6 = new JLabel("Social Notes:");
-		JLabel label7 = new JLabel("Bibliography:");
+		JLabel baseNameLabel = new JLabel("Base Name:");
+		JLabel otherNameLabel = new JLabel("Other Name:");
+		JLabel dateLabel = new JLabel("Date:");
+		JLabel typeLabel = new JLabel("Type:");
+		JLabel locationLabel = new JLabel("Location:");
+		JLabel noteLabel = new JLabel("Social Notes:");
+		JLabel biblioLabel = new JLabel("Bibliography:");
 		
 		JPanel centerPanel = new JPanel(new GridLayout(7,1));
 		centerPanel.add(baseName);
@@ -56,13 +56,13 @@ public class AddConnection implements ActionListener {
 		centerPanel.add(bib);
 		
 		JPanel westPanel = new JPanel(new GridLayout(7,1));
-		westPanel.add(label1);
-		westPanel.add(label2);
-		westPanel.add(label3);
-		westPanel.add(label4);
-		westPanel.add(label5);
-		westPanel.add(label6);
-		westPanel.add(label7);
+		westPanel.add(baseNameLabel);
+		westPanel.add(otherNameLabel);
+		westPanel.add(dateLabel);
+		westPanel.add(typeLabel);
+		westPanel.add(locationLabel);
+		westPanel.add(noteLabel);
+		westPanel.add(biblioLabel);
 		
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(add);

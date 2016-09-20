@@ -100,13 +100,14 @@ public class HomeScreen implements ActionListener {
 	    return table;
 	}
 
-
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
+		Object source1 = event.getSource();
 		if (source == search) {
-			Search search = new Search();
+			Search s1 = new Search();
 			
 			//wait here
+	
 			
 			JPanel southPanel = new JPanel(new GridLayout(1, 3));
 			JButton clear = new JButton("Clear");
