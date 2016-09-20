@@ -13,7 +13,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 import com.opencsv.CSVReader;
 
-public class HomeScreen implements ActionListener {
+public class HomeScreenGUI implements ActionListener {
 
 	private JFrame frame;
 	private JButton search;
@@ -21,16 +21,10 @@ public class HomeScreen implements ActionListener {
 	private JButton edit;
 	private JButton artists;
 	private JButton connections;
-	private JPanel bigPanel;
+	private JPanel centerPanel;
 	private JTable tableDisplay;
 
-	public HomeScreen() throws IOException {
-		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(500, 400);
-		frame.setTitle("Home");
-		frame.setLayout(new BorderLayout());
-
+	public HomeScreenGUI() throws IOException {
 		search = new JButton("Search");
 		add = new JButton("Add");
 		edit = new JButton("Edit");
@@ -38,30 +32,13 @@ public class HomeScreen implements ActionListener {
 		connections = new JButton("Connections");
 		artists.setEnabled(false);
 
-		JPanel westPanel = new JPanel(new GridLayout(3, 1));
-		westPanel.add(search);
-		westPanel.add(add);
-		westPanel.add(edit);
-
-		JPanel northPanel = new JPanel(new GridLayout(1, 5));
-		northPanel.add(artists);
-		northPanel.add(connections);
-
-		// creates centerPanel that displays the table of data
-		JPanel centerPanel = new JPanel(new BorderLayout()); 
-		tableDisplay = displayTable();
-		//ArtistTableModel tableModel = new ArtistTableModel("Edges.csv");
-		//tableDisplay = new JTable(tableModel.getData(),tableModel.getColumns());
-		JScrollPane scrollPane = new JScrollPane(tableDisplay);
-		tableDisplay.setFillsViewportHeight(true);
-	    centerPanel.add(scrollPane);
-		
-		bigPanel = new JPanel(new BorderLayout());
-		bigPanel.add(northPanel, BorderLayout.NORTH);
-		bigPanel.add(centerPanel, BorderLayout.CENTER);
-
-		frame.add(westPanel, BorderLayout.WEST);
-		frame.add(bigPanel, BorderLayout.CENTER);
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(500, 400);
+		frame.setTitle("Home");
+		frame.setLayout(new BorderLayout());
+		frame.add(createWestPanel(), BorderLayout.WEST);
+		frame.add(createCenterPanel(), BorderLayout.CENTER);
 
 		search.addActionListener(this);
 		add.addActionListener(this);
@@ -100,11 +77,48 @@ public class HomeScreen implements ActionListener {
 	    return table;
 	}
 
+	
+	
+	private JPanel createWestPanel(){
+		JPanel westPanel = new JPanel(new GridLayout(3, 1));
+		westPanel.add(search);
+		westPanel.add(add);
+		westPanel.add(edit);
+		return westPanel;
+	}
+	
+	private JPanel createNorthPanel(){
+		JPanel northPanel = new JPanel(new GridLayout(1, 5));
+		northPanel.add(artists);
+		northPanel.add(connections);
+		return northPanel;
+	}
+
+	
+	private JPanel createTablePanel() throws IOException{
+		// creates centerPanel that displays the table of data
+		JPanel tablePanel = new JPanel(new BorderLayout()); 
+		tableDisplay = displayTable();
+		//ArtistTableModel tableModel = new ArtistTableModel("Edges.csv");
+		//tableDisplay = new JTable(tableModel.getData(),tableModel.getColumns());
+		JScrollPane scrollPane = new JScrollPane(tableDisplay);
+		tableDisplay.setFillsViewportHeight(true);
+		tablePanel.add(scrollPane);
+    	return tablePanel;
+	}
+	
+	private JPanel createCenterPanel() throws IOException{
+		centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(createNorthPanel(), BorderLayout.NORTH);
+		centerPanel.add(createTablePanel(), BorderLayout.CENTER);
+		return centerPanel;
+	}
+	
 
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			Search search = new Search();
+			SearchGUI searchGUI = new SearchGUI();
 			
 			//wait here
 			
@@ -117,8 +131,8 @@ public class HomeScreen implements ActionListener {
 			southPanel.add(edit);
 			southPanel.add(export);
 
-			bigPanel.add(southPanel, BorderLayout.SOUTH);
-			bigPanel.revalidate();
+			centerPanel.add(southPanel, BorderLayout.SOUTH);
+			centerPanel.revalidate();
 
 		} else if (source == add) {
 			Object[] options = { "Add Artist", "Add Connection" };
@@ -126,10 +140,10 @@ public class HomeScreen implements ActionListener {
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 			if (val == 0) { // if artist
 				artists.setPressedIcon(new ImageIcon());
-				AddArtist newArtist = new AddArtist();
-			} else { // if connection
+				AddArtistGUI newArtist = new AddArtistGUI();
+			} else if (val == 1) { // if connection
 				connections.setPressedIcon(new ImageIcon());
-				AddConnection newConnection = new AddConnection();
+				AddConnectionGUI newConnection = new AddConnectionGUI();
 			}
 		} else if (source == edit) {
 
@@ -140,17 +154,17 @@ public class HomeScreen implements ActionListener {
 			southPanel.add(edit);
 			southPanel.add(searchEdit);
 
-			bigPanel.add(southPanel, BorderLayout.SOUTH);
-			bigPanel.revalidate();
+			centerPanel.add(southPanel, BorderLayout.SOUTH);
+			centerPanel.revalidate();
 
 		} else if(source == connections) {
 			connections.setEnabled(false);
 			artists.setEnabled(true);
-			bigPanel.revalidate();
+			centerPanel.revalidate();
 		} else {
 			artists.setEnabled(false);
 			connections.setEnabled(true);
-			bigPanel.revalidate();
+			centerPanel.revalidate();
 		}
 	}
 }

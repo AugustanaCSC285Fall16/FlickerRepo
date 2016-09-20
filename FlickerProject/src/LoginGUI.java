@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.swing.*;
 
 
-public class StartGUI implements ActionListener{
+public class LoginGUI implements ActionListener{
 	private JFrame frame;
 	private JTextField username;
 	private JPasswordField password;
@@ -14,13 +14,7 @@ public class StartGUI implements ActionListener{
 	private JLabel label1;
 	private JLabel label2;
 	
-	public StartGUI(){
-		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(300, 125);
-		frame.setTitle("Login");
-		frame.setLayout(new BorderLayout());
-		
+	public LoginGUI(){
 		username = new JTextField(15);
 		password = new JPasswordField(15);
 		add = new JButton("Add User");
@@ -28,18 +22,13 @@ public class StartGUI implements ActionListener{
 		label1 = new JLabel("Username:");
 		label2 = new JLabel("Password:");
 		
-		JPanel southPanel = new JPanel(new FlowLayout());
-		southPanel.add(add);
-		southPanel.add(submit);
-		
-		JPanel centerPanel = new JPanel(new FlowLayout());
-		centerPanel.add(label1);
-		centerPanel.add(username);
-		centerPanel.add(label2);
-		centerPanel.add(password);
-		
-		frame.add(southPanel, BorderLayout.SOUTH);
-		frame.add(centerPanel, BorderLayout.CENTER);
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(300, 125);
+		frame.setTitle("Login");
+		frame.setLayout(new BorderLayout());
+		frame.add(createSouthPanel(), BorderLayout.SOUTH);
+		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		
 		add.addActionListener(this);
 		submit.addActionListener(this);
@@ -48,6 +37,24 @@ public class StartGUI implements ActionListener{
 		frame.setLocationRelativeTo(null);
 	}
 	
+	private JPanel createCenterPanel(){
+		JPanel centerPanel = new JPanel(new FlowLayout());
+		centerPanel.add(label1);
+		centerPanel.add(username);
+		centerPanel.add(label2);
+		centerPanel.add(password);
+		return centerPanel;
+	}
+	
+	private JPanel createSouthPanel(){
+		JPanel southPanel = new JPanel(new FlowLayout());
+		southPanel.add(add);
+		southPanel.add(submit);
+		return southPanel;
+	}
+	
+	
+	
 	
 	public void actionPerformed(ActionEvent event){
 		if(event.getSource() == add){
@@ -55,7 +62,7 @@ public class StartGUI implements ActionListener{
 			NewUser newUser = new NewUser();
 		} else {
 			try {
-				HomeScreen launchProgram = new HomeScreen();
+				HomeScreenGUI launchProgram = new HomeScreenGUI();
 				frame.dispose();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

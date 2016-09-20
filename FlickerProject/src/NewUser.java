@@ -67,7 +67,7 @@ public class NewUser implements ActionListener {
 			if(option==0){
 				frame.dispose();
 				try {
-					HomeScreen homeScreen = new HomeScreen();
+					HomeScreenGUI homeScreenGUI = new HomeScreenGUI();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
