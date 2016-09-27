@@ -74,7 +74,7 @@ public class AddArtistGUI implements ActionListener {
 		add.addActionListener(this);
 		cancel.addActionListener(this);
 
-		frame.setVisible(true);
+		frame.setVisible(false);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
