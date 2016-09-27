@@ -29,7 +29,6 @@ public class AddArtistGUI implements ActionListener {
 	private JLabel biographyLabel;
 	JButton add;
 	private JButton cancel;
-	
 	HomeScreenGUI home;
 
 	public AddArtistGUI(HomeScreenGUI home) {
