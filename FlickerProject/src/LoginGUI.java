@@ -48,8 +48,8 @@ public class LoginGUI implements ActionListener{
 	
 	private JPanel createSouthPanel(){
 		JPanel southPanel = new JPanel(new FlowLayout());
-		southPanel.add(add);
 		southPanel.add(submit);
+		southPanel.add(add);
 		return southPanel;
 	}
 	
