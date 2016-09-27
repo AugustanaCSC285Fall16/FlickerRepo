@@ -124,10 +124,17 @@ public class AddArtistGUI implements ActionListener {
 	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
-			ArrayList<String> personData = saveNewPersonData();
-			PersonList personList = new PersonList(personData);
+			//ArrayList<String> personData = saveNewPersonData();
+			//PersonList personList = new PersonList(personData);
 			try {
-				personList.writePersonData();
+				//personList.writePersonData();
+				Person newPerson = new Person((String)name.getSelectedItem().toString(), 
+						(String)occupation.getSelectedItem().toString(), (String)gender.getSelectedItem().toString(), 
+						(String)culture.getSelectedItem().toString(), notes.getText());
+				DataStorage storage = new DataStorage();
+				storage.loadPeople("DataFiles/PersonData.csv");
+				storage.addPerson(newPerson);
+				storage.savePeople("DataFiles/PersonData.csv");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
