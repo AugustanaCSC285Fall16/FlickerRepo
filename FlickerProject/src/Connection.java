@@ -2,32 +2,28 @@ import java.util.*;
 
 public class Connection {
 	// data fields
-	private Date date;
+	private String date;
 	private String typeInteraction;
 	private String location;
 	private String citation;
-	private Person person1;
-	private Person person2;
-	private int direction;
+	private List<Person> peopleList;
+	private String direction;
 	
 	// constructor
-	public Connection(Date date, String typeInteraction, String location, String citation, Person person1,
-			Person person2, int direction) {
-		super();
+	public Connection(String date, String typeInteraction, String location, String citation, List<Person> people, String direction) {
 		this.date = date;
 		this.typeInteraction = typeInteraction;
 		this.location = location;
 		this.citation = citation;
-		this.person1 = person1;
-		this.person2 = person2;
+		this.peopleList = people;
 		this.direction = direction;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -55,27 +51,11 @@ public class Connection {
 		this.citation = citation;
 	}
 
-	public Person getPerson1() {
-		return person1;
-	}
-
-	public void setPerson1(Person person1) {
-		this.person1 = person1;
-	}
-
-	public Person getPerson2() {
-		return person2;
-	}
-
-	public void setPerson2(Person person2) {
-		this.person2 = person2;
-	}
-
-	public int getDirection() {
+	public String getDirection() {
 		return direction;
 	}
 
-	public void setDirection(int direction) {
+	public void setDirection(String direction) {
 		this.direction = direction;
 	}
 	
