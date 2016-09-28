@@ -1,13 +1,23 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 
 public class SearchGUI implements ActionListener {
+	
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
 
 	private JFrame frame;
 	private JComboBox<String> name;
-	private JComboBox<String> date;
+	private JFormattedTextField date;
+	private JFormattedTextField otherDate;
 	private JComboBox<String> type;
 	private JComboBox<String> culture;
 	private JComboBox<String> gender;
@@ -42,6 +52,8 @@ public class SearchGUI implements ActionListener {
 	private JPanel innerDatePlusPanel;
 	
 	private int additionalNames;
+	private int numDates;
+	
 	private JPanel centerPanel;
 	private JPanel westPanel;
 	
@@ -52,9 +64,15 @@ public class SearchGUI implements ActionListener {
 		this.home=home;
 		
 		additionalNames = 0;
+		numDates = 0;
 		
 		name = new JComboBox<>(new String[] { "", "White", "Black" });
-		date = new JComboBox<>(new String[] { "", "White", "Black" });
+		date = new JFormattedTextField(DATE_FORMAT);
+		date.setColumns(7);
+		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		otherDate = new JFormattedTextField(DATE_FORMAT);
+		otherDate.setColumns(7);
+		otherDate.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		type = new JComboBox<>(new String[] { "", "White", "Black" });
 		culture = new JComboBox<>(new String[] { "", "White", "Black" });
 		gender = new JComboBox<>(new String[] { "", "White", "Black" });
@@ -63,7 +81,7 @@ public class SearchGUI implements ActionListener {
 		reset = new JButton("Reset");
 		search = new JButton("Search");
 		nameLabel = new JLabel("Name:");
-		dateLabel = new JLabel("Date:");
+		dateLabel = new JLabel("Date (yyyy/mm/dd):");
 		typeLabel = new JLabel("Type:");
 		cultureLabel = new JLabel("Culture:");
 		genderLabel = new JLabel("Gender:");
@@ -101,10 +119,19 @@ public class SearchGUI implements ActionListener {
 		culturePanel.add(culture);
 		occupationPanel.add(occupation);
 		locationPanel.add(location);
+		
+		try {
+            MaskFormatter dateMask = new MaskFormatter("####/##/##");
+            MaskFormatter dateMask2 = new MaskFormatter("####/##/##");
+            dateMask.install(date);
+            dateMask2.install(otherDate);
+        } catch (ParseException ex) {
+            Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(200, 300);
+		frame.setSize(250, 300);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
@@ -121,7 +148,7 @@ public class SearchGUI implements ActionListener {
 	}
 
 	private JPanel createCenterPanel(int numNames) {
-		centerPanel = new JPanel(new GridLayout(7+numNames, 1));
+		centerPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
 		centerPanel.add(namePanel);
 		for(int i = 0 ; i < numNames; i++){
 			JPanel panel = new JPanel(new FlowLayout());
@@ -132,6 +159,11 @@ public class SearchGUI implements ActionListener {
 			centerPanel.add(panel);
 		}
 		centerPanel.add(datePanel);
+		if(numDates > 0){
+			JPanel panel2 = new JPanel(new FlowLayout());
+			panel2.add(otherDate);
+			centerPanel.add(panel2);
+		}
 		centerPanel.add(typePanel);
 		centerPanel.add(culturePanel);
 		centerPanel.add(genderPanel);
@@ -172,16 +204,36 @@ public class SearchGUI implements ActionListener {
 		frame.setVisible(true);
 	}
 
+	void setDefault(){
+		numDates=0;
+		additionalNames=0;
+		
+		name.setSelectedIndex(0);
+		type.setSelectedIndex(0);
+		culture.setSelectedIndex(0);
+		gender.setSelectedIndex(0);
+		occupation.setSelectedIndex(0);
+		location.setSelectedIndex(0);
+		
+		frame.remove(centerPanel);
+		frame.remove(westPanel);
+		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
+		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
+		
+		frame.setSize(250,300+40*(additionalNames+numDates));
+	}
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == search) {
 			// search things
 			frame.dispose();
 			home.actionPerformed(event);
+			
+			String theData = date.getText();
+			System.out.println(theData);
 
 		} else if (event.getSource() == reset) {
 			// reset fields
 			name.setSelectedIndex(0);
-			date.setSelectedIndex(0);
 			type.setSelectedIndex(0);
 			culture.setSelectedIndex(0);
 			gender.setSelectedIndex(0);
@@ -189,6 +241,7 @@ public class SearchGUI implements ActionListener {
 			location.setSelectedIndex(0);
 		
 			additionalNames=0;
+			numDates = 0;
 			
 			frame.remove(centerPanel);
 			frame.remove(westPanel);
@@ -196,7 +249,7 @@ public class SearchGUI implements ActionListener {
 			frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 			frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
 			
-			frame.setSize(200,300+40*additionalNames);
+			frame.setSize(250,300+40*(additionalNames+numDates));
 			
 			makeVisible();
 		} else if (event.getSource()== namePlus){
@@ -206,11 +259,20 @@ public class SearchGUI implements ActionListener {
 			frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 			frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
 			
-			frame.setSize(200,300+40*additionalNames);
+			frame.setSize(250,300+40*(additionalNames+numDates));
 			
 			makeVisible();
 		} else if(event.getSource() == datePlus){
+			numDates = 1;
+			frame.remove(centerPanel);
+			frame.remove(westPanel);
 			
+			frame.add(createWestPanel(additionalNames),BorderLayout.WEST);
+			frame.add(createCenterPanel(additionalNames),BorderLayout.CENTER);
+
+			frame.setSize(250, 300+40*(additionalNames+numDates));
+			
+			makeVisible();
 		}
 	}
 

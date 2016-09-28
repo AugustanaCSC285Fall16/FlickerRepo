@@ -131,6 +131,7 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
+			searchGUI.setDefault();
 			searchGUI.makeVisible();
 		} else if(source == searchGUI.search) {
 			southPanel.removeAll();
