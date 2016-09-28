@@ -1,3 +1,3 @@
-Edge, Base Id List, Target Id List, Date, Type of Interaction, Location, Citation, Direction
-1, 0, 1:2, 9/20/16, Letter, Olin, google.com, To
-2, 1, 0:2, 9/12/16, Email, Hansen, facebook.com, From
+Edge, Connecting Id's List, Date, Type of Interaction, Location, Citation, Direction
+1, 0:1, 9/20/16, Letter, Olin, google.com, To
+2, 1:3:4, 9/12/16, Email, Hansen, facebook.com, From

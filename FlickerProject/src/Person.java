@@ -12,7 +12,7 @@ public class Person {
 	public Person(String name, String occupation, String gender, String culturalId, String biographicalNotes) throws IOException {
 		DataStorage storage = new DataStorage();
 		storage.loadIdAndConnNum("DataFiles/NodeAndEdgeNumber.csv");
-		this.id = Integer.toString(storage.getNextIdNum());
+		this.id = Integer.toString(storage.getNextIdNum() + 1);
 		this.name = name;
 		this.occupation = occupation;
 		this.gender = gender;

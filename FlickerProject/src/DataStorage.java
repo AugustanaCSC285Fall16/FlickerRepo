@@ -6,8 +6,8 @@ import com.opencsv.CSVWriter;
 
 public class DataStorage {
 	//data fields
-	private Map<String,Person> personMap;
-	private List<Connection> connections;
+	public Map<String,Person> personMap;
+	private Map<String,Connection> connectionsMap;
 	private String[] personHeaderRow;
 	private String[] connectionHeaderRow;
 	private int nextIdNum;
@@ -17,7 +17,7 @@ public class DataStorage {
 	//constructor
 	public DataStorage() {
 		personMap = new TreeMap<>();
-		connections = new ArrayList<>();
+		connectionsMap = new TreeMap<>();
 	}
 	
 	public void loadPeople(String fileName) throws IOException {
@@ -53,50 +53,44 @@ public class DataStorage {
 		for (String[] row : myRows) {
 			String edgeNum = row[0];
 			String baseIdListText = row[1];
-			String targetIdListText = row[2];
-			String date = row[3];
-			String typeInteraction = row[4];
-			String location = row[5];
-			String citation = row[6];
-			String direction = row[7];
+			String date = row[2];
+			String typeInteraction = row[3];
+			String location = row[4];
+			String citation = row[5];
+			String direction = row[6];
 			String[] idArray = baseIdListText.split(":");
-			List<Person> peopleConnecting = new ArrayList<Person>();
+			List<Person> peopleConnectingNamesList = new ArrayList<Person>();
 
 			for (String idStr : idArray) {
 				int id = Integer.parseInt(idStr);
 				Person person = personMap.get(id);
-				peopleConnecting.add(person); 
+				peopleConnectingNamesList.add(person); 
 			}
 			
-//			List<Person> targetPeople = new ArrayList<>(); 
-//			String[] targetIdArray = targetIdListText.split(":");
-//			for (String idText : targetIdArray) {
-//				int id = Integer.parseInt(idText);
-//				Person person = personMap.get(id);
-//				targetPeople.add(person); 
-//			}
-			Connection newConnection = new Connection(date, typeInteraction, location, citation, peopleConnecting, direction);
-			connections.add(newConnection);
-			
-		}		
-	}
-
-	public void saveConnections(String fileName) throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(fileName));
-		writer.writeNext(connectionHeaderRow);
-		for (Person person : personMap.values()) {
-		     writer.writeNext(person.toCSVRowArray());		     
+			// make add connection method
+			Connection connection = new Connection(date, typeInteraction, location, citation, peopleConnectingNamesList, direction);
+			connectionsMap.put(connection.getEdgeId(), connection);
 		}
-		 writer.close();
-	}
+	}	
+
+//	public void saveConnections(String fileName) throws IOException {
+//		CSVWriter writer = new CSVWriter(new FileWriter(fileName));
+//		writer.writeNext(connectionHeaderRow);
+//		for (Connection connection : connectionsMap.values()) {
+//		    for(Object person: connection.getPeopleList()) {
+//		    	String id = 
+//		    }
+//		}
+//		 writer.close();
+//	}
 	
 	public void loadIdAndConnNum(String fileName) throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(fileName));
 		 String [] nextLine;
 	     while ((nextLine = reader.readNext()) != null) {
 	        // nextLine[] is an array of values from the line
-	        nextIdNum = Integer.parseInt(nextLine[0]) + 1;
-	        nextConnNum = Integer.parseInt(nextLine[1]) + 1;
+	        nextIdNum = Integer.parseInt(nextLine[0]);
+	        nextConnNum = Integer.parseInt(nextLine[1]);
 	     }
 	}
 	
