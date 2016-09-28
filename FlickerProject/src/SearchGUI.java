@@ -43,6 +43,7 @@ public class SearchGUI implements ActionListener {
 	
 	private int additionalNames;
 	private JPanel centerPanel;
+	private JPanel westPanel;
 	
 	HomeScreenGUI home;
 
@@ -108,7 +109,7 @@ public class SearchGUI implements ActionListener {
 		frame.setLayout(new BorderLayout());
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
-		frame.add(createWestPanel(), BorderLayout.WEST);
+		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
 
 		reset.addActionListener(this);
 		search.addActionListener(this);
@@ -120,13 +121,15 @@ public class SearchGUI implements ActionListener {
 	}
 
 	private JPanel createCenterPanel(int numNames) {
-		int numRows = 7+ numNames;
-		
-		centerPanel = new JPanel(new GridLayout(numRows, 1));
+		centerPanel = new JPanel(new GridLayout(7+numNames, 1));
 		centerPanel.add(namePanel);
 		for(int i = 0 ; i < numNames; i++){
-			
-			System.out.println("Adding a panel");
+			JPanel panel = new JPanel(new FlowLayout());
+			JComboBox<String> name = new JComboBox<>(new String[] { "", "White", "Black" });
+			JPanel namePanel = new JPanel (new FlowLayout());
+			namePanel.add(name);
+			panel.add(namePanel);
+			centerPanel.add(panel);
 		}
 		centerPanel.add(datePanel);
 		centerPanel.add(typePanel);
@@ -137,9 +140,17 @@ public class SearchGUI implements ActionListener {
 		return centerPanel;
 	}
 
-	private JPanel createWestPanel() {
-		JPanel westPanel = new JPanel(new GridLayout(7, 1));
+	private JPanel createWestPanel(int numNames) {
+		westPanel = new JPanel(new GridLayout(7+numNames, 1));
 		westPanel.add(nameLabel);
+		for(int i = 0 ; i < numNames; i++){
+			JPanel panel = new JPanel(new FlowLayout());
+			JComboBox<String> toFrom = new JComboBox<>(new String[] { "", "To", "From" });
+			JPanel toFromPanel = new JPanel(new FlowLayout());
+			toFromPanel.add(toFrom);
+			panel.add(toFromPanel);
+			westPanel.add(panel);
+		}
 		westPanel.add(dateLabel);
 		westPanel.add(typeLabel);
 		westPanel.add(cultureLabel);
@@ -176,13 +187,26 @@ public class SearchGUI implements ActionListener {
 			gender.setSelectedIndex(0);
 			occupation.setSelectedIndex(0);
 			location.setSelectedIndex(0);
-		} else if (event.getSource()== namePlus){
-			System.out.println("are we getting here?");
-			additionalNames++;
+		
+			additionalNames=0;
 			
 			frame.remove(centerPanel);
+			frame.remove(westPanel);
 			
 			frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
+			frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
+			
+			frame.setSize(200,300+40*additionalNames);
+			
+			makeVisible();
+		} else if (event.getSource()== namePlus){
+			additionalNames++;
+			frame.remove(centerPanel);
+			frame.remove(westPanel);
+			frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
+			frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
+			
+			frame.setSize(200,300+40*additionalNames);
 			
 			makeVisible();
 		} else if(event.getSource() == datePlus){
