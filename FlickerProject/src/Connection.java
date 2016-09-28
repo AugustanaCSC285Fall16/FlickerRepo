@@ -8,6 +8,7 @@ public class Connection {
 	private String citation;
 	private List<Person> peopleList;
 	private String direction;
+	private String edgeId;
 	
 	// constructor
 	public Connection(String date, String typeInteraction, String location, String citation, List<Person> people, String direction) {
@@ -17,6 +18,18 @@ public class Connection {
 		this.citation = citation;
 		this.peopleList = people;
 		this.direction = direction;
+	}
+	
+//	public String[] toCSVRowArray() {
+//		return new String[] { edgeId, , occupation, gender, culturalId, biographicalNotes };
+//	}
+	
+	public List getPeopleList() {
+		return peopleList;
+	}
+	
+	public String getEdgeId() {
+		return edgeId;
 	}
 
 	public String getDate() {
