@@ -18,7 +18,7 @@ public class NewUser implements ActionListener {
 
 	public NewUser() {
 		frame = new JFrame("New User");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(300, 200);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
@@ -75,6 +75,8 @@ public class NewUser implements ActionListener {
 			}
 		} else if (event.getSource() == cancel){
 			frame.dispose();
+			LoginGUI login = new LoginGUI();
+
 		}
 	}
 

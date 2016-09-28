@@ -87,9 +87,11 @@ public class HomeScreenGUI implements ActionListener {
 	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		table.setDefaultRenderer(Object.class, centerRenderer);
+		table.setEnabled(false);
 	    return table;
 	}
-
+	
+	
 	
 	
 	private JPanel createWestPanel(){
