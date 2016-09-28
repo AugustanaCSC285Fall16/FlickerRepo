@@ -1,28 +1,25 @@
 import java.io.IOException;
 
-public class Person {
+public class Person implements TableRowViewable {
 	// data fields
-	private String id;
+	private int id;
 	private String name;
 	private String occupation;
 	private String gender;
 	private String culturalId;
 	private String biographicalNotes;
 
-	public Person(String name, String occupation, String gender, String culturalId, String biographicalNotes) throws IOException {
-		DataStorage storage = new DataStorage();
-		storage.loadIdAndConnNum("DataFiles/NodeAndEdgeNumber.csv");
-		this.id = Integer.toString(storage.getNextIdNum() + 1);
+	public Person(int id, String name, String occupation, String gender, String culturalId, String biographicalNotes) throws IOException {
+		this.id = id;
 		this.name = name;
 		this.occupation = occupation;
 		this.gender = gender;
 		this.culturalId = culturalId;
 		this.biographicalNotes = biographicalNotes;
-		storage.saveIdAndConnNum("DataFiles/NodeAndEdgeNumber.csv");
 	}
 	
 	public Person(String[] csvRowData) {
-		this.id = csvRowData[0];
+		this.id = Integer.parseInt(csvRowData[0]);
 		this.name = csvRowData[1];
 		this.occupation = csvRowData[2];
 		this.gender = csvRowData[3];
@@ -31,10 +28,14 @@ public class Person {
 	}
 
 	public String[] toCSVRowArray() {
-		return new String[] { id, name, occupation, gender, culturalId, biographicalNotes };
+		return new String[] { Integer.toString(id), name, occupation, gender, culturalId, biographicalNotes };
+	}
+	public String[] toTableRowArray() {
+		return new String[] { Integer.toString(id), name, occupation, gender, culturalId, biographicalNotes };
 	}
 
-	public String getID() {
+
+	public int getID() {
 		return id;
 	}
 
@@ -76,6 +77,11 @@ public class Person {
 
 	public void setBiographicalNotes(String biographicalNotes) {
 		this.biographicalNotes = biographicalNotes;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 
 }

@@ -127,13 +127,18 @@ public class AddArtistGUI implements ActionListener {
 			//PersonList personList = new PersonList(personData);
 			try {
 				//personList.writePersonData();
-				Person newPerson = new Person((String)name.getSelectedItem().toString(), 
-						(String)occupation.getSelectedItem().toString(), (String)gender.getSelectedItem().toString(), 
-						(String)culture.getSelectedItem().toString(), notes.getText());
-				DataStorage storage = new DataStorage();
-				storage.loadPeople("DataFiles/PersonData.csv");
+								
+				DataStorage storage = DataStorage.getMainDataStorage();
+				
+				int nextID = storage.incrementAndGetNextPersonIdNum();
+
+				Person newPerson = new Person(nextID, name.getSelectedItem().toString(), 
+						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(), 
+						culture.getSelectedItem().toString(), notes.getText());
+				//DataStorage storage = new DataStorage();
+				
 				storage.addPerson(newPerson);
-				storage.savePeople("DataFiles/PersonData.csv");
+				storage.savePeople();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

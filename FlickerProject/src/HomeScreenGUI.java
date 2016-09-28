@@ -37,7 +37,8 @@ public class HomeScreenGUI implements ActionListener {
 		artists = new JButton("Artists");
 		connections = new JButton("Connections");
 		artists.setEnabled(false);
-		tableDisplay = displayTable("DataFiles/PersonData.csv");
+		DataStorage mainStorage = DataStorage.getMainDataStorage();
+		tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 
 		
 		searchGUI = new SearchGUI(this);
@@ -47,7 +48,7 @@ public class HomeScreenGUI implements ActionListener {
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1000, 1000);
+		frame.setSize(1500, 1000);
 		frame.setTitle("Home");
 		frame.setLayout(new BorderLayout());
 		frame.add(createWestPanel(), BorderLayout.WEST);
@@ -65,25 +66,20 @@ public class HomeScreenGUI implements ActionListener {
 	/*
 	 * Creates Table
 	 */
-	private JTable displayTable(String fileName) throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(fileName));
-	     String [] nextLine = reader.readNext();
-	     Vector<String> columnNames = new Vector<String>(nextLine.length,10);
-	     if((nextLine) != null) {
-	    	 for(int i = 0; i < nextLine.length; i++) {
-	    		 columnNames.add(nextLine[i]);
-	    	 }
-	     }
-	     Vector<Object> data = new Vector<Object>(10,10);
-	     while ((nextLine = reader.readNext()) != null) {
-	        // nextLine[] is an array of values from the line
-	        Vector<Object> row = new Vector<Object>(nextLine.length,10);
-	        for(int i = 0; i < nextLine.length; i++) {
-	        	row.add(nextLine[i]);
-	        }
-	        data.add(row);
-	     }
-	    JTable table = new JTable(data, columnNames);
+	
+	
+	private JTable displayTable(String[] columnNamesArray, Collection<? extends TableRowViewable> rowItems) throws IOException {
+		
+		Vector<String> columnNames = new Vector<>(Arrays.asList(columnNamesArray));
+		
+		Vector<Vector<String>> tableData = new Vector<>();
+		
+		for( TableRowViewable item: rowItems) {
+			String [] nextRow = item.toTableRowArray();
+			tableData.addElement(new Vector(Arrays.asList(nextRow)));
+		}
+		
+		JTable table = new JTable(tableData, columnNames);
 	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		table.setDefaultRenderer(Object.class, centerRenderer);
@@ -181,7 +177,8 @@ public class HomeScreenGUI implements ActionListener {
 			connections.setEnabled(false);
 			artists.setEnabled(true);
 			try {
-				tableDisplay = displayTable("DataFiles/ConnectionData.csv");
+				DataStorage mainStorage = DataStorage.getMainDataStorage();
+				tableDisplay = displayTable(mainStorage.getConnectionHeaderRow(), mainStorage.getConnectionList());
 				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -191,7 +188,8 @@ public class HomeScreenGUI implements ActionListener {
 			artists.setEnabled(false);
 			connections.setEnabled(true);
 			try {
-				tableDisplay = displayTable("DataFiles/PersonData.csv");
+				DataStorage mainStorage = DataStorage.getMainDataStorage();
+				tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
 			} catch (IOException e) {
 				e.printStackTrace();

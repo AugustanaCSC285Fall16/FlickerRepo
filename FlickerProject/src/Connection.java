@@ -1,34 +1,41 @@
 import java.util.*;
 
-public class Connection {
+public class Connection implements TableRowViewable {
 	// data fields
 	private String date;
 	private String typeInteraction;
 	private String location;
 	private String citation;
+	private String socialNotes;
 	private List<Person> peopleList;
 	private String direction;
-	private String edgeId;
+	private int edgeId;
 	
 	// constructor
-	public Connection(String date, String typeInteraction, String location, String citation, List<Person> people, String direction) {
+	public Connection(int edgeID, String date, String typeInteraction, String location, String citation, String socialNotes, List<Person> people, String direction) {
+		this.edgeId = edgeID;
 		this.date = date;
 		this.typeInteraction = typeInteraction;
 		this.location = location;
 		this.citation = citation;
+		this.socialNotes = socialNotes;
 		this.peopleList = people;
 		this.direction = direction;
 	}
 	
 //	public String[] toCSVRowArray() {
-//		return new String[] { edgeId, , occupation, gender, culturalId, biographicalNotes };
+//		//FIXME: needs completed
+//		return new String[] { Integer.toString(edgeId), peopleList, date, typeInteraction, location, citation, direction };
 //	}
+	public String[] toTableRowArray() {
+		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location, citation, socialNotes, direction};
+	}
 	
 	public List getPeopleList() {
 		return peopleList;
 	}
 	
-	public String getEdgeId() {
+	public int getEdgeId() {
 		return edgeId;
 	}
 
