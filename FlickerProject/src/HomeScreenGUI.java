@@ -155,6 +155,8 @@ public class HomeScreenGUI implements ActionListener {
 			}
 		} else if (source == artistGUI.add){
 			//Need to figure out how to update table after adding a  new artist.
+			tableDisplay.invalidate();
+			System.out.println("are we getting here");
 		} else if (source == connectionGUI.add){
 			System.out.println("successfully waited");
 			//waiting for user to click add in the connectionGUI
