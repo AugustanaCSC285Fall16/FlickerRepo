@@ -1,86 +1,166 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 
 public class AddConnectionGUI implements ActionListener {
+	
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
 
 	private JFrame frame;
-	private JTextField baseName;
-	private JTextField otherName;
-	private JTextField date;
-	private JTextField type;
-	private JTextField location;
-	private JTextField socialNotes;
-	private JTextField bib;
+	private JComboBox baseName;
+	private JFormattedTextField date;
+	private JComboBox type;
+	private JComboBox location;
+	private JTextArea socialNotes;
+	private JTextArea bib;
+	
 	private JLabel baseNameLabel;
-	private JLabel otherNameLabel;
 	private JLabel dateLabel;
 	private JLabel typeLabel;
 	private JLabel locationLabel;
 	private JLabel socialLabel;
 	private JLabel bibLabel;
+	
+	private JPanel centerPanel;
+	private JPanel westPanel;
+	
+	private JPanel moreNamesPanel;
+	private JPanel baseNamePanel;
+	private JPanel namePanel;
+	private JPanel datePanel;
+	private JPanel typePanel;
+	private JPanel locationPanel;
+	private JPanel socialPanel;
+	private JPanel bibPanel;
+	
+	private JScrollPane socialScroll;
+	private JScrollPane bibScroll;
+	
 	JButton add;
 	private JButton cancel;
+	private JButton moreNames;
+	
+	private int additionalNames;
 	
 	HomeScreenGUI home;
 
 	public AddConnectionGUI(HomeScreenGUI home) {
 		
 		this.home = home;
+		additionalNames = 0;
 		
-		baseName = new JTextField(15);
-		otherName = new JTextField(15);
-		date = new JTextField(15);
-		type = new JTextField(15);
-		location = new JTextField(15);
-		socialNotes = new JTextField(15);
-		bib = new JTextField(15);
+		baseName = new JComboBox<>(new String[] { "", "White", "Black" });
+		date = new JFormattedTextField(DATE_FORMAT);
+		date.setColumns(7);
+		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		type = new JComboBox<>(new String[] { "", "White", "Black" });
+		location = new JComboBox<>(new String[] { "", "White", "Black" });
+		socialNotes = new JTextArea(2,10);
+		socialNotes.setLineWrap(true);
+		bib = new JTextArea(2,10);
+		bib.setLineWrap(true);
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
+		moreNames = new JButton("+");
 
 		baseNameLabel = new JLabel("Base Name:");
-		otherNameLabel = new JLabel("Other Name:");
 		dateLabel = new JLabel("Date:");
 		typeLabel = new JLabel("Type:");
 		locationLabel = new JLabel("Location:");
 		socialLabel = new JLabel("Social Notes:");
 		bibLabel = new JLabel("Bibliography:");
+		
+		baseNamePanel = new JPanel (new BorderLayout());
+		namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+		moreNamesPanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+		datePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+		typePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+		locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		socialPanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+		bibPanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+		
+		socialScroll= new JScrollPane(socialNotes);
+		socialScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		bibScroll = new JScrollPane(bib);
+		bibScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		moreNamesPanel.add(moreNames);
+		namePanel.add(baseName);
+		baseNamePanel.add(namePanel,BorderLayout.CENTER);
+		baseNamePanel.add(moreNamesPanel, BorderLayout.EAST);
+		datePanel.add(date);
+		typePanel.add(type);
+		locationPanel.add(location);
+		socialPanel.add(socialScroll);
+		bibPanel.add(bibScroll);
+		
+		try {
+            MaskFormatter dateMask = new MaskFormatter("####/##/##");
+            dateMask.install(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(300, 400);
+		frame.setSize(250, 300);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
-		frame.add(createCenterPanel(), BorderLayout.CENTER);
+		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
-		frame.add(createWestPanel(), BorderLayout.WEST);
+		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
 
 		add.addActionListener(this);
 		cancel.addActionListener(this);
+		moreNames.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
-	private JPanel createCenterPanel() {
-		JPanel centerPanel = new JPanel(new GridLayout(7, 1));
-		centerPanel.add(baseName);
-		centerPanel.add(otherName);
-		centerPanel.add(date);
-		centerPanel.add(type);
-		centerPanel.add(location);
-		centerPanel.add(socialNotes);
-		centerPanel.add(bib);
+	private JPanel createCenterPanel(int numNames) {
+		centerPanel = new JPanel(new GridLayout(6+numNames, 1));
+		centerPanel.add(baseNamePanel);
+		for(int i = 0 ; i < numNames; i++){
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+			JComboBox<String> name = new JComboBox<>(new String[] { "", "White", "Black" });
+			JPanel namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+			namePanel.add(name);
+			panel.add(namePanel);
+			centerPanel.add(panel);
+		}
+		centerPanel.add(datePanel);
+		centerPanel.add(typePanel);
+		centerPanel.add(locationPanel);
+		centerPanel.add(socialPanel);
+		centerPanel.add(bibPanel);
 		return centerPanel;
 	}
 
-	private JPanel createWestPanel() {
-		JPanel westPanel = new JPanel(new GridLayout(7, 1));
+	private JPanel createWestPanel(int numNames) {
+		westPanel = new JPanel(new GridLayout(6+numNames, 1));
 		westPanel.add(baseNameLabel);
-		westPanel.add(otherNameLabel);
+		if(numNames>0){
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+			JComboBox<String> toFrom = new JComboBox<>(new String[] { "", "To", "From" });
+			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+			toFromPanel.add(toFrom);
+			panel.add(toFromPanel);
+			westPanel.add(panel);
+		}
+		for(int i = 1; i < numNames ; i++){
+			JPanel tempPanel = new JPanel();
+			westPanel.add(tempPanel);
+		}
 		westPanel.add(dateLabel);
 		westPanel.add(typeLabel);
 		westPanel.add(locationLabel);
@@ -97,6 +177,28 @@ public class AddConnectionGUI implements ActionListener {
 	}
 	void makeVisible(){
 		frame.setVisible(true);
+	}
+	
+	void setDefault(){
+		additionalNames=0;
+		
+		baseName.setSelectedIndex(0);
+		type.setSelectedIndex(0);
+		location.setSelectedIndex(0);
+		socialNotes.setText("");
+		bib.setText("");
+		
+		refreshPanel();
+	}
+	private void refreshPanel(){
+		frame.remove(centerPanel);
+		frame.remove(westPanel);
+		
+		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
+		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
+		
+		frame.setSize(250,300+40*(additionalNames));
+		makeVisible();
 	}
 
 //	private ArrayList<String> saveNewConnectionData(){
@@ -122,6 +224,9 @@ public class AddConnectionGUI implements ActionListener {
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();
+		} else if (event.getSource()==moreNames){
+			additionalNames++;
+			refreshPanel();
 		}
 	}
 

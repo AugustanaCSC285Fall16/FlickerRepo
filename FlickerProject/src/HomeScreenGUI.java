@@ -128,7 +128,6 @@ public class HomeScreenGUI implements ActionListener {
 		Object source = event.getSource();
 		if (source == search) {
 			searchGUI.setDefault();
-			searchGUI.makeVisible();
 		} else if(source == searchGUI.search) {
 			southPanel.removeAll();
 
@@ -150,7 +149,7 @@ public class HomeScreenGUI implements ActionListener {
 			if (val == 0) { // if artist
 				artistGUI.makeVisible();
 			} else if (val == 1) { // if connection
-				connectionGUI.makeVisible();
+				connectionGUI.setDefault();
 			}
 		} else if (source == artistGUI.add){
 			//Need to figure out how to update table after adding a  new artist.
