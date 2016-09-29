@@ -1,3 +1,4 @@
+
 /*
  * Creates the home screen for the program. From here,
  * a user can navigate to other screens to access the 
@@ -25,7 +26,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JPanel southPanel;
 	private JTable tableDisplay;
 
-	
 	private SearchGUI searchGUI;
 	private AddArtistGUI artistGUI;
 	private AddConnectionGUI connectionGUI;
@@ -40,7 +40,6 @@ public class HomeScreenGUI implements ActionListener {
 		DataStorage mainStorage = DataStorage.getMainDataStorage();
 		tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 
-		
 		searchGUI = new SearchGUI(this);
 		artistGUI = new AddArtistGUI(this);
 		connectionGUI = new AddConnectionGUI(this);
@@ -66,70 +65,64 @@ public class HomeScreenGUI implements ActionListener {
 	/*
 	 * Creates Table
 	 */
-	
-	
-	private JTable displayTable(String[] columnNamesArray, Collection<? extends TableRowViewable> rowItems) throws IOException {
-		
+
+	private JTable displayTable(String[] columnNamesArray, Collection<? extends TableRowViewable> rowItems)
+			throws IOException {
+
 		Vector<String> columnNames = new Vector<>(Arrays.asList(columnNamesArray));
-		
+
 		Vector<Vector<String>> tableData = new Vector<>();
-		
-		for( TableRowViewable item: rowItems) {
-			String [] nextRow = item.toTableRowArray();
+
+		for (TableRowViewable item : rowItems) {
+			String[] nextRow = item.toTableRowArray();
 			tableData.addElement(new Vector(Arrays.asList(nextRow)));
 		}
-		
+
 		JTable table = new JTable(tableData, columnNames);
-	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.setDefaultRenderer(Object.class, centerRenderer);
 		table.setEnabled(false);
-	    return table;
+		return table;
 	}
-	
-	
-	
-	
-	private JPanel createWestPanel(){
+
+	private JPanel createWestPanel() {
 		JPanel westPanel = new JPanel(new GridLayout(3, 1));
 		westPanel.add(search);
 		westPanel.add(add);
 		westPanel.add(edit);
 		return westPanel;
 	}
-	
-	private JPanel createNorthPanel(){
+
+	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel(new GridLayout(1, 5));
 		northPanel.add(artists);
 		northPanel.add(connections);
 		return northPanel;
 	}
 
-		// creates tablePanel that displays the table of data
-	private JPanel createTablePanel() throws IOException{
-		JPanel tablePanel = new JPanel(new BorderLayout()); 
-		//ArtistTableModel tableModel = new ArtistTableModel("Edges.csv");
-		//tableDisplay = new JTable(tableModel.getData(),tableModel.getColumns());
+	// creates tablePanel that displays the table of data
+	private JPanel createTablePanel() throws IOException {
+		JPanel tablePanel = new JPanel(new BorderLayout());
 		JScrollPane scrollPane = new JScrollPane(tableDisplay);
 		tableDisplay.setFillsViewportHeight(true);
 		tablePanel.add(scrollPane);
-    	return tablePanel;
+		return tablePanel;
 	}
-	
-	private JPanel createCenterPanel() throws IOException{
+
+	private JPanel createCenterPanel() throws IOException {
 		centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(createNorthPanel(), BorderLayout.NORTH);
 		centerPanel.add(createTablePanel(), BorderLayout.CENTER);
 		return centerPanel;
 	}
-	
 
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
 			searchGUI.setDefault();
 			searchGUI.makeVisible();
-		} else if(source == searchGUI.search) {
+		} else if (source == searchGUI.search) {
 			southPanel.removeAll();
 
 			southPanel = new JPanel(new GridLayout(1, 3));
@@ -152,15 +145,15 @@ public class HomeScreenGUI implements ActionListener {
 			} else if (val == 1) { // if connection
 				connectionGUI.makeVisible();
 			}
-		} else if (source == artistGUI.add){
-			//Need to figure out how to update table after adding a  new artist.
+		} else if (source == artistGUI.add) {
+			// Need to figure out how to update table after adding a new artist.
 			tableDisplay.invalidate();
 			System.out.println("are we getting here");
-		} else if (source == connectionGUI.add){
+		} else if (source == connectionGUI.add) {
 			System.out.println("successfully waited");
-			//waiting for user to click add in the connectionGUI
+			// waiting for user to click add in the connectionGUI
 		} else if (source == edit) {
-			
+
 			southPanel.removeAll();
 
 			southPanel = new JPanel(new GridLayout(1, 2));
@@ -173,7 +166,7 @@ public class HomeScreenGUI implements ActionListener {
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();
 
-		} else if(source == connections) {
+		} else if (source == connections) {
 			connections.setEnabled(false);
 			artists.setEnabled(true);
 			try {
@@ -184,7 +177,7 @@ public class HomeScreenGUI implements ActionListener {
 				e.printStackTrace();
 			}
 			centerPanel.revalidate();
-		} else if(source == artists){
+		} else if (source == artists) {
 			artists.setEnabled(false);
 			connections.setEnabled(true);
 			try {
