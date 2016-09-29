@@ -98,19 +98,6 @@ public class AddConnectionGUI implements ActionListener {
 	void makeVisible(){
 		frame.setVisible(true);
 	}
-
-//	private ArrayList<String> saveNewConnectionData(){
-//		ArrayList<String> newConnectionData = new ArrayList<String>();
-//		newConnectionData.add((String)baseName.getSelectedItem().toString());
-//		newConnectionData.add((String)targetName.getSelectedItem().toString());
-//		newConnectionData.add((String)date.getSelectedItem().toString());
-//		newConnectionData.add((String)type.getSelectedItem().toString());
-//		newConnectionData.add((String)location.getSelectedItem().toString());
-//		newConnectionData.add(socialNotes.getText());
-//		newConnectionData.add(bib.getText());
-//		return newConnectionData;
-//		
-//	}
 	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {

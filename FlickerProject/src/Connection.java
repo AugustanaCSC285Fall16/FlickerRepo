@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 
 public class Connection implements TableRowViewable {
@@ -10,9 +11,10 @@ public class Connection implements TableRowViewable {
 	private List<Person> peopleList;
 	private String direction;
 	private int edgeId;
-	
+
 	// constructor
-	public Connection(int edgeID, String date, String typeInteraction, String location, String citation, String socialNotes, List<Person> people, String direction) {
+	public Connection(int edgeID, String date, String typeInteraction, String location, String citation,
+			String socialNotes, List<Person> people, String direction) {
 		this.edgeId = edgeID;
 		this.date = date;
 		this.typeInteraction = typeInteraction;
@@ -22,19 +24,31 @@ public class Connection implements TableRowViewable {
 		this.peopleList = people;
 		this.direction = direction;
 	}
-	
-//	public String[] toCSVRowArray() {
-//		//FIXME: needs completed
-//		return new String[] { Integer.toString(edgeId), peopleList, date, typeInteraction, location, citation, direction };
-//	}
-	public String[] toTableRowArray() {
-		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location, citation, socialNotes, direction};
+
+	 public String[] toCSVRowArray() {
+	 //FIXME: needs completed
+		 String idListText = peopleListToIdText();
+		 return new String[] { Integer.toString(edgeId), idListText, date,
+				 typeInteraction, location, citation, direction };
 	}
-	
+	 
+	 public String peopleListToIdText() {
+		 String result = Integer.toString(peopleList.get(0).getID());
+		 for(Person person: peopleList) {
+			result = result + ":" + person.getID();
+		 }
+		 return result;
+	 }
+	 
+	public String[] toTableRowArray() {
+		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location,
+				citation, socialNotes, direction };
+	}
+
 	public List getPeopleList() {
 		return peopleList;
 	}
-	
+
 	public int getEdgeId() {
 		return edgeId;
 	}
@@ -78,7 +92,5 @@ public class Connection implements TableRowViewable {
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
-	
-	
-	
+
 }

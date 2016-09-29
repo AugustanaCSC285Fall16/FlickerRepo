@@ -33,8 +33,8 @@ public class AddArtistGUI implements ActionListener {
 
 	public AddArtistGUI(HomeScreenGUI home) {
 
-		this.home=home;
-		
+		this.home = home;
+
 		name = new JComboBox<>(new String[] { "", "White", "Black" });
 		culture = new JComboBox<>(new String[] { "", "White", "Black" });
 		gender = new JComboBox<>(new String[] { "", "White", "Black" });
@@ -105,38 +105,38 @@ public class AddArtistGUI implements ActionListener {
 		southPanel.add(cancel);
 		return southPanel;
 	}
-	
-	void makeVisible(){
+
+	void makeVisible() {
 		frame.setVisible(true);
 	}
 
-	public ArrayList<String> saveNewPersonData(){
+	public ArrayList<String> saveNewPersonData() {
 		ArrayList<String> newPersonData = new ArrayList<String>();
-		newPersonData.add((String)name.getSelectedItem().toString());
-		newPersonData.add((String)culture.getSelectedItem().toString());
-		newPersonData.add((String)gender.getSelectedItem().toString());
-		newPersonData.add((String)occupation.getSelectedItem().toString());
+		newPersonData.add((String) name.getSelectedItem().toString());
+		newPersonData.add((String) culture.getSelectedItem().toString());
+		newPersonData.add((String) gender.getSelectedItem().toString());
+		newPersonData.add((String) occupation.getSelectedItem().toString());
 		newPersonData.add(notes.getText());
 		return newPersonData;
-		
+
 	}
-	
+
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
-			//ArrayList<String> personData = saveNewPersonData();
-			//PersonList personList = new PersonList(personData);
+			// ArrayList<String> personData = saveNewPersonData();
+			// PersonList personList = new PersonList(personData);
 			try {
-				//personList.writePersonData();
-								
+				// personList.writePersonData();
+
 				DataStorage storage = DataStorage.getMainDataStorage();
-				
+
 				int nextID = storage.incrementAndGetNextPersonIdNum();
 
-				Person newPerson = new Person(nextID, name.getSelectedItem().toString(), 
-						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(), 
+				Person newPerson = new Person(nextID, name.getSelectedItem().toString(),
+						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(),
 						culture.getSelectedItem().toString(), notes.getText());
-				//DataStorage storage = new DataStorage();
-				
+				// DataStorage storage = new DataStorage();
+
 				storage.addPerson(newPerson);
 				storage.savePeople();
 			} catch (IOException e) {
