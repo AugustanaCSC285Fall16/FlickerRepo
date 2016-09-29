@@ -43,8 +43,8 @@ public class SearchGUI implements ActionListener {
 	private JPanel locationPanel;
 	
 
-	private JButton namePlus;
-	private JButton datePlus;
+	private JButton moreNames;
+	private JButton moreDates;
 	
 	private JPanel innerNamePanel;
 	private JPanel innerPlusPanel;
@@ -87,28 +87,28 @@ public class SearchGUI implements ActionListener {
 		genderLabel = new JLabel("Gender:");
 		occupationLabel = new JLabel("Occupation:");
 		locationLabel = new JLabel("Location:");
-		namePlus = new JButton("+");
-		datePlus = new JButton("+");
+		moreNames = new JButton("+");
+		moreDates = new JButton("+");
 		
 		namePanel = new JPanel(new BorderLayout());
-		innerNamePanel = new JPanel(new FlowLayout());
+		innerNamePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		innerNamePanel.add(name);
 		
-		innerPlusPanel = new JPanel(new FlowLayout());
-		innerPlusPanel.add(namePlus);
+		innerPlusPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		innerPlusPanel.add(moreNames);
 		
 		datePanel = new JPanel(new BorderLayout());
-		innerDatePanel = new JPanel(new FlowLayout());
+		innerDatePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		innerDatePanel.add(date);
 		
-		innerDatePlusPanel = new JPanel(new FlowLayout());
-		innerDatePlusPanel.add(datePlus);
+		innerDatePlusPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		innerDatePlusPanel.add(moreDates);
 		
-		typePanel = new JPanel(new FlowLayout());
-		genderPanel = new JPanel(new FlowLayout());
-		culturePanel = new JPanel(new FlowLayout());
-		occupationPanel = new JPanel(new FlowLayout());
-		locationPanel = new JPanel(new FlowLayout());
+		typePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		genderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		culturePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		occupationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		
 		namePanel.add(innerNamePanel, BorderLayout.CENTER);
 		namePanel.add(innerPlusPanel, BorderLayout.EAST);
@@ -140,8 +140,8 @@ public class SearchGUI implements ActionListener {
 
 		reset.addActionListener(this);
 		search.addActionListener(this);
-		namePlus.addActionListener(this);
-		datePlus.addActionListener(this);
+		moreNames.addActionListener(this);
+		moreDates.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -151,16 +151,16 @@ public class SearchGUI implements ActionListener {
 		centerPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
 		centerPanel.add(namePanel);
 		for(int i = 0 ; i < numNames; i++){
-			JPanel panel = new JPanel(new FlowLayout());
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			JComboBox<String> name = new JComboBox<>(new String[] { "", "White", "Black" });
-			JPanel namePanel = new JPanel (new FlowLayout());
+			JPanel namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(name);
 			panel.add(namePanel);
 			centerPanel.add(panel);
 		}
 		centerPanel.add(datePanel);
 		if(numDates > 0){
-			JPanel panel2 = new JPanel(new FlowLayout());
+			JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			panel2.add(otherDate);
 			centerPanel.add(panel2);
 		}
@@ -173,17 +173,25 @@ public class SearchGUI implements ActionListener {
 	}
 
 	private JPanel createWestPanel(int numNames) {
-		westPanel = new JPanel(new GridLayout(7+numNames, 1));
+		westPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
 		westPanel.add(nameLabel);
-		for(int i = 0 ; i < numNames; i++){
-			JPanel panel = new JPanel(new FlowLayout());
+		if(numNames>0){
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			JComboBox<String> toFrom = new JComboBox<>(new String[] { "", "To", "From" });
-			JPanel toFromPanel = new JPanel(new FlowLayout());
+			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			toFromPanel.add(toFrom);
 			panel.add(toFromPanel);
 			westPanel.add(panel);
 		}
+		for(int i = 1; i < numNames ; i++){
+			JPanel tempPanel = new JPanel();
+			westPanel.add(tempPanel);
+		}
 		westPanel.add(dateLabel);
+		if(numDates > 0){
+			JPanel tepPanel = new JPanel();
+			westPanel.add(tepPanel);
+		}
 		westPanel.add(typeLabel);
 		westPanel.add(cultureLabel);
 		westPanel.add(genderLabel);
@@ -215,64 +223,33 @@ public class SearchGUI implements ActionListener {
 		occupation.setSelectedIndex(0);
 		location.setSelectedIndex(0);
 		
+		refreshPanel();
+	}
+	private void refreshPanel(){
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
+		
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
 		
 		frame.setSize(250,300+40*(additionalNames+numDates));
+		makeVisible();
 	}
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == search) {
 			// search things
 			frame.dispose();
 			home.actionPerformed(event);
-			
-			String theData = date.getText();
-			System.out.println(theData);
 
 		} else if (event.getSource() == reset) {
 			// reset fields
-			name.setSelectedIndex(0);
-			type.setSelectedIndex(0);
-			culture.setSelectedIndex(0);
-			gender.setSelectedIndex(0);
-			occupation.setSelectedIndex(0);
-			location.setSelectedIndex(0);
-		
-			additionalNames=0;
-			numDates = 0;
-			
-			frame.remove(centerPanel);
-			frame.remove(westPanel);
-			
-			frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
-			frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
-			
-			frame.setSize(250,300+40*(additionalNames+numDates));
-			
-			makeVisible();
-		} else if (event.getSource()== namePlus){
+			setDefault();
+		} else if (event.getSource()== moreNames){
 			additionalNames++;
-			frame.remove(centerPanel);
-			frame.remove(westPanel);
-			frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
-			frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
-			
-			frame.setSize(250,300+40*(additionalNames+numDates));
-			
-			makeVisible();
-		} else if(event.getSource() == datePlus){
+			refreshPanel();
+		} else if(event.getSource() == moreDates){
 			numDates = 1;
-			frame.remove(centerPanel);
-			frame.remove(westPanel);
-			
-			frame.add(createWestPanel(additionalNames),BorderLayout.WEST);
-			frame.add(createCenterPanel(additionalNames),BorderLayout.CENTER);
-
-			frame.setSize(250, 300+40*(additionalNames+numDates));
-			
-			makeVisible();
+			refreshPanel();
 		}
 	}
 

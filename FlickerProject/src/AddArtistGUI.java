@@ -12,11 +12,11 @@ import javax.swing.*;
 public class AddArtistGUI implements ActionListener {
 
 	private JFrame frame;
-	private JComboBox<String> name;
+	private JTextField name;
 	private JComboBox<String> culture;
 	private JComboBox<String> gender;
 	private JComboBox<String> occupation;
-	private JTextField notes;
+	private JTextArea notes;
 	private JPanel namePanel;
 	private JPanel culturePanel;
 	private JPanel genderPanel;
@@ -30,16 +30,20 @@ public class AddArtistGUI implements ActionListener {
 	JButton add;
 	private JButton cancel;
 	HomeScreenGUI home;
+	private JScrollPane scroll;
+	
+	
 
 	public AddArtistGUI(HomeScreenGUI home) {
 
-		this.home = home;
-
-		name = new JComboBox<>(new String[] { "", "White", "Black" });
+		this.home=home;
+		
+		name = new JTextField(10);
 		culture = new JComboBox<>(new String[] { "", "White", "Black" });
 		gender = new JComboBox<>(new String[] { "", "White", "Black" });
 		occupation = new JComboBox<>(new String[] { "", "White", "Black" });
-		notes = new JTextField(10);
+		notes = new JTextArea(2,15);
+		notes.setLineWrap(true);
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
 
@@ -55,11 +59,14 @@ public class AddArtistGUI implements ActionListener {
 		occupationPanel = new JPanel(new FlowLayout());
 		notesPanel = new JPanel(new FlowLayout());
 
+		scroll= new JScrollPane(notes);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
 		namePanel.add(name);
 		culturePanel.add(culture);
 		genderPanel.add(gender);
 		occupationPanel.add(occupation);
-		notesPanel.add(notes);
+		notesPanel.add(scroll);
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -110,16 +117,19 @@ public class AddArtistGUI implements ActionListener {
 		frame.setVisible(true);
 	}
 
-	public ArrayList<String> saveNewPersonData() {
-		ArrayList<String> newPersonData = new ArrayList<String>();
-		newPersonData.add((String) name.getSelectedItem().toString());
-		newPersonData.add((String) culture.getSelectedItem().toString());
-		newPersonData.add((String) gender.getSelectedItem().toString());
-		newPersonData.add((String) occupation.getSelectedItem().toString());
-		newPersonData.add(notes.getText());
-		return newPersonData;
 
-	}
+//	public ArrayList<String> saveNewPersonData(){
+//		ArrayList<String> newPersonData = new ArrayList<String>();
+//		newPersonData.add((String)name.getSelectedItem().toString());
+//		newPersonData.add((String)culture.getSelectedItem().toString());
+//		newPersonData.add((String)gender.getSelectedItem().toString());
+//		newPersonData.add((String)occupation.getSelectedItem().toString());
+//		newPersonData.add(notes.getText());
+//		return newPersonData;
+//		
+//	}
+	
+
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
@@ -132,8 +142,8 @@ public class AddArtistGUI implements ActionListener {
 
 				int nextID = storage.incrementAndGetNextPersonIdNum();
 
-				Person newPerson = new Person(nextID, name.getSelectedItem().toString(),
-						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(),
+				Person newPerson = new Person(nextID, name.getText(), 
+						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(), 
 						culture.getSelectedItem().toString(), notes.getText());
 				// DataStorage storage = new DataStorage();
 
