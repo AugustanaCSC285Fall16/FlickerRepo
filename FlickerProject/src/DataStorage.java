@@ -5,31 +5,31 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 public class DataStorage {
-	//data fields
-	public Map<Integer,Person> personMap;
-	private Map<Integer,Connection> connectionsMap;
+	// data fields
+	public Map<Integer, Person> personMap;
+	private Map<Integer, Connection> connectionsMap;
 	private String[] personHeaderRow;
 
 	private String[] connectionHeaderRow;
-	
+
 	private int nextIdNum;
 	private int nextConnNum;
-	
+
 	private static final String DATA_FOLDER = "DataFiles";
 	private static final String PERSON_FILE_NAME = "PersonData.csv";
 	private static final String CONNECTION_FILE_NAME = "ConnectionData.csv";
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
-	
+
 	private static DataStorage primaryDataStorage = null;
-	
+
 	public static DataStorage getMainDataStorage() throws IOException {
 		if (primaryDataStorage == null) {
-			primaryDataStorage = new DataStorage();			
-		} 
+			primaryDataStorage = new DataStorage();
+		}
 		return primaryDataStorage;
 	}
-	
-	//constructor
+
+	// constructor
 	private DataStorage() throws IOException {
 		personMap = new TreeMap<>();
 		connectionsMap = new TreeMap<>();
@@ -37,9 +37,9 @@ public class DataStorage {
 		loadConnections();
 		loadIdAndConnNum();
 	}
-	
+
 	private void loadPeople() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER +"/" + PERSON_FILE_NAME));
+		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + PERSON_FILE_NAME));
 
 		List<String[]> myRows = reader.readAll();
 		personHeaderRow = myRows.remove(0); // remove header row
@@ -49,7 +49,7 @@ public class DataStorage {
 		}
 		System.out.println(personMap);
 	}
-	
+
 	public String[] getPersonHeaderRow() {
 		return personHeaderRow;
 	}
@@ -57,24 +57,22 @@ public class DataStorage {
 	public Collection<Person> getPeopleList() {
 		return personMap.values();
 	}
-	
-	
-	
+
 	public void addPerson(Person person) {
 		personMap.put(person.getID(), person);
 	}
-	
+
 	public void savePeople() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER +"/" + PERSON_FILE_NAME));
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + PERSON_FILE_NAME));
 		writer.writeNext(personHeaderRow);
 		for (Person person : personMap.values()) {
-		     writer.writeNext(person.toCSVRowArray());		     
+			writer.writeNext(person.toCSVRowArray());
 		}
-		 writer.close();	   
+		writer.close();
 	}
-	
-	private void loadConnections() throws IOException {		
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER +"/" + CONNECTION_FILE_NAME));		
+
+	private void loadConnections() throws IOException {
+		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + CONNECTION_FILE_NAME));
 		List<String[]> myRows = reader.readAll();
 		connectionHeaderRow = myRows.remove(0);
 
@@ -94,16 +92,19 @@ public class DataStorage {
 			for (String idStr : idArray) {
 				int id = Integer.parseInt(idStr);
 				Person person = personMap.get(id);
-				peopleConnectingNamesList.add(person); 
+				peopleConnectingNamesList.add(person);
 			}
-			
-			// make add connection method
-			Connection connection = new Connection(edgeID, date, typeInteraction, location, citation, socialNotes, peopleConnectingNamesList, direction);
-			connectionsMap.put(connection.getEdgeId(), connection);
+
+			addConnection(new Connection(edgeID, date, typeInteraction, location, citation, socialNotes,
+					peopleConnectingNamesList, direction));
+
 		}
-		
-	}	
-	
+
+	}
+
+	public void addConnection(Connection connection) {
+		connectionsMap.put(connection.getEdgeId(), connection);
+	}
 
 	public String[] getConnectionHeaderRow() {
 		return connectionHeaderRow;
@@ -113,40 +114,41 @@ public class DataStorage {
 		return connectionsMap.values();
 	}
 
-//	public void saveConnections() throws IOException {
-//		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER +"/" + CONNECTION_FILE_NAME));
-//		writer.writeNext(connectionHeaderRow);
-//		for (Connection connection : connectionsMap.values()) {
-//		    for(Object person: connection.getPeopleList()) {
-//		    	String id = 
-//		    }
-//		}
-//		 writer.close();
-//	}
-	
+	 public void saveConnections() throws IOException {
+		 CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER +"/" +
+		 CONNECTION_FILE_NAME));
+		 writer.writeNext(connectionHeaderRow);
+		 for(Connection connection: connectionsMap.values()) {
+			 writer.writeNext(connection.toCSVRowArray());
+		 }
+		 writer.close();
+	 }
+
 	private void loadIdAndConnNum() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER +"/" + NEXT_ID_FILE_NAME));
-		 String [] nextLine;
-	     while ((nextLine = reader.readNext()) != null) {
-	        // nextLine[] is an array of values from the line
-	        nextIdNum = Integer.parseInt(nextLine[0]);
-	        nextConnNum = Integer.parseInt(nextLine[1]);
-	     }
+		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + NEXT_ID_FILE_NAME));
+		String[] nextLine;
+		while ((nextLine = reader.readNext()) != null) {
+			// nextLine[] is an array of values from the line
+			nextIdNum = Integer.parseInt(nextLine[0]);
+			nextConnNum = Integer.parseInt(nextLine[1]);
+		}
 	}
-	
+
 	private void saveIdAndConnNum() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER +"/" + NEXT_ID_FILE_NAME));
-		String [] entries = {Integer.toString(nextIdNum), Integer.toString(nextConnNum)};
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + NEXT_ID_FILE_NAME));
+		String[] entries = { Integer.toString(nextIdNum), Integer.toString(nextConnNum) };
 		writer.writeNext(entries);
 		writer.close();
 	}
-	
+
 	/**
-	 * .... also updates the CSV file that stores these ID numbers persistently...
+	 * .... also updates the CSV file that stores these ID numbers
+	 * persistently...
+	 * 
 	 * @return
 	 */
 	public int incrementAndGetNextPersonIdNum() throws IOException {
-		nextIdNum++;				
+		nextIdNum++;
 		saveIdAndConnNum();
 
 		return nextIdNum;

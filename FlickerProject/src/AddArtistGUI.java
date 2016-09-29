@@ -112,10 +112,11 @@ public class AddArtistGUI implements ActionListener {
 		southPanel.add(cancel);
 		return southPanel;
 	}
-	
-	void makeVisible(){
+
+	void makeVisible() {
 		frame.setVisible(true);
 	}
+
 
 //	public ArrayList<String> saveNewPersonData(){
 //		ArrayList<String> newPersonData = new ArrayList<String>();
@@ -128,22 +129,24 @@ public class AddArtistGUI implements ActionListener {
 //		
 //	}
 	
+
+
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
-			//ArrayList<String> personData = saveNewPersonData();
-			//PersonList personList = new PersonList(personData);
+			// ArrayList<String> personData = saveNewPersonData();
+			// PersonList personList = new PersonList(personData);
 			try {
-				//personList.writePersonData();
-								
+				// personList.writePersonData();
+
 				DataStorage storage = DataStorage.getMainDataStorage();
-				
+
 				int nextID = storage.incrementAndGetNextPersonIdNum();
 
 				Person newPerson = new Person(nextID, name.getText(), 
 						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(), 
 						culture.getSelectedItem().toString(), notes.getText());
-				//DataStorage storage = new DataStorage();
-				
+				// DataStorage storage = new DataStorage();
+
 				storage.addPerson(newPerson);
 				storage.savePeople();
 			} catch (IOException e) {

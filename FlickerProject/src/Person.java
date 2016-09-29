@@ -9,7 +9,8 @@ public class Person implements TableRowViewable {
 	private String culturalId;
 	private String biographicalNotes;
 
-	public Person(int id, String name, String occupation, String gender, String culturalId, String biographicalNotes) throws IOException {
+	public Person(int id, String name, String occupation, String gender, String culturalId, String biographicalNotes)
+			throws IOException {
 		this.id = id;
 		this.name = name;
 		this.occupation = occupation;
@@ -17,7 +18,7 @@ public class Person implements TableRowViewable {
 		this.culturalId = culturalId;
 		this.biographicalNotes = biographicalNotes;
 	}
-	
+
 	public Person(String[] csvRowData) {
 		this.id = Integer.parseInt(csvRowData[0]);
 		this.name = csvRowData[1];
@@ -30,10 +31,10 @@ public class Person implements TableRowViewable {
 	public String[] toCSVRowArray() {
 		return new String[] { Integer.toString(id), name, occupation, gender, culturalId, biographicalNotes };
 	}
+
 	public String[] toTableRowArray() {
 		return new String[] { Integer.toString(id), name, occupation, gender, culturalId, biographicalNotes };
 	}
-
 
 	public int getID() {
 		return id;
