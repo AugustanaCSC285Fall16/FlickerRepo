@@ -22,6 +22,13 @@ public class DataStorage {
 
 	private static DataStorage primaryDataStorage = null;
 
+	/** 
+	 * Creates our main Data Storage Object that will be used
+	 * all over in the program to call methods.
+	 * 
+	 * @return Data Storage object that will be our simpleton
+	 * @throws IOException
+	 */
 	public static DataStorage getMainDataStorage() throws IOException {
 		if (primaryDataStorage == null) {
 			primaryDataStorage = new DataStorage();
@@ -38,6 +45,10 @@ public class DataStorage {
 		loadIdAndConnNum();
 	}
 
+	/**
+	 * 
+	 * @throws IOException
+	 */
 	private void loadPeople() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + PERSON_FILE_NAME));
 
@@ -47,7 +58,6 @@ public class DataStorage {
 		for (String[] row : myRows) {
 			addPerson(new Person(row));
 		}
-		System.out.println(personMap);
 	}
 
 	public String[] getPersonHeaderRow() {
@@ -145,12 +155,25 @@ public class DataStorage {
 	 * .... also updates the CSV file that stores these ID numbers
 	 * persistently...
 	 * 
-	 * @return
+	 * @return the incremented Person Id number to be used
 	 */
 	public int incrementAndGetNextPersonIdNum() throws IOException {
 		nextIdNum++;
 		saveIdAndConnNum();
 
 		return nextIdNum;
+	}
+	
+	/**
+	 * .... also updates the CSV file that stores these ID numbers
+	 * persistently...
+	 * 
+	 * @return the incremented Connection Id Number to be used. 
+	 */
+	public int incrementAndGetNextConnectionIdNum() throws IOException {
+		nextConnNum++;
+		saveIdAndConnNum();
+
+		return nextConnNum;
 	}
 }

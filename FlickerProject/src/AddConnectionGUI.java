@@ -1,6 +1,7 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,27 +13,28 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
 public class AddConnectionGUI implements ActionListener {
-	
+
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
 
 	private JFrame frame;
-	private JComboBox baseName;
+	private JComboBox<String> baseName;
 	private JFormattedTextField date;
-	private JComboBox type;
-	private JComboBox location;
+	private JComboBox<String> type;
+	private JComboBox<String> location;
 	private JTextArea socialNotes;
 	private JTextArea bib;
-	
+	private JComboBox<String> direction;
+
 	private JLabel baseNameLabel;
 	private JLabel dateLabel;
 	private JLabel typeLabel;
 	private JLabel locationLabel;
 	private JLabel socialLabel;
 	private JLabel bibLabel;
-	
+
 	private JPanel centerPanel;
 	private JPanel westPanel;
-	
+
 	private JPanel moreNamesPanel;
 	private JPanel baseNamePanel;
 	private JPanel namePanel;
@@ -41,32 +43,32 @@ public class AddConnectionGUI implements ActionListener {
 	private JPanel locationPanel;
 	private JPanel socialPanel;
 	private JPanel bibPanel;
-	
+
 	private JScrollPane socialScroll;
 	private JScrollPane bibScroll;
-	
+
 	JButton add;
 	private JButton cancel;
 	private JButton moreNames;
-	
+
 	private int additionalNames;
-	
+
 	HomeScreenGUI home;
 
 	public AddConnectionGUI(HomeScreenGUI home) {
-		
+
 		this.home = home;
 		additionalNames = 0;
-		
+
 		baseName = new JComboBox<>(new String[] { "", "White", "Black" });
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
 		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		type = new JComboBox<>(new String[] { "", "White", "Black" });
 		location = new JComboBox<>(new String[] { "", "White", "Black" });
-		socialNotes = new JTextArea(2,10);
+		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
-		bib = new JTextArea(2,10);
+		bib = new JTextArea(2, 10);
 		bib.setLineWrap(true);
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
@@ -78,37 +80,37 @@ public class AddConnectionGUI implements ActionListener {
 		locationLabel = new JLabel("Location:");
 		socialLabel = new JLabel("Social Notes:");
 		bibLabel = new JLabel("Bibliography:");
-		
-		baseNamePanel = new JPanel (new BorderLayout());
-		namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
-		moreNamesPanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
-		datePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
-		typePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+
+		baseNamePanel = new JPanel(new BorderLayout());
+		namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		moreNamesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		datePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		typePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		socialPanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
-		bibPanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
-		
-		socialScroll= new JScrollPane(socialNotes);
+		socialPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		bibPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+
+		socialScroll = new JScrollPane(socialNotes);
 		socialScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		bibScroll = new JScrollPane(bib);
 		bibScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+
 		moreNamesPanel.add(moreNames);
 		namePanel.add(baseName);
-		baseNamePanel.add(namePanel,BorderLayout.CENTER);
+		baseNamePanel.add(namePanel, BorderLayout.CENTER);
 		baseNamePanel.add(moreNamesPanel, BorderLayout.EAST);
 		datePanel.add(date);
 		typePanel.add(type);
 		locationPanel.add(location);
 		socialPanel.add(socialScroll);
 		bibPanel.add(bibScroll);
-		
+
 		try {
-            MaskFormatter dateMask = new MaskFormatter("####/##/##");
-            dateMask.install(date);
-        } catch (ParseException ex) {
-            Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+			MaskFormatter dateMask = new MaskFormatter("##/##/####");
+			dateMask.install(date);
+		} catch (ParseException ex) {
+			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,12 +130,12 @@ public class AddConnectionGUI implements ActionListener {
 	}
 
 	private JPanel createCenterPanel(int numNames) {
-		centerPanel = new JPanel(new GridLayout(6+numNames, 1));
+		centerPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		centerPanel.add(baseNamePanel);
-		for(int i = 0 ; i < numNames; i++){
+		for (int i = 0; i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			JComboBox<String> name = new JComboBox<>(new String[] { "", "White", "Black" });
-			JPanel namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(name);
 			panel.add(namePanel);
 			centerPanel.add(panel);
@@ -147,17 +149,17 @@ public class AddConnectionGUI implements ActionListener {
 	}
 
 	private JPanel createWestPanel(int numNames) {
-		westPanel = new JPanel(new GridLayout(6+numNames, 1));
+		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		westPanel.add(baseNameLabel);
-		if(numNames>0){
+		if (numNames > 0) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			JComboBox<String> toFrom = new JComboBox<>(new String[] { "", "To", "From" });
+			direction = new JComboBox<>(new String[] { "", "To", "From" });
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			toFromPanel.add(toFrom);
+			toFromPanel.add(direction);
 			panel.add(toFromPanel);
 			westPanel.add(panel);
 		}
-		for(int i = 1; i < numNames ; i++){
+		for (int i = 1; i < numNames; i++) {
 			JPanel tempPanel = new JPanel();
 			westPanel.add(tempPanel);
 		}
@@ -175,43 +177,60 @@ public class AddConnectionGUI implements ActionListener {
 		southPanel.add(cancel);
 		return southPanel;
 	}
-	void makeVisible(){
+
+	void makeVisible() {
 		frame.setVisible(true);
 	}
-	
-	void setDefault(){
-		additionalNames=0;
-		
+
+	void setDefault() {
+		additionalNames = 0;
+
 		baseName.setSelectedIndex(0);
 		type.setSelectedIndex(0);
 		location.setSelectedIndex(0);
 		socialNotes.setText("");
 		bib.setText("");
-		
+
 		refreshPanel();
 	}
-	private void refreshPanel(){
+
+	private void refreshPanel() {
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
-		
+
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
-		
-		frame.setSize(250,300+40*(additionalNames));
+
+		frame.setSize(250, 300 + 40 * (additionalNames));
 		makeVisible();
 	}
-	
+
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
-			// search things
-			//ArrayList<String> ConnectionData = saveNewConnectionData();
-			// send to filewriter to get appended to csv
+			try {
+				DataStorage storage = DataStorage.getMainDataStorage();
+				int nextID = storage.incrementAndGetNextConnectionIdNum();
+
+				// baseName.toString(). Doesn't work. Needs to be a List<Person>
+				// Need to figure out how to make this happen.
+
+				// Connection newConnection = new Connection(nextID,
+				// date.getText(), type.getSelectedItem().toString(),
+				// location.getSelectedItem().toString(), bib.getText(),
+				// socialNotes.getText(), baseName.getSelectedItem().toString(),
+				// direction.getSelectedItem().toString() );
+				// storage.addConnection(newConnection);
+				storage.saveConnections();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			frame.dispose();
 			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();
-		} else if (event.getSource()==moreNames){
+		} else if (event.getSource() == moreNames) {
 			additionalNames++;
 			refreshPanel();
 		}

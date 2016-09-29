@@ -31,18 +31,16 @@ public class AddArtistGUI implements ActionListener {
 	private JButton cancel;
 	HomeScreenGUI home;
 	private JScrollPane scroll;
-	
-	
 
 	public AddArtistGUI(HomeScreenGUI home) {
 
-		this.home=home;
-		
+		this.home = home;
+
 		name = new JTextField(10);
 		culture = new JComboBox<>(new String[] { "", "White", "Black" });
 		gender = new JComboBox<>(new String[] { "", "White", "Black" });
 		occupation = new JComboBox<>(new String[] { "", "White", "Black" });
-		notes = new JTextArea(2,15);
+		notes = new JTextArea(2, 15);
 		notes.setLineWrap(true);
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
@@ -59,7 +57,7 @@ public class AddArtistGUI implements ActionListener {
 		occupationPanel = new JPanel(new FlowLayout());
 		notesPanel = new JPanel(new FlowLayout());
 
-		scroll= new JScrollPane(notes);
+		scroll = new JScrollPane(notes);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		namePanel.add(name);
@@ -117,36 +115,28 @@ public class AddArtistGUI implements ActionListener {
 		frame.setVisible(true);
 	}
 
-
-//	public ArrayList<String> saveNewPersonData(){
-//		ArrayList<String> newPersonData = new ArrayList<String>();
-//		newPersonData.add((String)name.getSelectedItem().toString());
-//		newPersonData.add((String)culture.getSelectedItem().toString());
-//		newPersonData.add((String)gender.getSelectedItem().toString());
-//		newPersonData.add((String)occupation.getSelectedItem().toString());
-//		newPersonData.add(notes.getText());
-//		return newPersonData;
-//		
-//	}
-	
-
+	// public ArrayList<String> saveNewPersonData(){
+	// ArrayList<String> newPersonData = new ArrayList<String>();
+	// newPersonData.add((String)name.getSelectedItem().toString());
+	// newPersonData.add((String)culture.getSelectedItem().toString());
+	// newPersonData.add((String)gender.getSelectedItem().toString());
+	// newPersonData.add((String)occupation.getSelectedItem().toString());
+	// newPersonData.add(notes.getText());
+	// return newPersonData;
+	//
+	// }
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
 			// ArrayList<String> personData = saveNewPersonData();
 			// PersonList personList = new PersonList(personData);
 			try {
-				// personList.writePersonData();
-
 				DataStorage storage = DataStorage.getMainDataStorage();
-
 				int nextID = storage.incrementAndGetNextPersonIdNum();
-
-				Person newPerson = new Person(nextID, name.getText(), 
-						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(), 
-						culture.getSelectedItem().toString(), notes.getText());
-				// DataStorage storage = new DataStorage();
-
+				
+				Person newPerson = new Person(nextID, name.getText(), occupation.getSelectedItem().toString(),
+						gender.getSelectedItem().toString(), culture.getSelectedItem().toString(), notes.getText());
+				
 				storage.addPerson(newPerson);
 				storage.savePeople();
 			} catch (IOException e) {
