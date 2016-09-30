@@ -26,16 +26,22 @@ public class Connection implements TableRowViewable {
 	}
 
 	 public String[] toCSVRowArray() {
-	 //FIXME: needs completed
 		 String idListText = peopleListToIdText();
 		 return new String[] { Integer.toString(edgeId), idListText, date,
-				 typeInteraction, location, citation, direction };
+				 typeInteraction, location, citation, socialNotes, direction };
 	}
 	 
+	 /** 
+	  * Retrieves the ID for each person in a connection and returns it.
+	  * 
+	  * 
+	  * @return String 
+	  */
 	 public String peopleListToIdText() {
-		 String result = Integer.toString(peopleList.get(0).getID());
+		 String result = "";
 		 for(Person person: peopleList) {
-			result = result + ":" + person.getID();
+			result += person.getID() + ":";
+			 //FIXME: Make it so there is not an extra colon at the end. 
 		 }
 		 return result;
 	 }
@@ -44,6 +50,7 @@ public class Connection implements TableRowViewable {
 		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location,
 				citation, socialNotes, direction };
 	}
+	
 
 	public List getPeopleList() {
 		return peopleList;

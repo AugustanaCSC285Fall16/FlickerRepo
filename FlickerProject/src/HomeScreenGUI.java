@@ -28,7 +28,7 @@ public class HomeScreenGUI implements ActionListener {
 	private JTable tableDisplay;
 
 	private SearchGUI searchGUI;
-	private AddArtistGUI artistGUI;
+	private AddPersonGUI artistGUI;
 	private AddConnectionGUI connectionGUI;
 	private ExportGUI exportGUI;
 
@@ -44,7 +44,7 @@ public class HomeScreenGUI implements ActionListener {
 		tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 
 		searchGUI = new SearchGUI(this);
-		artistGUI = new AddArtistGUI(this);
+		artistGUI = new AddPersonGUI(this);
 		connectionGUI = new AddConnectionGUI(this);
 		exportGUI = new ExportGUI(this);
 		southPanel = new JPanel();
@@ -125,18 +125,18 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
+			tableDisplay.setEnabled(false);
 			searchGUI.setDefault();
 			searchGUI.makeVisible();
 		} else if (source == searchGUI.search) {
-
+		
 			southPanel.removeAll();
 
-			southPanel = new JPanel(new GridLayout(1, 3));
+			southPanel = new JPanel(new GridLayout(1, 2));
 			JButton clear = new JButton("Clear");
 			JButton edit = new JButton("Edit");
 
 			southPanel.add(clear);
-			southPanel.add(edit);
 			southPanel.add(export);
 
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
@@ -144,6 +144,11 @@ public class HomeScreenGUI implements ActionListener {
 			
 			
 		} else if (source == add) {
+			tableDisplay.setEnabled(false);
+			southPanel.removeAll();
+			centerPanel.add(southPanel, BorderLayout.SOUTH);
+			centerPanel.revalidate();
+			
 			Object[] options = { "Add Artist", "Add Connection" };
 			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
@@ -161,15 +166,13 @@ public class HomeScreenGUI implements ActionListener {
 			System.out.println("successfully waited");
 			// waiting for user to click add in the connectionGUI
 		} else if (source == edit) {
-
+			tableDisplay.setEnabled(true);
 			southPanel.removeAll();
 
 			southPanel = new JPanel(new GridLayout(1, 2));
-			JButton edit = new JButton("Edit");
-			JButton searchEdit = new JButton("Search for Edit");
+			JButton save = new JButton("Save Changes");
 
-			southPanel.add(edit);
-			southPanel.add(searchEdit);
+			southPanel.add(save);
 
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();

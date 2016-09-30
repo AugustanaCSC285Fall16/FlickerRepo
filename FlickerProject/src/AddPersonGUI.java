@@ -9,35 +9,32 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class AddArtistGUI implements ActionListener {
+public class AddPersonGUI implements ActionListener {
 
 	private JFrame frame;
 	private JTextField name;
 	private JComboBox<String> culture;
 	private JComboBox<String> gender;
 	private JComboBox<String> occupation;
-	
 	private JTextArea notes;
 	private JPanel namePanel;
 	private JPanel culturePanel;
 	private JPanel genderPanel;
 	private JPanel occupationPanel;
 	private JPanel notesPanel;
+	private JPanel centerPanel;
+	private JPanel westPanel;
 	private JLabel nameLabel;
 	private JLabel culturalLabel;
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
-	private JPanel centerPanel;
-	private JPanel westPanel;
-
-	
 	JButton add;
 	private JButton cancel;
 	HomeScreenGUI home;
 	private JScrollPane scroll;
 
-	public AddArtistGUI(HomeScreenGUI home) {
+	public AddPersonGUI(HomeScreenGUI home) {
 
 		this.home = home;
 
@@ -88,6 +85,12 @@ public class AddArtistGUI implements ActionListener {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 	}
+	
+	/**
+	 * This method creates the center panel.
+	 * It adds the appropriate buttons to the panel.
+	 * @return JPanel This returns the completed center panel.
+	 */
 
 	private JPanel createCenterPanel() {
 		centerPanel = new JPanel(new GridLayout(5, 1));
@@ -99,6 +102,12 @@ public class AddArtistGUI implements ActionListener {
 		return centerPanel;
 	}
 
+	/**
+	 * This method creates the west panel.
+	 * It adds the appropriate buttons to the panel.
+	 * @return JPanel This returns the completed west panel.
+	 */
+	
 	private JPanel createWestPanel() {
 		westPanel = new JPanel(new GridLayout(5, 1));
 		westPanel.add(nameLabel);
@@ -109,6 +118,12 @@ public class AddArtistGUI implements ActionListener {
 		return westPanel;
 	}
 
+	/**
+	 * This method creates the south panel.
+	 * It adds the appropriate buttons the panel.
+	 * @return JPanel This returns the completed south panel.
+	 */
+	
 	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(add);
@@ -116,6 +131,10 @@ public class AddArtistGUI implements ActionListener {
 		return southPanel;
 	}
 
+	/**
+	 * Makes the frame visible.
+	 */
+	
 	void makeVisible() {
 		frame.setVisible(true);
 	}
@@ -150,7 +169,7 @@ public class AddArtistGUI implements ActionListener {
 	// return newPersonData;
 	//
 	// }
-	
+
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
 			// ArrayList<String> personData = saveNewPersonData();
@@ -173,8 +192,6 @@ public class AddArtistGUI implements ActionListener {
 			// reset fields
 			frame.dispose();
 		}
-	}
-	
-	
-
+	}		
 }
+

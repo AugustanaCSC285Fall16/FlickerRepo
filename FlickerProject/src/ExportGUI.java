@@ -64,6 +64,4 @@ public class ExportGUI implements ActionListener{
 			geffy.setSelected(true);
 		}
 	}
-
-
 }
