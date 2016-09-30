@@ -132,6 +132,13 @@ public class AddConnectionGUI implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
+	
+	/**
+	 * This method is used to create the west panel.
+	 * It adds the appropriate buttons to the panel.
+	 * @param numNames The number of additional names need in the panel.
+	 * @return JPanel This returns the completed center panel.
+	 */
 
 	private JPanel createCenterPanel(int numNames) {
 		centerPanel = new JPanel(new GridLayout(6 + numNames, 1));
@@ -152,6 +159,13 @@ public class AddConnectionGUI implements ActionListener {
 		return centerPanel;
 	}
 
+	/**
+	 * This method is used to create the west panel.
+	 * It adds the appropriate labels to the panel.
+	 * @param numNames The number of additional names needed in the panel.
+	 * @return JPanel This returns the completed west panel.
+	 */
+	
 	private JPanel createWestPanel(int numNames) {
 		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		westPanel.add(baseNameLabel);
@@ -175,6 +189,12 @@ public class AddConnectionGUI implements ActionListener {
 		return westPanel;
 	}
 
+	/**
+	 * Creates the south panel and adds the appropriate
+	 * buttons.
+	 * @return JPanel This returns the finished south panel.
+	 */
+	
 	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(add);
@@ -182,10 +202,19 @@ public class AddConnectionGUI implements ActionListener {
 		return southPanel;
 	}
 
+	/**
+	 * Makes the frame visible.
+	 */
+	
 	void makeVisible() {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Sets all data fields to the default value. Refreshes the frame
+	 * by calling the refreshPanel() method.
+	 */
+	
 	void setDefault() {
 		additionalNames = 0;
 
@@ -197,6 +226,11 @@ public class AddConnectionGUI implements ActionListener {
 
 		refreshPanel();
 	}
+	
+	/**
+	 * Removes current panels from the search frame. Updates the frame's
+	 * size and adds the panels back to the frame.
+	 */
 
 	private void refreshPanel() {
 		frame.remove(centerPanel);
