@@ -22,9 +22,9 @@ public class DataStorage {
 
 	private static DataStorage primaryDataStorage = null;
 
-	/** 
-	 * Creates our main Data Storage Object that will be used
-	 * all over in the program to call methods.
+	/**
+	 * Creates our main Data Storage Object that will be used all over in the
+	 * program to call methods.
 	 * 
 	 * @return Data Storage object that will be our simpleton
 	 * @throws IOException
@@ -96,6 +96,7 @@ public class DataStorage {
 			String citation = row[5];
 			String socialNotes = row[6];
 			String direction = row[7];
+
 			String[] idArray = baseIdListText.split(":");
 			List<Person> peopleConnectingNamesList = new ArrayList<Person>();
 
@@ -123,16 +124,25 @@ public class DataStorage {
 	public Collection<Connection> getConnectionList() {
 		return connectionsMap.values();
 	}
+	
+	public Person getPersonListForConnection(String name){
+		for (Person person: personMap.values()){
+			if (name.equals(person.getName())){
+				int id = person.getID();
+				return personMap.get(id);
+			}
+		}
+		return null;
+	}
 
-	 public void saveConnections() throws IOException {
-		 CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER +"/" +
-		 CONNECTION_FILE_NAME));
-		 writer.writeNext(connectionHeaderRow);
-		 for(Connection connection: connectionsMap.values()) {
-			 writer.writeNext(connection.toCSVRowArray());
-		 }
-		 writer.close();
-	 }
+	public void saveConnections() throws IOException {
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + CONNECTION_FILE_NAME));
+		writer.writeNext(connectionHeaderRow);
+		for (Connection connection : connectionsMap.values()) {
+			writer.writeNext(connection.toCSVRowArray());
+		}
+		writer.close();
+	}
 
 	private void loadIdAndConnNum() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + NEXT_ID_FILE_NAME));
@@ -163,12 +173,12 @@ public class DataStorage {
 
 		return nextIdNum;
 	}
-	
+
 	/**
 	 * .... also updates the CSV file that stores these ID numbers
 	 * persistently...
 	 * 
-	 * @return the incremented Connection Id Number to be used. 
+	 * @return the incremented Connection Id Number to be used.
 	 */
 	public int incrementAndGetNextConnectionIdNum() throws IOException {
 		nextConnNum++;

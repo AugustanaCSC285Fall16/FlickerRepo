@@ -6,6 +6,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +27,7 @@ public class AddConnectionGUI implements ActionListener {
 	private JTextArea socialNotes;
 	private JTextArea bib;
 	private JComboBox<String> direction;
+	private JComboBox<String> targetName;
 
 	private JLabel baseNameLabel;
 	private JLabel dateLabel;
@@ -134,9 +138,9 @@ public class AddConnectionGUI implements ActionListener {
 		centerPanel.add(baseNamePanel);
 		for (int i = 0; i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			JComboBox<String> name = new JComboBox<>(new String[] { "", "White", "Black" });
+			targetName = new JComboBox<>(new String[] { "", "White", "Black" });
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			namePanel.add(name);
+			namePanel.add(targetName);
 			panel.add(namePanel);
 			centerPanel.add(panel);
 		}
@@ -204,22 +208,23 @@ public class AddConnectionGUI implements ActionListener {
 		frame.setSize(250, 300 + 40 * (additionalNames));
 		makeVisible();
 	}
-
+	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
 			try {
 				DataStorage storage = DataStorage.getMainDataStorage();
 				int nextID = storage.incrementAndGetNextConnectionIdNum();
+			
+				List<Person> personListForConn = new ArrayList<>();
+				personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
+				personListForConn.add(storage.getPersonListForConnection(targetName.getSelectedItem().toString()));
 
-				// baseName.toString(). Doesn't work. Needs to be a List<Person>
-				// Need to figure out how to make this happen.
-
-				// Connection newConnection = new Connection(nextID,
-				// date.getText(), type.getSelectedItem().toString(),
-				// location.getSelectedItem().toString(), bib.getText(),
-				// socialNotes.getText(), baseName.getSelectedItem().toString(),
-				// direction.getSelectedItem().toString() );
-				// storage.addConnection(newConnection);
+				Connection newConnection = new Connection(nextID,
+				date.getText(), type.getSelectedItem().toString(),
+				location.getSelectedItem().toString(), bib.getText(),
+				socialNotes.getText(), personListForConn,
+				direction.getSelectedItem().toString() );
+				storage.addConnection(newConnection);
 				storage.saveConnections();
 
 			} catch (IOException e) {

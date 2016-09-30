@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class AddArtistGUI implements ActionListener {
+public class AddPersonGUI implements ActionListener {
 
 	private JFrame frame;
 	private JTextField name;
@@ -32,7 +32,7 @@ public class AddArtistGUI implements ActionListener {
 	HomeScreenGUI home;
 	private JScrollPane scroll;
 
-	public AddArtistGUI(HomeScreenGUI home) {
+	public AddPersonGUI(HomeScreenGUI home) {
 
 		this.home = home;
 
