@@ -12,9 +12,12 @@ public class ExportGUI implements ActionListener{
 	private JPanel southPanel;
 	
 	private JRadioButton palladio;
-	private JRadioButton geffy;
+	private JRadioButton gephi;
 	private JButton export;
 	private JButton cancel;
+	
+	private boolean palladioSelect;
+	private boolean gephiSelect;
 	
 	HomeScreenGUI home;
 	
@@ -24,12 +27,12 @@ public class ExportGUI implements ActionListener{
 		northPanel = new JPanel(new FlowLayout());
 		southPanel = new JPanel(new FlowLayout());
 		palladio = new JRadioButton("Palladio");
-		geffy = new JRadioButton("Geffy");
+		gephi = new JRadioButton("Gephi");
 		export = new JButton("Export");
 		cancel = new JButton("Cancel");
 	
 		northPanel.add(palladio);
-		northPanel.add(geffy);
+		northPanel.add(gephi);
 		southPanel.add(export);
 		southPanel.add(cancel);
 		
@@ -42,7 +45,7 @@ public class ExportGUI implements ActionListener{
 		frame.add(southPanel, BorderLayout.SOUTH);
 		
 		palladio.addActionListener(this);
-		geffy.addActionListener(this);
+		gephi.addActionListener(this);
 		export.addActionListener(this);
 		cancel.addActionListener(this);		
 		
@@ -50,6 +53,10 @@ public class ExportGUI implements ActionListener{
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
+	/**
+	 * Makes the frame visible.
+	 */
+	
 	void makeVisible(){
 		frame.setVisible(true);
 	}
@@ -57,11 +64,15 @@ public class ExportGUI implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == palladio) {
 			palladio.setSelected(true);
-			geffy.setSelected(false);
+			gephi.setSelected(false);
+			palladioSelect = true;
+			gephiSelect = false;
 		}
-		else if (event.getSource() == geffy) {
+		else if (event.getSource() == gephi) {
 			palladio.setSelected(false);
-			geffy.setSelected(true);
+			gephi.setSelected(true);
+			gephiSelect = true;
+			palladioSelect = false;
 		}
 	}
 }
