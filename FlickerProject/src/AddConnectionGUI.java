@@ -67,12 +67,12 @@ public class AddConnectionGUI implements ActionListener {
 		additionalNames = 0;
 		targetNames = new ArrayList<>();
 
-		baseName = new JComboBox<>(new String[] { "", "White", "Black" });
+		baseName = new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
 		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		type = new JComboBox<>(new String[] { "", "White", "Black" });
-		location = new JComboBox<>(new String[] { "", "White", "Black" });
+		type = new JComboBox<>(new String[] { "", "Journal", "Letter", "Other" });
+		location = new JComboBox<>(new String[] { "", "Paris", "Other" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		bib = new JTextArea(2, 10);
@@ -146,10 +146,16 @@ public class AddConnectionGUI implements ActionListener {
 	private JPanel createCenterPanel(int numNames) {
 		centerPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		centerPanel.add(baseNamePanel);
-		targetNames.clear();
-		for (int i = 0; i < numNames; i++) {
+		for(int i = 0 ; i < targetNames.size(); i ++){
+			JPanel panel = new JPanel ( new FlowLayout(FlowLayout.LEADING));
+			JPanel namePanel = new JPanel ( new FlowLayout(FlowLayout.LEADING));
+			namePanel.add(targetNames.get(i));
+			panel.add(namePanel);
+			centerPanel.add(panel);
+		}
+		for (int i = targetNames.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			targetNames.add(new JComboBox<>(new String[] { "", "White", "Black" }));
+			targetNames.add(new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
@@ -221,6 +227,8 @@ public class AddConnectionGUI implements ActionListener {
 	
 	void setDefault() {
 		additionalNames = 0;
+		targetNames.clear();
+		
 
 		baseName.setSelectedIndex(0);
 		type.setSelectedIndex(0);
@@ -255,13 +263,14 @@ public class AddConnectionGUI implements ActionListener {
 			
 				List<Person> personListForConn = new ArrayList<>();
 				personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
+
 				//this might be broke?
-//				personListForConn.add(storage.getPersonListForConnection(targetName.getSelectedItem().toString()));
+				//personListForConn.add(storage.getPersonListForConnection(targetName.getSelectedItem().toString()));
 				//try this?
+
 				for(int i = 0 ; i< targetNames.size(); i ++){
 					personListForConn.add(storage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
 				}
-
 
 				Connection newConnection = new Connection(nextID,
 				date.getText(), type.getSelectedItem().toString(),

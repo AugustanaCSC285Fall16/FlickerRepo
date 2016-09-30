@@ -39,9 +39,9 @@ public class AddPersonGUI implements ActionListener {
 		this.home = home;
 
 		name = new JTextField(10);
-		culture = new JComboBox<>(new String[] { "", "White", "Black" });
-		gender = new JComboBox<>(new String[] { "", "White", "Black" });
-		occupation = new JComboBox<>(new String[] { "", "White", "Black" });
+		culture = new JComboBox<>(new String[] { "", "French", "American", "Italian", "German", "Other" });
+		gender = new JComboBox<>(new String[] { "", "Male", "Female", "Other" });
+		occupation = new JComboBox<>(new String[] { "", "Artist","Bartender","Other" });
 		notes = new JTextArea(2, 15);
 		notes.setLineWrap(true);
 		add = new JButton("Add");

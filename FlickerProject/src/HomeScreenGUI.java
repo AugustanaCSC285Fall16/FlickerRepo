@@ -66,8 +66,12 @@ public class HomeScreenGUI implements ActionListener {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 	}
-	/*
-	 * Creates Table
+	
+	/**
+	 * This method is used to create the table.
+	 * It creates the table.
+	 * @return JPanel This returns the completed table.
+	 * @throws IOException
 	 */
 
 	private JTable displayTable(String[] columnNamesArray, Collection<? extends TableRowViewable> rowItems)
@@ -103,6 +107,12 @@ public class HomeScreenGUI implements ActionListener {
 		return table;
 	}
 
+	/**
+	 * This method is used to create the west panel.
+	 * It adds the appropriate labels to the panel.
+	 * @return JPanel This returns the completed west panel.
+	 */	
+	
 	private JPanel createWestPanel() {
 		JPanel westPanel = new JPanel(new GridLayout(3, 1));
 		westPanel.add(search);
@@ -110,6 +120,13 @@ public class HomeScreenGUI implements ActionListener {
 		westPanel.add(edit);
 		return westPanel;
 	}
+	
+	/**
+	 * This method is used to create the north panel.
+	 * It adds the appropriate buttons to the panel.
+	 * @return JPanel This returns the completed north panel.
+	 */
+
 
 //	private JPanel createNorthPanel() throws IOException {
 //		JPanel northPanel = new JPanel(new GridLayout(1, 5));
