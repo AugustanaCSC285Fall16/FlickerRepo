@@ -16,6 +16,9 @@ public class ExportGUI implements ActionListener{
 	private JButton export;
 	private JButton cancel;
 	
+	private boolean palladioSelect;
+	private boolean gephiSelect;
+	
 	HomeScreenGUI home;
 	
 	public ExportGUI(HomeScreenGUI home) {
@@ -50,6 +53,10 @@ public class ExportGUI implements ActionListener{
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
+	/**
+	 * Makes the frame visible.
+	 */
+	
 	void makeVisible(){
 		frame.setVisible(true);
 	}
@@ -58,10 +65,14 @@ public class ExportGUI implements ActionListener{
 		if (event.getSource() == palladio) {
 			palladio.setSelected(true);
 			gephi.setSelected(false);
+			palladioSelect = true;
+			gephiSelect = false;
 		}
 		else if (event.getSource() == gephi) {
 			palladio.setSelected(false);
 			gephi.setSelected(true);
+			gephiSelect = true;
+			palladioSelect = false;
 		}
 	}
 }

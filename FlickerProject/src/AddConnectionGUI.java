@@ -263,7 +263,11 @@ public class AddConnectionGUI implements ActionListener {
 			
 				List<Person> personListForConn = new ArrayList<>();
 				personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
-				
+
+				//this might be broke?
+				//personListForConn.add(storage.getPersonListForConnection(targetName.getSelectedItem().toString()));
+				//try this?
+
 				for(int i = 0 ; i< targetNames.size(); i ++){
 					personListForConn.add(storage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
 				}
