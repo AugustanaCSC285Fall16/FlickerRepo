@@ -83,6 +83,12 @@ public class AddArtistGUI implements ActionListener {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 	}
+	
+	/**
+	 * This method creates the center panel.
+	 * It adds the appropriate buttons to the panel.
+	 * @return JPanel This returns the completed center panel.
+	 */
 
 	private JPanel createCenterPanel() {
 		JPanel centerPanel = new JPanel(new GridLayout(5, 1));
@@ -94,6 +100,12 @@ public class AddArtistGUI implements ActionListener {
 		return centerPanel;
 	}
 
+	/**
+	 * This method creates the west panel.
+	 * It adds the appropriate buttons to the panel.
+	 * @return JPanel This returns the completed west panel.
+	 */
+	
 	private JPanel createWestPanel() {
 		JPanel westPanel = new JPanel(new GridLayout(5, 1));
 		westPanel.add(nameLabel);
@@ -104,6 +116,12 @@ public class AddArtistGUI implements ActionListener {
 		return westPanel;
 	}
 
+	/**
+	 * This method creates the south panel.
+	 * It adds the appropriate buttons the panel.
+	 * @return JPanel This returns the completed south panel.
+	 */
+	
 	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(add);
@@ -111,6 +129,10 @@ public class AddArtistGUI implements ActionListener {
 		return southPanel;
 	}
 
+	/**
+	 * Makes the frame visible.
+	 */
+	
 	void makeVisible() {
 		frame.setVisible(true);
 	}

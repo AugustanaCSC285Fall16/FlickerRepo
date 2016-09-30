@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,8 +59,12 @@ public class SearchGUI implements ActionListener {
 	private JPanel westPanel;
 	
 	HomeScreenGUI home;
+	
+	private ArrayList<JComboBox> artists;
 
 	public SearchGUI(HomeScreenGUI home) {
+		
+		artists = new ArrayList<JComboBox>();
 		
 		this.home=home;
 		
@@ -147,14 +152,22 @@ public class SearchGUI implements ActionListener {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
+	/**
+	 * This method is used to create the west panel.
+	 * It adds the appropriate buttons to the panel.
+	 * @param numNames The number of additional names need in the panel.
+	 * @return JPanel This returns the completed center panel.
+	 */
+	
 	private JPanel createCenterPanel(int numNames) {
 		centerPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
 		centerPanel.add(namePanel);
+		artists.clear();
 		for(int i = 0 ; i < numNames; i++){
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			JComboBox<String> name = new JComboBox<>(new String[] { "", "White", "Black" });
+			artists.add(new JComboBox<>(new String[] { "", "White", "Black" }));
 			JPanel namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
-			namePanel.add(name);
+			namePanel.add(artists.get(i));
 			panel.add(namePanel);
 			centerPanel.add(panel);
 		}
@@ -171,6 +184,13 @@ public class SearchGUI implements ActionListener {
 		centerPanel.add(locationPanel);
 		return centerPanel;
 	}
+	
+	/**
+	 * This method is used to create the west panel.
+	 * It adds the appropriate labels to the panel.
+	 * @param numNames The number of additional names needed in the panel.
+	 * @return JPanel This returns the completed west panel.
+	 */
 
 	private JPanel createWestPanel(int numNames) {
 		westPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
@@ -199,6 +219,12 @@ public class SearchGUI implements ActionListener {
 		westPanel.add(locationLabel);
 		return westPanel;
 	}
+	
+	/**
+	 * Creates the south panel and adds the appropriate
+	 * buttons.
+	 * @return JPanel This returns the finished south panel.
+	 */
 
 	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
@@ -207,11 +233,19 @@ public class SearchGUI implements ActionListener {
 		return southPanel;
 	}
 	
+	/**
+	 * Makes the frame visible.
+	 */
 
 	void makeVisible(){
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Sets all data fields to the default value. Refreshes the frame
+	 * by calling the refreshPanel() method.
+	 */
+	
 	void setDefault(){
 		numDates=0;
 		additionalNames=0;
@@ -225,6 +259,12 @@ public class SearchGUI implements ActionListener {
 		
 		refreshPanel();
 	}
+	
+	/**
+	 * Removes current panels from the search frame. Updates the frame's
+	 * size and adds the panels back to the frame.
+	 */
+	
 	private void refreshPanel(){
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
@@ -240,6 +280,10 @@ public class SearchGUI implements ActionListener {
 			// search things
 			frame.dispose();
 			home.actionPerformed(event);
+			for(int i=0; i < artists.size(); i++){
+				System.out.println("Artist at "+i+" is " + artists.get(i).getSelectedItem().toString());
+			}
+
 
 		} else if (event.getSource() == reset) {
 			// reset fields
