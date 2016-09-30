@@ -155,7 +155,7 @@ public class AddConnectionGUI implements ActionListener {
 		}
 		for (int i = targetNames.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			targetName = new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
+			targetNames.add(new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
