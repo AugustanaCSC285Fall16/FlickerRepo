@@ -121,6 +121,10 @@ public class DataStorage {
 		connectionsMap.put(connection.getEdgeId(), connection);
 	}
 
+	public Connection getConnectionFromID(int ID){
+		return connectionsMap.get(ID);
+	}
+	
 	public String[] getConnectionHeaderRow() {
 		return connectionHeaderRow;
 	}

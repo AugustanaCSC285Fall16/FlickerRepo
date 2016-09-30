@@ -100,4 +100,12 @@ public class Connection implements TableRowViewable {
 		this.direction = direction;
 	}
 
+	public String getSocialNotes(){
+		return socialNotes;
+	}
+	
+	public void setSocialNotes(String socialNotes){
+		this.socialNotes = socialNotes;
+	}
+	
 }

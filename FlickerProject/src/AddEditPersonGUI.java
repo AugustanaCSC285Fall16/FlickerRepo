@@ -11,7 +11,7 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-public class AddPersonGUI implements ActionListener {
+public class AddEditPersonGUI implements ActionListener {
 
 	private JFrame frame;
 	private JTextField name;
@@ -31,28 +31,39 @@ public class AddPersonGUI implements ActionListener {
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
-	JButton add;
+	JButton submitButton;
 	private JButton cancel;
 	HomeScreenGUI home;
 	private JScrollPane scroll;
-	Vector<String> cultureChoices;
-	Vector<String> genderChoices;
-	Vector<String> occupationChoices;
-	
-	public AddPersonGUI(HomeScreenGUI home) {
 
+	// class that relates to controlled vocabulary
+	private Vector<String> cultureChoices;
+	private Vector<String> genderChoices;
+	private Vector<String> occupationChoices;
+
+	private Person personEdited;
+
+	/**
+	 * 
+	 * @param home
+	 *            - reference back to the home screen GUI
+	 * @param person
+	 *            - to be edited or null if we are adding a new person
+	 */
+	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
+		this.personEdited = person;
 		this.home = home;
 
 		name = new JTextField(10);
-		cultureChoices = new Vector<String>(Arrays.asList("", "French", "American", "Italian", "German", "Other" ));
+		cultureChoices = new Vector<String>(Arrays.asList("", "French", "American", "Italian", "German", "Other"));
 		culture = new JComboBox<>(new String[] { "", "French", "American", "Italian", "German", "Other" });
-		genderChoices = new Vector<String>(Arrays.asList( "", "Male", "Female", "Other" ));
+		genderChoices = new Vector<String>(Arrays.asList("", "Male", "Female", "Other"));
 		gender = new JComboBox<>(new String[] { "", "Male", "Female", "Other" });
-		occupationChoices = new Vector<String>(Arrays.asList( "", "Artist","Bartender","Other" ));
-		occupation = new JComboBox<>(new String[] { "", "Artist","Bartender","Other" });
+		occupationChoices = new Vector<String>(Arrays.asList("", "Artist", "Bartender", "Other"));
+		occupation = new JComboBox<>(new String[] { "", "Artist", "Bartender", "Other" });
 		notes = new JTextArea(2, 15);
 		notes.setLineWrap(true);
-		add = new JButton("Submit");
+		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 
 		nameLabel = new JLabel("Artist Name:");
@@ -76,8 +87,7 @@ public class AddPersonGUI implements ActionListener {
 		occupationPanel.add(occupation);
 		notesPanel.add(scroll);
 
-		
-		//TODO: This should be moved out of AddPersonGUI and into SearchGUI
+		// TODO: This should be moved out of AddPersonGUI and into SearchGUI
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 300);
@@ -87,18 +97,24 @@ public class AddPersonGUI implements ActionListener {
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
 		frame.add(createWestPanel(), BorderLayout.WEST);
 
-		add.addActionListener(this);
+		submitButton.addActionListener(this);
 		cancel.addActionListener(this);
 
-		frame.setVisible(false);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+		if (personEdited == null) {
+			setDefault();
+		} else {
+			setPersonData(personEdited);
+		}
+
 	}
-	
+
 	/**
-	 * This method creates the center panel.
-	 * It adds the appropriate buttons to the panel.
+	 * This method creates the center panel. It adds the appropriate buttons to
+	 * the panel.
+	 * 
 	 * @return JPanel This returns the completed center panel.
 	 */
 
@@ -113,11 +129,12 @@ public class AddPersonGUI implements ActionListener {
 	}
 
 	/**
-	 * This method creates the west panel.
-	 * It adds the appropriate buttons to the panel.
+	 * This method creates the west panel. It adds the appropriate buttons to
+	 * the panel.
+	 * 
 	 * @return JPanel This returns the completed west panel.
 	 */
-	
+
 	private JPanel createWestPanel() {
 		westPanel = new JPanel(new GridLayout(5, 1));
 		westPanel.add(nameLabel);
@@ -129,14 +146,15 @@ public class AddPersonGUI implements ActionListener {
 	}
 
 	/**
-	 * This method creates the south panel.
-	 * It adds the appropriate buttons the panel.
+	 * This method creates the south panel. It adds the appropriate buttons the
+	 * panel.
+	 * 
 	 * @return JPanel This returns the completed south panel.
 	 */
-	
+
 	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
-		southPanel.add(add);
+		southPanel.add(submitButton);
 		southPanel.add(cancel);
 		return southPanel;
 	}
@@ -144,20 +162,21 @@ public class AddPersonGUI implements ActionListener {
 	/**
 	 * Makes the frame visible.
 	 */
-	
+
 	void makeVisible() {
 		frame.setVisible(true);
-		
+
 	}
-	
+
 	void setDefault() {
 		name.setText("");
 		culture.setSelectedIndex(0);
 		gender.setSelectedIndex(0);
+		occupation.setSelectedIndex(0);
 		notes.setText("");
 		refreshPanel();
 	}
-	
+
 	void setPersonData(Person person) {
 		Person personToEdit = person;
 		name.setText(personToEdit.getName());
@@ -167,41 +186,53 @@ public class AddPersonGUI implements ActionListener {
 		notes.setText(personToEdit.getBiographicalNotes());
 		refreshPanel();
 	}
-	
+
 	private void refreshPanel() {
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
 
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		frame.add(createWestPanel(), BorderLayout.WEST);
-		
+
 		frame.setSize(260, 300 + 40);
 
 		makeVisible();
 	}
 
+	private void submitClicked() throws IOException {
+		DataStorage storage = DataStorage.getMainDataStorage();
+		if (personEdited != null) {
+			personEdited.setName(name.getText());
+			personEdited.setOccupation(occupation.getSelectedItem().toString());
+			personEdited.setGender(gender.getSelectedItem().toString());
+			personEdited.setCulturalId(culture.getSelectedItem().toString());
+			personEdited.setBiographicalNotes(notes.getText());
+		} else {
+			int nextID = storage.incrementAndGetNextPersonIdNum();
+
+			Person newPerson = new Person(nextID, name.getText(), occupation.getSelectedItem().toString(),
+					gender.getSelectedItem().toString(), culture.getSelectedItem().toString(), notes.getText());
+
+			storage.addPerson(newPerson);
+		}
+		storage.savePeople();
+		frame.dispose();
+	}
+
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == add) {
-			// ArrayList<String> personData = saveNewPersonData();
-			// PersonList personList = new PersonList(personData);
+		if (event.getSource() == submitButton) {
 			try {
-				DataStorage storage = DataStorage.getMainDataStorage();
-				int nextID = storage.incrementAndGetNextPersonIdNum();
-				
-				Person newPerson = new Person(nextID, name.getText(), occupation.getSelectedItem().toString(),
-						gender.getSelectedItem().toString(), culture.getSelectedItem().toString(), notes.getText());
-				
-				storage.addPerson(newPerson);
-				storage.savePeople();
+				submitClicked();
 			} catch (IOException e) {
+				//TODO: show message dialog about error saving data?
 				e.printStackTrace();
 			}
-			frame.dispose();
+			// home.updatePersonTable() Make Method to update the table after
+			// adding or editing
 			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();
 		}
-	}		
+	}
 }
-

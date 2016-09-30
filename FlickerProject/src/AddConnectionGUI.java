@@ -6,9 +6,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +27,7 @@ public class AddConnectionGUI implements ActionListener {
 	private JComboBox<String> type;
 	private JComboBox<String> location;
 	private JTextArea socialNotes;
-	private JTextArea bib;
+	private JTextArea citation;
 	private JComboBox<String> direction;
 	private JComboBox<String> targetName;
 
@@ -60,6 +62,12 @@ public class AddConnectionGUI implements ActionListener {
 	private ArrayList<JComboBox> targetNames;
 
 	HomeScreenGUI home;
+	
+	Vector<String> baseNameChoices;
+	Vector<String> typeChoices;
+	Vector<String> locationChoices;
+	Vector<String> directionChoices;
+	
 
 	public AddConnectionGUI(HomeScreenGUI home) {
 
@@ -67,16 +75,19 @@ public class AddConnectionGUI implements ActionListener {
 		additionalNames = 0;
 		targetNames = new ArrayList<>();
 
+		baseNameChoices = new Vector<String>(Arrays.asList( "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White"));
 		baseName = new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
 		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		typeChoices = new Vector<String>(Arrays.asList( "", "Journal", "Letter", "Other" ));
 		type = new JComboBox<>(new String[] { "", "Journal", "Letter", "Other" });
+		locationChoices = new Vector<String>(Arrays.asList("", "Paris", "Other"));
 		location = new JComboBox<>(new String[] { "", "Paris", "Other" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
-		bib = new JTextArea(2, 10);
-		bib.setLineWrap(true);
+		citation = new JTextArea(2, 10);
+		citation.setLineWrap(true);
 		add = new JButton("Add");
 		cancel = new JButton("Cancel");
 		moreNames = new JButton("+");
@@ -99,7 +110,7 @@ public class AddConnectionGUI implements ActionListener {
 
 		socialScroll = new JScrollPane(socialNotes);
 		socialScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		bibScroll = new JScrollPane(bib);
+		bibScroll = new JScrollPane(citation);
 		bibScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		moreNamesPanel.add(moreNames);
@@ -180,6 +191,7 @@ public class AddConnectionGUI implements ActionListener {
 		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		westPanel.add(baseNameLabel);
 		if (numNames > 0) {
+			directionChoices = new Vector<String>(Arrays.asList("", "To", "From" ));
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			direction = new JComboBox<>(new String[] { "", "To", "From" });
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -228,11 +240,12 @@ public class AddConnectionGUI implements ActionListener {
 	void setDefault() {
 		additionalNames = 0;
 		targetNames.clear();
+		date.setText("");
 		baseName.setSelectedIndex(0);
 		type.setSelectedIndex(0);
 		location.setSelectedIndex(0);
 		socialNotes.setText("");
-		bib.setText("");
+		citation.setText("");
 
 		refreshPanel();
 	}
@@ -253,20 +266,17 @@ public class AddConnectionGUI implements ActionListener {
 		makeVisible();
 	}
 	
-//	void setConnectionData(Connection connection) {
-//		Connection connectionToEdit = connection;
-//		baseName.setSelectedIndex(0);
-//		type.setSelectedIndex(0);
-//		location.setSelectedIndex(0);
-//		socialNotes.setText("");
-//		bib.setText("");
-//		baseName.setText(personToEdit.getName());
-//		culture.setSelectedIndex(cultureChoices.indexOf(personToEdit.getCulturalId()));
-//		gender.setSelectedIndex(genderChoices.indexOf(personToEdit.getGender()));
-//		occupation.setSelectedIndex(occupationChoices.indexOf(personToEdit.getOccupation()));
-//		notes.setText(personToEdit.getBiographicalNotes());
-//		refreshPanel();
-//	}
+	void setConnectionData(Connection connection) {
+		Connection connectionToEdit = connection;
+		//baseName.setSelectedIndex(baseName.indexOf(connectionToEdit.getPeopleList()));
+		//targetName.setSelectedIndex(baseName.indexOf(connectionToEdit.getPeopleList()));
+		type.setSelectedIndex(typeChoices.indexOf(connectionToEdit.getTypeInteraction()));
+		location.setSelectedIndex(locationChoices.indexOf(connectionToEdit.getLocation()));
+		direction.setSelectedIndex(directionChoices.indexOf(connectionToEdit.getDirection()));
+		socialNotes.setText(connectionToEdit.getSocialNotes());
+		citation.setText(connectionToEdit.getCitation());
+		refreshPanel();
+	}
 	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
@@ -276,18 +286,14 @@ public class AddConnectionGUI implements ActionListener {
 			
 				List<Person> personListForConn = new ArrayList<>();
 				personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
-
-				//this might be broke?
-				//personListForConn.add(storage.getPersonListForConnection(targetName.getSelectedItem().toString()));
-				//try this?
-
+				
 				for(int i = 0 ; i< targetNames.size(); i ++){
 					personListForConn.add(storage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
 				}
 
 				Connection newConnection = new Connection(nextID,
 				date.getText(), type.getSelectedItem().toString(),
-				location.getSelectedItem().toString(), bib.getText(),
+				location.getSelectedItem().toString(), citation.getText(),
 				socialNotes.getText(), personListForConn,
 				direction.getSelectedItem().toString() );
 				storage.addConnection(newConnection);
