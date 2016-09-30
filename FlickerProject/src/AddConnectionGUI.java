@@ -56,6 +56,8 @@ public class AddConnectionGUI implements ActionListener {
 	private JButton moreNames;
 
 	private int additionalNames;
+	
+	private ArrayList<JComboBox> targetNames;
 
 	HomeScreenGUI home;
 
@@ -63,6 +65,7 @@ public class AddConnectionGUI implements ActionListener {
 
 		this.home = home;
 		additionalNames = 0;
+		targetNames = new ArrayList<>();
 
 		baseName = new JComboBox<>(new String[] { "", "White", "Black" });
 		date = new JFormattedTextField(DATE_FORMAT);
@@ -143,11 +146,12 @@ public class AddConnectionGUI implements ActionListener {
 	private JPanel createCenterPanel(int numNames) {
 		centerPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		centerPanel.add(baseNamePanel);
+		targetNames.clear();
 		for (int i = 0; i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			targetName = new JComboBox<>(new String[] { "", "White", "Black" });
+			targetNames.add(new JComboBox<>(new String[] { "", "White", "Black" }));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			namePanel.add(targetName);
+			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
 			centerPanel.add(panel);
 		}
@@ -251,8 +255,13 @@ public class AddConnectionGUI implements ActionListener {
 			
 				List<Person> personListForConn = new ArrayList<>();
 				personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
-				//this might be broken?
-				personListForConn.add(storage.getPersonListForConnection(targetName.getSelectedItem().toString()));
+				//this might be broke?
+//				personListForConn.add(storage.getPersonListForConnection(targetName.getSelectedItem().toString()));
+				//try this?
+				for(int i = 0 ; i< targetNames.size(); i ++){
+					personListForConn.add(storage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
+				}
+
 
 				Connection newConnection = new Connection(nextID,
 				date.getText(), type.getSelectedItem().toString(),
