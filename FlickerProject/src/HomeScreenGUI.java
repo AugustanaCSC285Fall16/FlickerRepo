@@ -15,17 +15,18 @@ import javax.swing.table.*;
 import com.opencsv.CSVReader;
 
 public class HomeScreenGUI implements ActionListener {
-
+	DataStorage mainStorage = DataStorage.getMainDataStorage();
+	
 	private JFrame frame;
 	private JButton search;
 	private JButton add;
 	private JButton edit;
-	private JButton artists;
-	private JButton connections;
+	private JTabbedPane personsTab;
+	//private JTabbedPane connectionsTab;
 	private JButton export;
 	private JPanel centerPanel;
 	private JPanel southPanel;
-	private JTable tableDisplay;
+	//private JTable tableDisplay;
 
 	private SearchGUI searchGUI;
 	private AddPersonGUI artistGUI;
@@ -36,12 +37,10 @@ public class HomeScreenGUI implements ActionListener {
 		search = new JButton("Search");
 		add = new JButton("Add");
 		edit = new JButton("Edit");
-		artists = new JButton("Artists");
-		connections = new JButton("Connections");
+		personsTab = new JTabbedPane();
+		//connectionsTab = new JTabbedPane();
 		export = new JButton("Export");
-		artists.setEnabled(false);
-		DataStorage mainStorage = DataStorage.getMainDataStorage();
-		tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
+		//tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 
 		searchGUI = new SearchGUI(this);
 		artistGUI = new AddPersonGUI(this);
@@ -51,7 +50,7 @@ public class HomeScreenGUI implements ActionListener {
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1500, 1000);
+		frame.setSize(1000, 1000);
 		frame.setTitle("Home");
 		frame.setLayout(new BorderLayout());
 		frame.add(createWestPanel(), BorderLayout.WEST);
@@ -60,8 +59,8 @@ public class HomeScreenGUI implements ActionListener {
 		search.addActionListener(this);
 		add.addActionListener(this);
 		edit.addActionListener(this);
-		artists.addActionListener(this);
-		connections.addActionListener(this);
+//		personsTab.addActionListener(this);
+//		connectionsTab.addActionListener(this);
 		export.addActionListener(this);
 
 		frame.setVisible(true);
@@ -78,16 +77,29 @@ public class HomeScreenGUI implements ActionListener {
 
 		Vector<Vector<String>> tableData = new Vector<>();
 
+		
 		for (TableRowViewable item : rowItems) {
 			String[] nextRow = item.toTableRowArray();
 			tableData.addElement(new Vector(Arrays.asList(nextRow)));
 		}
 
-		JTable table = new JTable(tableData, columnNames);
+
+		JTable table = new JTable(); //tableData, columnNames);
+		DefaultTableModel nonEditableTableModel = new DefaultTableModel() {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }	    
+		};
+		nonEditableTableModel.setDataVector(tableData, columnNames);
+		table.setModel(nonEditableTableModel);
+		
+		
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.setDefaultRenderer(Object.class, centerRenderer);
-		table.setEnabled(false);
+//		table.setEnabled(false);
 		return table;
 	}
 
@@ -99,33 +111,41 @@ public class HomeScreenGUI implements ActionListener {
 		return westPanel;
 	}
 
-	private JPanel createNorthPanel() {
-		JPanel northPanel = new JPanel(new GridLayout(1, 5));
-		northPanel.add(artists);
-		northPanel.add(connections);
-		return northPanel;
-	}
+//	private JPanel createNorthPanel() throws IOException {
+//		JPanel northPanel = new JPanel(new GridLayout(1, 5));
+//		personsTab.add("Persons Data", displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList()));
+//		personsTab.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+//		personsTab.add("Connections Data", displayTable(mainStorage.getConnectionHeaderRow(), mainStorage.getConnectionList()));
+//		northPanel.add(personsTab);
+//		//northPanel.add(connectionsTab);
+//		return northPanel;
+//	}
 
 	// creates tablePanel that displays the table of data
-	private JPanel createTablePanel() throws IOException {
-		JPanel tablePanel = new JPanel(new BorderLayout());
-		JScrollPane scrollPane = new JScrollPane(tableDisplay);
-		tableDisplay.setFillsViewportHeight(true);
-		tablePanel.add(scrollPane);
-		return tablePanel;
-	}
+//	private JPanel createTablePanel() throws IOException {
+//		JPanel tablePanel = new JPanel(new BorderLayout());
+//		JScrollPane scrollPane = new JScrollPane(tableDisplay);
+//		tableDisplay.setFillsViewportHeight(true);
+//		tablePanel.add(scrollPane);
+//		return tablePanel;
+//	}
 
 	private JPanel createCenterPanel() throws IOException {
 		centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(createNorthPanel(), BorderLayout.NORTH);
-		centerPanel.add(createTablePanel(), BorderLayout.CENTER);
+		personsTab.add("Persons Data", displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList()));
+		personsTab.add("Connections Data", displayTable(mainStorage.getConnectionHeaderRow(), mainStorage.getConnectionList()));
+		centerPanel.add(personsTab);
+		//centerPanel.add(connectionsTab);
+		//centerPanel = new JPanel(new BorderLayout());
+		//centerPanel.add(createNorthPanel(), BorderLayout.NORTH);
+		//centerPanel.add(createTablePanel(), BorderLayout.CENTER);
 		return centerPanel;
 	}
 
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			tableDisplay.setEnabled(false);
+			//tableDisplay.setEnabled(false);
 			searchGUI.setDefault();
 			searchGUI.makeVisible();
 		} else if (source == searchGUI.search) {
@@ -144,7 +164,6 @@ public class HomeScreenGUI implements ActionListener {
 			
 			
 		} else if (source == add) {
-			tableDisplay.setEnabled(false);
 			southPanel.removeAll();
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();
@@ -160,13 +179,12 @@ public class HomeScreenGUI implements ActionListener {
 			}
 		} else if (source == artistGUI.add) {
 			// Need to figure out how to update table after adding a new artist.
-			tableDisplay.invalidate();
+			//tableDisplay.invalidate();
 			System.out.println("are we getting here");
 		} else if (source == connectionGUI.add) {
 			System.out.println("successfully waited");
 			// waiting for user to click add in the connectionGUI
 		} else if (source == edit) {
-			tableDisplay.setEnabled(true);
 			southPanel.removeAll();
 
 			southPanel = new JPanel(new GridLayout(1, 2));
@@ -177,30 +195,33 @@ public class HomeScreenGUI implements ActionListener {
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();
 
-		} else if (source == connections) {
-			connections.setEnabled(false);
-			artists.setEnabled(true);
-			try {
-				DataStorage mainStorage = DataStorage.getMainDataStorage();
-				tableDisplay = displayTable(mainStorage.getConnectionHeaderRow(), mainStorage.getConnectionList());
-				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			centerPanel.revalidate();
-		} else if (source == artists) {
-			artists.setEnabled(false);
-			connections.setEnabled(true);
-			try {
-				DataStorage mainStorage = DataStorage.getMainDataStorage();
-				tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
-				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			centerPanel.revalidate();
-		} else if (source == export) {
-			exportGUI.makeVisible();
+//		} else if (source == connections) {
+//			connections.setEnabled(false);
+//			artists.setEnabled(true);
+//			try {
+//				DataStorage mainStorage = DataStorage.getMainDataStorage();
+//				tableDisplay = displayTable(mainStorage.getConnectionHeaderRow(), mainStorage.getConnectionList());
+//								
+//				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
+//				//centerPanel.invalidate();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			centerPanel.revalidate();
+//		} else if (source == artists) {
+//			artists.setEnabled(false);
+//			connections.setEnabled(true);
+//			try {
+//				DataStorage mainStorage = DataStorage.getMainDataStorage();
+//				tableDisplay.setEnabled(false);
+//				tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
+//				centerPanel.add(createTablePanel(), BorderLayout.CENTER);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			centerPanel.revalidate();
+//		} else if (source == export) {
+//			exportGUI.makeVisible();
 		}
 	}
 }
