@@ -228,8 +228,6 @@ public class AddConnectionGUI implements ActionListener {
 	void setDefault() {
 		additionalNames = 0;
 		targetNames.clear();
-		
-
 		baseName.setSelectedIndex(0);
 		type.setSelectedIndex(0);
 		location.setSelectedIndex(0);
@@ -254,6 +252,21 @@ public class AddConnectionGUI implements ActionListener {
 		frame.setSize(250, 300 + 40 * (additionalNames));
 		makeVisible();
 	}
+	
+//	void setConnectionData(Connection connection) {
+//		Connection connectionToEdit = connection;
+//		baseName.setSelectedIndex(0);
+//		type.setSelectedIndex(0);
+//		location.setSelectedIndex(0);
+//		socialNotes.setText("");
+//		bib.setText("");
+//		baseName.setText(personToEdit.getName());
+//		culture.setSelectedIndex(cultureChoices.indexOf(personToEdit.getCulturalId()));
+//		gender.setSelectedIndex(genderChoices.indexOf(personToEdit.getGender()));
+//		occupation.setSelectedIndex(occupationChoices.indexOf(personToEdit.getOccupation()));
+//		notes.setText(personToEdit.getBiographicalNotes());
+//		refreshPanel();
+//	}
 	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {

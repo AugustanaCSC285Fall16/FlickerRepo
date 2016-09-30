@@ -29,7 +29,7 @@ public class HomeScreenGUI implements ActionListener {
 	//private JTable tableDisplay;
 
 	private SearchGUI searchGUI;
-	private AddPersonGUI artistGUI;
+	private AddPersonGUI personGUI;
 	private AddConnectionGUI connectionGUI;
 	private ExportGUI exportGUI;
 
@@ -43,7 +43,7 @@ public class HomeScreenGUI implements ActionListener {
 		//tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 
 		searchGUI = new SearchGUI(this);
-		artistGUI = new AddPersonGUI(this);
+		personGUI = new AddPersonGUI(this);
 		connectionGUI = new AddConnectionGUI(this);
 		exportGUI = new ExportGUI(this);
 		southPanel = new JPanel();
@@ -87,7 +87,6 @@ public class HomeScreenGUI implements ActionListener {
 			tableData.addElement(new Vector(Arrays.asList(nextRow)));
 		}
 
-
 		JTable table = new JTable(); //tableData, columnNames);
 		DefaultTableModel nonEditableTableModel = new DefaultTableModel() {
 		    @Override
@@ -98,8 +97,7 @@ public class HomeScreenGUI implements ActionListener {
 		};
 		nonEditableTableModel.setDataVector(tableData, columnNames);
 		table.setModel(nonEditableTableModel);
-		
-		
+				
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.setDefaultRenderer(Object.class, centerRenderer);
@@ -181,6 +179,7 @@ public class HomeScreenGUI implements ActionListener {
 			
 			
 		} else if (source == add) {
+			//TODO: this code seems overly messy, and may not be needed any more? check and clean up later...
 			southPanel.removeAll();
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();
@@ -189,18 +188,15 @@ public class HomeScreenGUI implements ActionListener {
 			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 			if (val == 0) { // if artist
-				artistGUI.makeVisible();
-				artistGUI.setDefault();
+				personGUI.makeVisible();
+				personGUI.setDefault();
 			} else if (val == 1) { // if connection
 				connectionGUI.setDefault();
 			}
-		} else if (source == artistGUI.add) {
-			// Need to figure out how to update table after adding a new artist.
-			//tableDisplay.invalidate();
-			System.out.println("are we getting here");
+		} else if (source == personGUI.add) {
+			
 		} else if (source == connectionGUI.add) {
-			System.out.println("successfully waited");
-			// waiting for user to click add in the connectionGUI
+			
 		} else if (source == edit) {
 			southPanel.removeAll();
 
@@ -211,6 +207,8 @@ public class HomeScreenGUI implements ActionListener {
 
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();
+			
+			personGUI.setPersonData(mainStorage.getPersonFromID(10));
 
 //		} else if (source == connections) {
 //			connections.setEnabled(false);

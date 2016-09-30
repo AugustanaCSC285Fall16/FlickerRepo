@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.*;
 
@@ -33,18 +35,24 @@ public class AddPersonGUI implements ActionListener {
 	private JButton cancel;
 	HomeScreenGUI home;
 	private JScrollPane scroll;
-
+	Vector<String> cultureChoices;
+	Vector<String> genderChoices;
+	Vector<String> occupationChoices;
+	
 	public AddPersonGUI(HomeScreenGUI home) {
 
 		this.home = home;
 
 		name = new JTextField(10);
+		cultureChoices = new Vector<String>(Arrays.asList("", "French", "American", "Italian", "German", "Other" ));
 		culture = new JComboBox<>(new String[] { "", "French", "American", "Italian", "German", "Other" });
+		genderChoices = new Vector<String>(Arrays.asList( "", "Male", "Female", "Other" ));
 		gender = new JComboBox<>(new String[] { "", "Male", "Female", "Other" });
+		occupationChoices = new Vector<String>(Arrays.asList( "", "Artist","Bartender","Other" ));
 		occupation = new JComboBox<>(new String[] { "", "Artist","Bartender","Other" });
 		notes = new JTextArea(2, 15);
 		notes.setLineWrap(true);
-		add = new JButton("Add");
+		add = new JButton("Submit");
 		cancel = new JButton("Cancel");
 
 		nameLabel = new JLabel("Artist Name:");
@@ -68,6 +76,8 @@ public class AddPersonGUI implements ActionListener {
 		occupationPanel.add(occupation);
 		notesPanel.add(scroll);
 
+		
+		//TODO: This should be moved out of AddPersonGUI and into SearchGUI
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 300);
@@ -137,6 +147,7 @@ public class AddPersonGUI implements ActionListener {
 	
 	void makeVisible() {
 		frame.setVisible(true);
+		
 	}
 	
 	void setDefault() {
@@ -144,6 +155,16 @@ public class AddPersonGUI implements ActionListener {
 		culture.setSelectedIndex(0);
 		gender.setSelectedIndex(0);
 		notes.setText("");
+		refreshPanel();
+	}
+	
+	void setPersonData(Person person) {
+		Person personToEdit = person;
+		name.setText(personToEdit.getName());
+		culture.setSelectedIndex(cultureChoices.indexOf(personToEdit.getCulturalId()));
+		gender.setSelectedIndex(genderChoices.indexOf(personToEdit.getGender()));
+		occupation.setSelectedIndex(occupationChoices.indexOf(personToEdit.getOccupation()));
+		notes.setText(personToEdit.getBiographicalNotes());
 		refreshPanel();
 	}
 	
@@ -158,17 +179,6 @@ public class AddPersonGUI implements ActionListener {
 
 		makeVisible();
 	}
-
-	// public ArrayList<String> saveNewPersonData(){
-	// ArrayList<String> newPersonData = new ArrayList<String>();
-	// newPersonData.add((String)name.getSelectedItem().toString());
-	// newPersonData.add((String)culture.getSelectedItem().toString());
-	// newPersonData.add((String)gender.getSelectedItem().toString());
-	// newPersonData.add((String)occupation.getSelectedItem().toString());
-	// newPersonData.add(notes.getText());
-	// return newPersonData;
-	//
-	// }
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {

@@ -64,6 +64,10 @@ public class DataStorage {
 		return personHeaderRow;
 	}
 
+	public Person getPersonFromID(int ID){
+		return personMap.get(ID);
+	}
+	
 	public Collection<Person> getPeopleList() {
 		return personMap.values();
 	}
