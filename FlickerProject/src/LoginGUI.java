@@ -37,6 +37,12 @@ public class LoginGUI implements ActionListener{
 		frame.setLocationRelativeTo(null);
 	}
 	
+	/**
+	 * This method is used to create the center panel.
+	 * It adds the appropriate labels to the panel.
+	 * @return JPanel This returns the completed center panel.
+	 */	
+	
 	private JPanel createCenterPanel(){
 		JPanel centerPanel = new JPanel(new FlowLayout());
 		centerPanel.add(label1);
@@ -45,6 +51,12 @@ public class LoginGUI implements ActionListener{
 		centerPanel.add(password);
 		return centerPanel;
 	}
+	
+	/**
+	 * This method is used to create the south panel.
+	 * It adds the appropriate labels to the panel.
+	 * @return JPanel This returns the completed south panel.
+	 */	
 	
 	private JPanel createSouthPanel(){
 		JPanel southPanel = new JPanel(new FlowLayout());
@@ -66,7 +78,7 @@ public class LoginGUI implements ActionListener{
 				frame.dispose();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e);
 			}
 		}
 	}
