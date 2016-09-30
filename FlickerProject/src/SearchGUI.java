@@ -24,6 +24,7 @@ public class SearchGUI implements ActionListener {
 	private JComboBox<String> gender;
 	private JComboBox<String> occupation;
 	private JComboBox<String> location;
+	private JComboBox<String> toFrom;
 	private JButton reset;
 	JButton search;
 	
@@ -63,7 +64,7 @@ public class SearchGUI implements ActionListener {
 
 	public SearchGUI(HomeScreenGUI home) {
 		
-		artists = new ArrayList<JComboBox>();
+		artists = new ArrayList<>();
 		
 		this.home=home;
 		
@@ -82,6 +83,7 @@ public class SearchGUI implements ActionListener {
 		gender = new JComboBox<>(new String[] { "", "White", "Black" });
 		occupation = new JComboBox<>(new String[] { "", "White", "Black" });
 		location = new JComboBox<>(new String[] { "", "White", "Black" });
+		toFrom = new JComboBox<>(new String[] { "", "To", "From" });
 		reset = new JButton("Reset");
 		search = new JButton("Search");
 		nameLabel = new JLabel("Name:");
@@ -161,11 +163,17 @@ public class SearchGUI implements ActionListener {
 	private JPanel createCenterPanel(int numNames) {
 		centerPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
 		centerPanel.add(namePanel);
-		artists.clear();
-		for(int i = 0 ; i < numNames; i++){
+		for(int i = 0 ; i < artists.size(); i++){
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+			JPanel namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+			namePanel.add(artists.get(i));
+			panel.add(namePanel);
+			centerPanel.add(panel);
+		}
+		for (int i = artists.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			artists.add(new JComboBox<>(new String[] { "", "White", "Black" }));
-			JPanel namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(artists.get(i));
 			panel.add(namePanel);
 			centerPanel.add(panel);
@@ -196,7 +204,6 @@ public class SearchGUI implements ActionListener {
 		westPanel.add(nameLabel);
 		if(numNames>0){
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			JComboBox<String> toFrom = new JComboBox<>(new String[] { "", "To", "From" });
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			toFromPanel.add(toFrom);
 			panel.add(toFromPanel);
@@ -248,6 +255,7 @@ public class SearchGUI implements ActionListener {
 	void setDefault(){
 		numDates=0;
 		additionalNames=0;
+		artists.clear();
 		
 		name.setSelectedIndex(0);
 		type.setSelectedIndex(0);
@@ -255,6 +263,7 @@ public class SearchGUI implements ActionListener {
 		gender.setSelectedIndex(0);
 		occupation.setSelectedIndex(0);
 		location.setSelectedIndex(0);
+		toFrom.setSelectedIndex(0);
 		
 		refreshPanel();
 	}
