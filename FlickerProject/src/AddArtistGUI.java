@@ -16,6 +16,7 @@ public class AddArtistGUI implements ActionListener {
 	private JComboBox<String> culture;
 	private JComboBox<String> gender;
 	private JComboBox<String> occupation;
+	
 	private JTextArea notes;
 	private JPanel namePanel;
 	private JPanel culturePanel;
@@ -27,6 +28,10 @@ public class AddArtistGUI implements ActionListener {
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
+	private JPanel centerPanel;
+	private JPanel westPanel;
+
+	
 	JButton add;
 	private JButton cancel;
 	HomeScreenGUI home;
@@ -85,7 +90,7 @@ public class AddArtistGUI implements ActionListener {
 	}
 
 	private JPanel createCenterPanel() {
-		JPanel centerPanel = new JPanel(new GridLayout(5, 1));
+		centerPanel = new JPanel(new GridLayout(5, 1));
 		centerPanel.add(namePanel);
 		centerPanel.add(culturePanel);
 		centerPanel.add(genderPanel);
@@ -95,7 +100,7 @@ public class AddArtistGUI implements ActionListener {
 	}
 
 	private JPanel createWestPanel() {
-		JPanel westPanel = new JPanel(new GridLayout(5, 1));
+		westPanel = new JPanel(new GridLayout(5, 1));
 		westPanel.add(nameLabel);
 		westPanel.add(culturalLabel);
 		westPanel.add(genderLabel);
@@ -114,6 +119,26 @@ public class AddArtistGUI implements ActionListener {
 	void makeVisible() {
 		frame.setVisible(true);
 	}
+	
+	void setDefault() {
+		name.setText("");
+		culture.setSelectedIndex(0);
+		gender.setSelectedIndex(0);
+		notes.setText("");
+		refreshPanel();
+	}
+	
+	private void refreshPanel() {
+		frame.remove(centerPanel);
+		frame.remove(westPanel);
+
+		frame.add(createCenterPanel(), BorderLayout.CENTER);
+		frame.add(createWestPanel(), BorderLayout.WEST);
+		
+		frame.setSize(260, 300 + 40);
+
+		makeVisible();
+	}
 
 	// public ArrayList<String> saveNewPersonData(){
 	// ArrayList<String> newPersonData = new ArrayList<String>();
@@ -125,7 +150,7 @@ public class AddArtistGUI implements ActionListener {
 	// return newPersonData;
 	//
 	// }
-
+	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
 			// ArrayList<String> personData = saveNewPersonData();
@@ -149,5 +174,7 @@ public class AddArtistGUI implements ActionListener {
 			frame.dispose();
 		}
 	}
+	
+	
 
 }

@@ -41,7 +41,6 @@ public class SearchGUI implements ActionListener {
 	private JPanel genderPanel;
 	private JPanel occupationPanel;
 	private JPanel locationPanel;
-	
 
 	private JButton moreNames;
 	private JButton moreDates;
@@ -250,7 +249,7 @@ public class SearchGUI implements ActionListener {
 		} else if(event.getSource() == moreDates){
 			numDates = 1;
 			refreshPanel();
-		}
+		} 
 	}
 
 }

@@ -22,6 +22,7 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton edit;
 	private JButton artists;
 	private JButton connections;
+	private JButton export;
 	private JPanel centerPanel;
 	private JPanel southPanel;
 	private JTable tableDisplay;
@@ -29,6 +30,7 @@ public class HomeScreenGUI implements ActionListener {
 	private SearchGUI searchGUI;
 	private AddArtistGUI artistGUI;
 	private AddConnectionGUI connectionGUI;
+	private ExportGUI exportGUI;
 
 	public HomeScreenGUI() throws IOException {
 		search = new JButton("Search");
@@ -36,6 +38,7 @@ public class HomeScreenGUI implements ActionListener {
 		edit = new JButton("Edit");
 		artists = new JButton("Artists");
 		connections = new JButton("Connections");
+		export = new JButton("Export");
 		artists.setEnabled(false);
 		DataStorage mainStorage = DataStorage.getMainDataStorage();
 		tableDisplay = displayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
@@ -43,6 +46,7 @@ public class HomeScreenGUI implements ActionListener {
 		searchGUI = new SearchGUI(this);
 		artistGUI = new AddArtistGUI(this);
 		connectionGUI = new AddConnectionGUI(this);
+		exportGUI = new ExportGUI(this);
 		southPanel = new JPanel();
 
 		frame = new JFrame();
@@ -58,6 +62,7 @@ public class HomeScreenGUI implements ActionListener {
 		edit.addActionListener(this);
 		artists.addActionListener(this);
 		connections.addActionListener(this);
+		export.addActionListener(this);
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -129,7 +134,6 @@ public class HomeScreenGUI implements ActionListener {
 			southPanel = new JPanel(new GridLayout(1, 3));
 			JButton clear = new JButton("Clear");
 			JButton edit = new JButton("Edit");
-			JButton export = new JButton("Export");
 
 			southPanel.add(clear);
 			southPanel.add(edit);
@@ -137,12 +141,15 @@ public class HomeScreenGUI implements ActionListener {
 
 			centerPanel.add(southPanel, BorderLayout.SOUTH);
 			centerPanel.revalidate();
+			
+			
 		} else if (source == add) {
 			Object[] options = { "Add Artist", "Add Connection" };
 			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 			if (val == 0) { // if artist
 				artistGUI.makeVisible();
+				artistGUI.setDefault();
 			} else if (val == 1) { // if connection
 				connectionGUI.setDefault();
 			}
@@ -189,6 +196,8 @@ public class HomeScreenGUI implements ActionListener {
 				e.printStackTrace();
 			}
 			centerPanel.revalidate();
+		} else if (source == export) {
+			exportGUI.makeVisible();
 		}
 	}
 }
