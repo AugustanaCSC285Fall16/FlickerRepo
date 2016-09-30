@@ -64,12 +64,12 @@ public class AddConnectionGUI implements ActionListener {
 		this.home = home;
 		additionalNames = 0;
 
-		baseName = new JComboBox<>(new String[] { "", "White", "Black" });
+		baseName = new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
 		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		type = new JComboBox<>(new String[] { "", "White", "Black" });
-		location = new JComboBox<>(new String[] { "", "White", "Black" });
+		type = new JComboBox<>(new String[] { "", "Journal", "Letter", "Other" });
+		location = new JComboBox<>(new String[] { "", "Paris", "Other" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		bib = new JTextArea(2, 10);
@@ -145,7 +145,7 @@ public class AddConnectionGUI implements ActionListener {
 		centerPanel.add(baseNamePanel);
 		for (int i = 0; i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			targetName = new JComboBox<>(new String[] { "", "White", "Black" });
+			targetName = new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetName);
 			panel.add(namePanel);
