@@ -22,7 +22,7 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton add;
 	private JButton edit;
 	private JButton save;
-	private JTabbedPane personsTab;
+	private JTabbedPane databases;
 	// private JTabbedPane connectionsTab;
 	private JButton export;
 	private JPanel centerPanel;
@@ -31,7 +31,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JTable connectionTableDisplay;
 
 	private SearchGUI searchGUI;
-	private AddConnectionGUI connectionGUI;
 	private ExportGUI exportGUI;
 
 	public HomeScreenGUI() throws IOException {
@@ -39,14 +38,13 @@ public class HomeScreenGUI implements ActionListener {
 		search = new JButton("Search");
 		add = new JButton("Add");
 		edit = new JButton("Edit");
-		personsTab = new JTabbedPane();
+		databases = new JTabbedPane();
 		// connectionsTab = new JTabbedPane();
 		export = new JButton("Export");
 		// tableDisplay = displayTable(mainStorage.getPersonHeaderRow(),
 		// mainStorage.getPeopleList());
 
 		searchGUI = new SearchGUI(this);
-		connectionGUI = new AddConnectionGUI(this);
 		exportGUI = new ExportGUI(this);
 		southPanel = new JPanel();
 
@@ -122,49 +120,21 @@ public class HomeScreenGUI implements ActionListener {
 		return westPanel;
 	}
 
-	/**
-	 * This method is used to create the north panel. It adds the appropriate
-	 * buttons to the panel.
-	 * 
-	 * @return JPanel This returns the completed north panel.
-	 */
-
-	// private JPanel createNorthPanel() throws IOException {
-	// JPanel northPanel = new JPanel(new GridLayout(1, 5));
-	// personsTab.add("Persons Data",
-	// displayTable(mainStorage.getPersonHeaderRow(),
-	// mainStorage.getPeopleList()));
-	// personsTab.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
-	// personsTab.add("Connections Data",
-	// displayTable(mainStorage.getConnectionHeaderRow(),
-	// mainStorage.getConnectionList()));
-	// northPanel.add(personsTab);
-	// //northPanel.add(connectionsTab);
-	// return northPanel;
-	// }
-
-	// creates tablePanel that displays the table of data
-	// private JPanel createTablePanel() throws IOException {
-	// JPanel tablePanel = new JPanel(new BorderLayout());
-	// JScrollPane scrollPane = new JScrollPane(tableDisplay);
-	// tableDisplay.setFillsViewportHeight(true);
-	// tablePanel.add(scrollPane);
-	// return tablePanel;
-	// }
-
 	private JPanel createCenterPanel() throws IOException {
 		centerPanel = new JPanel(new BorderLayout());
 		personTableDisplay = createDisplayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 		connectionTableDisplay = createDisplayTable(mainStorage.getConnectionHeaderRow(),
 				mainStorage.getConnectionList());
-		personsTab.add("Persons Data", personTableDisplay);
-		personsTab.add("Connections Data", connectionTableDisplay);
-		centerPanel.add(personsTab);
-		// centerPanel.add(connectionsTab);
-		// centerPanel = new JPanel(new BorderLayout());
-		// centerPanel.add(createNorthPanel(), BorderLayout.NORTH);
-		// centerPanel.add(createTablePanel(), BorderLayout.CENTER);
+		databases.add("Persons Data", personTableDisplay);
+		databases.add("Connections Data", connectionTableDisplay);
+		centerPanel.add(databases);
 		return centerPanel;
+	}
+	
+	public void updateTable() throws IOException {
+		frame.remove(centerPanel);
+		frame.add(createCenterPanel(), BorderLayout.CENTER);
+		frame.revalidate();
 	}
 
 	public void actionPerformed(ActionEvent event) {
@@ -188,12 +158,6 @@ public class HomeScreenGUI implements ActionListener {
 			centerPanel.revalidate();
 
 		} else if (source == add) {
-			// TODO: this code seems overly messy, and may not be needed any
-			// more? check and clean up later...
-			southPanel.removeAll();
-			centerPanel.add(southPanel, BorderLayout.SOUTH);
-			centerPanel.revalidate();
-
 			Object[] options = { "Add Artist", "Add Connection" };
 			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
@@ -201,20 +165,12 @@ public class HomeScreenGUI implements ActionListener {
 				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
 				personGUI.makeVisible();
 			} else if (val == 1) { // if connection
-				
-				connectionGUI.setDefault();
+				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,null);
+				connectionGUI.makeVisible();
 			}
 		} else if (source == edit) {
-			southPanel.removeAll();
 
-			southPanel = new JPanel(new GridLayout(1, 2));
-
-			southPanel.add(save);
-
-			centerPanel.add(southPanel, BorderLayout.SOUTH);
-			centerPanel.revalidate();
-
-			if (personsTab.getSelectedComponent() == personTableDisplay) {
+			if (databases.getSelectedComponent() == personTableDisplay) {
 				int selectedRow = personTableDisplay.getSelectedRow();
 				if (selectedRow > -1) {
 					personTableDisplay.getModel().getValueAt(selectedRow, 0);
@@ -230,19 +186,20 @@ public class HomeScreenGUI implements ActionListener {
 				if (selectedRow > -1) {
 					String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
 					int connectionID = Integer.parseInt(IDCellText);
-					connectionGUI.setConnectionData(mainStorage.getConnectionFromID(connectionID));
+					AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, mainStorage.getConnectionFromID(connectionID));
+					connectionGUI.makeVisible();
 				} else {
 					JOptionPane.showMessageDialog(frame, "Click a row first!");
 				}
 			}
 
 		} else if (source == save) {
-			if (personsTab.getSelectedComponent() == personTableDisplay) {
+			if (databases.getSelectedComponent() == personTableDisplay) {
 				// Set the person that was selected to the new data that was
 				// selected.
 
 			} else {
-
+				
 			}
 		}
 	}

@@ -52,8 +52,12 @@ public class Connection implements TableRowViewable {
 	}
 	
 
-	public List getPeopleList() {
+	public List<Person> getPeopleList() {
 		return peopleList;
+	}
+	
+	public void setPeopleList(List<Person> peopleList) {
+		this.peopleList = peopleList;
 	}
 
 	public int getEdgeId() {
