@@ -73,7 +73,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		this.connectionEdited = connection;
 		this.home = home;
 
-		additionalNames = 0;
+		additionalNames = 1;
 		targetNames = new ArrayList<>();
 
 		baseNameChoices = new Vector<String>(
@@ -253,7 +253,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * the refreshPanel() method.
 	 */
 	void setDefault() {
-		additionalNames = 0;
+		additionalNames = 1;
 		targetNames.clear();
 		date.setText("");
 		baseName.setSelectedIndex(0);
@@ -277,7 +277,13 @@ public class AddEditConnectionGUI implements ActionListener {
 		direction.setSelectedIndex(directionChoices.indexOf(connectionToEdit.getDirection()));
 		socialNotes.setText(connectionToEdit.getSocialNotes());
 		citation.setText(connectionToEdit.getCitation());
-		// date.setText(connectionToEdit.getDate());
+		try {
+			MaskFormatter dateMask = new MaskFormatter("##/##/####");
+			dateMask.install(date);
+		} catch (ParseException ex) {
+			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		date.setText(connectionToEdit.getDate());
 		//date.setValue(connectionToEdit.getDate());
 		refreshPanel();
 	}
