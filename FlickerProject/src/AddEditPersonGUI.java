@@ -223,13 +223,12 @@ public class AddEditPersonGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
+				home.updateTable();
 			} catch (IOException e) {
 				//TODO: show message dialog about error saving data?
 				e.printStackTrace();
 			}
-			// home.updatePersonTable() Make Method to update the table after
-			// adding or editing
-			home.actionPerformed(event);
+		home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();

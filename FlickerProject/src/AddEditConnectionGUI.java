@@ -331,12 +331,11 @@ public class AddEditConnectionGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
+				home.updateTable();
 			} catch (IOException e) {
 				// TODO: show message dialog about error saving data?
 				e.printStackTrace();
 			}
-			// TODO: make method to update the table after
-			// home.updatePersonTable() Make Method to update the table after
 			// adding or editing
 			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {

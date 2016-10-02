@@ -132,6 +132,8 @@ public class HomeScreenGUI implements ActionListener {
 	}
 	
 	public void updateTable() throws IOException {
+		databases.removeAll();
+		centerPanel.removeAll();
 		frame.remove(centerPanel);
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		frame.revalidate();
