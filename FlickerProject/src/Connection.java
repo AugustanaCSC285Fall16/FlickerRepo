@@ -65,6 +65,7 @@ public class Connection implements TableRowViewable {
 	}
 
 	public String getDate() {
+		
 		return date;
 	}
 

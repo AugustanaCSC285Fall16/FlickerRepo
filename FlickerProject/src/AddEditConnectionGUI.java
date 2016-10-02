@@ -277,7 +277,13 @@ public class AddEditConnectionGUI implements ActionListener {
 		direction.setSelectedIndex(directionChoices.indexOf(connectionToEdit.getDirection()));
 		socialNotes.setText(connectionToEdit.getSocialNotes());
 		citation.setText(connectionToEdit.getCitation());
-		// date.setText(connectionToEdit.getDate());
+		try {
+			MaskFormatter dateMask = new MaskFormatter("##/##/####");
+			dateMask.install(date);
+		} catch (ParseException ex) {
+			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		date.setText(connectionToEdit.getDate());
 		//date.setValue(connectionToEdit.getDate());
 		refreshPanel();
 	}
