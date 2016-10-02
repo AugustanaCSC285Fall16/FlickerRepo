@@ -77,15 +77,15 @@ public class AddEditConnectionGUI implements ActionListener {
 		targetNames = new ArrayList<>();
 
 		baseNameChoices = new Vector<String>(
-				Arrays.asList("", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White"));
-		baseName = new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
+				Arrays.asList("--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White"));
+		baseName = new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
 		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		typeChoices = new Vector<String>(Arrays.asList("", "Journal", "Letter", "Other"));
-		type = new JComboBox<>(new String[] { "", "Journal", "Letter", "Other" });
-		locationChoices = new Vector<String>(Arrays.asList("", "Paris", "Other"));
-		location = new JComboBox<>(new String[] { "", "Paris", "Other" });
+		typeChoices = new Vector<String>(Arrays.asList("None", "Journal", "Letter", "Other"));
+		type = new JComboBox<>(new String[] { "None", "Journal", "Letter", "Other" });
+		locationChoices = new Vector<String>(Arrays.asList("None", "Paris", "Other"));
+		location = new JComboBox<>(new String[] { "None", "Paris", "Other" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		citation = new JTextArea(2, 10);
@@ -182,7 +182,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		for (int i = targetNames.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			targetNames
-					.add(new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
+					.add(new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
@@ -208,9 +208,9 @@ public class AddEditConnectionGUI implements ActionListener {
 		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		westPanel.add(baseNameLabel);
 		if (numNames > 0) {
-			directionChoices = new Vector<String>(Arrays.asList("", "To", "From"));
+			directionChoices = new Vector<String>(Arrays.asList("No direction", "To", "From"));
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			direction = new JComboBox<>(new String[] { "", "To", "From" });
+			direction = new JComboBox<>(new String[] { "No direction", "To", "From" });
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			toFromPanel.add(direction);
 			panel.add(toFromPanel);

@@ -55,12 +55,12 @@ public class AddEditPersonGUI implements ActionListener {
 		this.home = home;
 
 		name = new JTextField(10);
-		cultureChoices = new Vector<String>(Arrays.asList("", "French", "American", "Italian", "German", "Other"));
-		culture = new JComboBox<>(new String[] { "", "French", "American", "Italian", "German", "Other" });
+		cultureChoices = new Vector<String>(Arrays.asList("None", "French", "American", "Italian", "German", "Other"));
+		culture = new JComboBox<>(new String[] { "None", "French", "American", "Italian", "German", "Other" });
 		genderChoices = new Vector<String>(Arrays.asList("", "Male", "Female", "Other"));
-		gender = new JComboBox<>(new String[] { "", "Male", "Female", "Other" });
+		gender = new JComboBox<>(new String[] { "None", "Male", "Female", "Other" });
 		occupationChoices = new Vector<String>(Arrays.asList("", "Artist", "Bartender", "Other"));
-		occupation = new JComboBox<>(new String[] { "", "Artist", "Bartender", "Other" });
+		occupation = new JComboBox<>(new String[] { "None", "Artist", "Bartender", "Other" });
 		notes = new JTextArea(2, 15);
 		notes.setLineWrap(true);
 		submitButton = new JButton("Submit");
