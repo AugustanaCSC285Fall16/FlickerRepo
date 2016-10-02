@@ -73,7 +73,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		this.connectionEdited = connection;
 		this.home = home;
 
-		additionalNames = 0;
+		additionalNames = 1;
 		targetNames = new ArrayList<>();
 
 		baseNameChoices = new Vector<String>(
@@ -253,7 +253,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * the refreshPanel() method.
 	 */
 	void setDefault() {
-		additionalNames = 0;
+		additionalNames = 1;
 		targetNames.clear();
 		date.setText("");
 		baseName.setSelectedIndex(0);
