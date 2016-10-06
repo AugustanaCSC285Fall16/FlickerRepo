@@ -59,8 +59,6 @@ public class HomeScreenGUI implements ActionListener {
 		search.addActionListener(this);
 		add.addActionListener(this);
 		edit.addActionListener(this);
-		// personsTab.addActionListener(this);
-		// connectionsTab.addActionListener(this);
 		export.addActionListener(this);
 		save.addActionListener(this);
 
@@ -69,12 +67,15 @@ public class HomeScreenGUI implements ActionListener {
 	}
 
 	/**
-	 * This method is used to create the table. It creates the table.
+	 * This method creates a table to be displayed. Also overrides the 
+	 * table model to make it non Editable. 
+	 * Centers the data. 
 	 * 
-	 * @return JPanel This returns the completed table.
+	 * @param columnNamesArray - String Array of column titles
+	 * @param rowItems - What will be in the rows. Could be for Person or Connection
+	 * @return JTable - Table that is all filled out with the correct data
 	 * @throws IOException
 	 */
-
 	private JTable createDisplayTable(String[] columnNamesArray, Collection<? extends TableRowViewable> rowItems)
 			throws IOException {
 
@@ -101,7 +102,6 @@ public class HomeScreenGUI implements ActionListener {
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.setDefaultRenderer(Object.class, centerRenderer);
-		// table.setEnabled(false);
 		return table;
 	}
 
@@ -120,6 +120,12 @@ public class HomeScreenGUI implements ActionListener {
 		return westPanel;
 	}
 
+	/**
+	 * Creates the center panel and adds the appropriate display tables to it.
+	 * 
+	 * @return JPanel Returns a completed CenterPanel.
+	 * @throws IOException
+	 */
 	private JPanel createCenterPanel() throws IOException {
 		centerPanel = new JPanel(new BorderLayout());
 		personTableDisplay = createDisplayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
@@ -131,6 +137,11 @@ public class HomeScreenGUI implements ActionListener {
 		return centerPanel;
 	}
 	
+	/**
+	 * Updates the table to see new data that was added. 
+	 * 
+	 * @throws IOException
+	 */
 	public void updateTable() throws IOException {
 		databases.removeAll();
 		centerPanel.removeAll();
@@ -138,71 +149,87 @@ public class HomeScreenGUI implements ActionListener {
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		frame.revalidate();
 	}
+	
+	/**
+	 * A search PopUp will open and the user will be able to 
+	 * fill it out to search for their criteria.
+	 */
+	public void searchClicked(){
+		southPanel.removeAll();
+		southPanel = new JPanel(new GridLayout(1, 2));
+		JButton clear = new JButton("Clear");
+		southPanel.add(clear);
+		southPanel.add(export);
+		centerPanel.add(southPanel, BorderLayout.SOUTH);
+		centerPanel.revalidate();
+	}
+	
+	/**
+	 * A message dialog will first pop up asking what the user would like to add
+	 * then PopUp will open based on what button they choose.  
+	 */
+	public void addClicked(){
+		Object[] options = { "Add Artist", "Add Connection" };
+		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+		if (val == 0) { // if artist
+			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
+			personGUI.makeVisible();
+		} else if (val == 1) { // if connection
+			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,null);
+			connectionGUI.makeVisible();
+		}
+	}
+	
+	/**
+	 * A Popup with either the a person information filled in or a connection 
+	 * information filled in will pop up. If no row is selected, a message
+	 * will pop up informing the user to click a row to edit.
+	 *  
+	 */
+	public void editClicked(){
+		if (databases.getSelectedComponent() == personTableDisplay) {
+			int selectedRow = personTableDisplay.getSelectedRow();
+			if (selectedRow > -1) {
+				personTableDisplay.getModel().getValueAt(selectedRow, 0);
+				String IDCellText = (String) personTableDisplay.getModel().getValueAt(selectedRow, 0);
+				int personID = Integer.parseInt(IDCellText);
+				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID));
+				personGUI.makeVisible();
+			} else {
+				JOptionPane.showMessageDialog(frame, "Click a row first!");
+			}
+		} else { // is connectionTableDisplay
+			int selectedRow = connectionTableDisplay.getSelectedRow();
+			if (selectedRow > -1) {
+				String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
+				int connectionID = Integer.parseInt(IDCellText);
+				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, mainStorage.getConnectionFromID(connectionID));
+				connectionGUI.makeVisible();
+			} else {
+				JOptionPane.showMessageDialog(frame, "Click a row first!");
+			}
+		}
 
+	}
+
+	/**
+	 * Based on the source of the event, the method will choose what the 
+	 * GUI will do next.
+	 * 
+	 * @param ActionEvent - event from the HomeScreenGUI
+	 */
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			// tableDisplay.setEnabled(false);
 			searchGUI.setDefault();
 			searchGUI.makeVisible();
 		} else if (source == searchGUI.search) {
-
-			southPanel.removeAll();
-
-			southPanel = new JPanel(new GridLayout(1, 2));
-			JButton clear = new JButton("Clear");
-			JButton edit = new JButton("Edit");
-
-			southPanel.add(clear);
-			southPanel.add(export);
-
-			centerPanel.add(southPanel, BorderLayout.SOUTH);
-			centerPanel.revalidate();
-
+			searchClicked();
 		} else if (source == add) {
-			Object[] options = { "Add Artist", "Add Connection" };
-			int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
-			if (val == 0) { // if artist
-				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
-				personGUI.makeVisible();
-			} else if (val == 1) { // if connection
-				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,null);
-				connectionGUI.makeVisible();
-			}
+			addClicked();
 		} else if (source == edit) {
-
-			if (databases.getSelectedComponent() == personTableDisplay) {
-				int selectedRow = personTableDisplay.getSelectedRow();
-				if (selectedRow > -1) {
-					personTableDisplay.getModel().getValueAt(selectedRow, 0);
-					String IDCellText = (String) personTableDisplay.getModel().getValueAt(selectedRow, 0);
-					int personID = Integer.parseInt(IDCellText);
-					AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID));
-					personGUI.makeVisible();
-				} else {
-					JOptionPane.showMessageDialog(frame, "Click a row first!");
-				}
-			} else { // is connectionTableDisplay
-				int selectedRow = connectionTableDisplay.getSelectedRow();
-				if (selectedRow > -1) {
-					String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
-					int connectionID = Integer.parseInt(IDCellText);
-					AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, mainStorage.getConnectionFromID(connectionID));
-					connectionGUI.makeVisible();
-				} else {
-					JOptionPane.showMessageDialog(frame, "Click a row first!");
-				}
-			}
-
-		} else if (source == save) {
-			if (databases.getSelectedComponent() == personTableDisplay) {
-				// Set the person that was selected to the new data that was
-				// selected.
-
-			} else {
-				
-			}
+			editClicked();
 		}
 	}
 }
