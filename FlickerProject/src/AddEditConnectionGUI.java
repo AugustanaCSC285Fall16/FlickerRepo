@@ -69,6 +69,15 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	private Connection connectionEdited;
 
+	
+	/**
+	 * Creates the add/edit connection GUI
+	 * 
+	 * @param home
+	 *            - reference back to the home screen GUI
+	 * @param person
+	 *            - to be edited or null if we are adding a new connection
+	 */
 	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
 		this.connectionEdited = connection;
 		this.home = home;
@@ -265,6 +274,12 @@ public class AddEditConnectionGUI implements ActionListener {
 		refreshPanel();
 	}
 
+	/**
+	 * Sets the Options in the Edit connection GUI to the selected connection's data
+	 * 
+	 * @param connection
+	 *            - the connection who's data will fill in the GUI
+	 */
 	void setConnectionData(Connection connection) {
 		Connection connectionToEdit = connection;
 		List<Person> peopleList = connectionToEdit.getPeopleList();
@@ -303,6 +318,14 @@ public class AddEditConnectionGUI implements ActionListener {
 		makeVisible();
 	}
 
+	/**
+	 * Will set the edited connection's data to whatever was put into the GUI if it
+	 * is already a connection filled in. Will Add a new connection with all of the data
+	 * filled in the GUI if there was not a connection already selected. Saves the
+	 * connection data
+	 * 
+	 * @throws IOException
+	 */
 	private void submitClicked() throws IOException {
 		DataStorage storage = DataStorage.getMainDataStorage();
 		ArrayList<Person> personListForConn = new ArrayList<>();
@@ -333,6 +356,13 @@ public class AddEditConnectionGUI implements ActionListener {
 		frame.dispose();
 	}
 
+	/**
+	 * Based on the source of the event, the method will choose what the ConnectionGUI
+	 * will do next.
+	 * 
+	 * @param ActionEvent
+	 *            - event from the Add/Edit ConnectionGUI
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {

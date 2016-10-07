@@ -77,8 +77,7 @@ public class LoginGUI implements ActionListener{
 				HomeScreenGUI launchProgram = new HomeScreenGUI();
 				frame.dispose();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(null, e);
+				JOptionPane.showMessageDialog(null, "Not a valid username or password!");
 			}
 		}
 	}

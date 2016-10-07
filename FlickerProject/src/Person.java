@@ -9,6 +9,8 @@ public class Person implements TableRowViewable {
 	private String culturalId;
 	private String biographicalNotes;
 
+	
+	// default constructor
 	public Person(int id, String name, String occupation, String gender, String culturalId, String biographicalNotes)
 			throws IOException {
 		this.id = id;
@@ -28,6 +30,11 @@ public class Person implements TableRowViewable {
 		this.biographicalNotes = csvRowData[5];
 	}
 
+	/**
+	 * Creates the string array that will be used in the CSV
+	 * 
+	 * @return String[] of the person information
+	 */
 	public String[] toCSVRowArray() {
 		return new String[] { Integer.toString(id), name, occupation, gender, culturalId, biographicalNotes };
 	}
