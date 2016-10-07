@@ -44,6 +44,7 @@ public class AddEditPersonGUI implements ActionListener {
 	private Person personEdited;
 
 	/**
+	 * Creates the add/edit person GUI
 	 * 
 	 * @param home
 	 *            - reference back to the home screen GUI
@@ -55,12 +56,12 @@ public class AddEditPersonGUI implements ActionListener {
 		this.home = home;
 
 		name = new JTextField(10);
-		cultureChoices = new Vector<String>(Arrays.asList("", "French", "American", "Italian", "German", "Other"));
-		culture = new JComboBox<>(new String[] { "", "French", "American", "Italian", "German", "Other" });
+		cultureChoices = new Vector<String>(Arrays.asList("None", "French", "American", "Italian", "German", "Other"));
+		culture = new JComboBox<>(new String[] { "None", "French", "American", "Italian", "German", "Other" });
 		genderChoices = new Vector<String>(Arrays.asList("", "Male", "Female", "Other"));
-		gender = new JComboBox<>(new String[] { "", "Male", "Female", "Other" });
+		gender = new JComboBox<>(new String[] { "None", "Male", "Female", "Other" });
 		occupationChoices = new Vector<String>(Arrays.asList("", "Artist", "Bartender", "Other"));
-		occupation = new JComboBox<>(new String[] { "", "Artist", "Bartender", "Other" });
+		occupation = new JComboBox<>(new String[] { "None", "Artist", "Bartender", "Other" });
 		notes = new JTextArea(2, 15);
 		notes.setLineWrap(true);
 		submitButton = new JButton("Submit");
@@ -86,9 +87,8 @@ public class AddEditPersonGUI implements ActionListener {
 		genderPanel.add(gender);
 		occupationPanel.add(occupation);
 		notesPanel.add(scroll);
-
-		// TODO: This should be moved out of AddPersonGUI and into SearchGUI
-		frame = new JFrame("Search");
+		
+		frame = new JFrame("Frame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 300);
 		frame.setTitle("Frame");
@@ -134,7 +134,6 @@ public class AddEditPersonGUI implements ActionListener {
 	 * 
 	 * @return JPanel This returns the completed west panel.
 	 */
-
 	private JPanel createWestPanel() {
 		westPanel = new JPanel(new GridLayout(5, 1));
 		westPanel.add(nameLabel);
@@ -151,7 +150,6 @@ public class AddEditPersonGUI implements ActionListener {
 	 * 
 	 * @return JPanel This returns the completed south panel.
 	 */
-
 	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
@@ -160,14 +158,15 @@ public class AddEditPersonGUI implements ActionListener {
 	}
 
 	/**
-	 * Makes the frame visible.
+	 * Makes the frame visible
 	 */
-
 	void makeVisible() {
 		frame.setVisible(true);
-
 	}
 
+	/**
+	 * Sets the edit GUI all back to blanks to fill in
+	 */
 	void setDefault() {
 		name.setText("");
 		culture.setSelectedIndex(0);
@@ -177,6 +176,12 @@ public class AddEditPersonGUI implements ActionListener {
 		refreshPanel();
 	}
 
+	/**
+	 * Sets the Options in the Edit person GUI to the selected person's data
+	 * 
+	 * @param person
+	 *            - the person who's data will fill in the GUI
+	 */
 	void setPersonData(Person person) {
 		Person personToEdit = person;
 		name.setText(personToEdit.getName());
@@ -187,18 +192,26 @@ public class AddEditPersonGUI implements ActionListener {
 		refreshPanel();
 	}
 
+	/**
+	 * Refreshes the panel to show new data or a blank GUI to fill out
+	 */
 	private void refreshPanel() {
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
-
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		frame.add(createWestPanel(), BorderLayout.WEST);
-
 		frame.setSize(260, 300 + 40);
-
 		makeVisible();
 	}
 
+	/**
+	 * Will set the edited person's data to whatever was put into the GUI if it
+	 * is already a person filled in. Will Add a new person with all of the data
+	 * filled in the GUI if there was not a person already selected. Saves the
+	 * People data
+	 * 
+	 * @throws IOException
+	 */
 	private void submitClicked() throws IOException {
 		DataStorage storage = DataStorage.getMainDataStorage();
 		if (personEdited != null) {
@@ -219,18 +232,23 @@ public class AddEditPersonGUI implements ActionListener {
 		frame.dispose();
 	}
 
+	/**
+	 * Based on the source of the event, the method will choose what the PersonGUI
+	 * will do next.
+	 * 
+	 * @param ActionEvent
+	 *            - event from the Add/Edit PersonGUI
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
 				home.updateTable();
 			} catch (IOException e) {
-				//TODO: show message dialog about error saving data?
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
-		home.actionPerformed(event);
+			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
-			// reset fields
 			frame.dispose();
 		}
 	}

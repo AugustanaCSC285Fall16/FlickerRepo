@@ -69,6 +69,15 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	private Connection connectionEdited;
 
+	
+	/**
+	 * Creates the add/edit connection GUI
+	 * 
+	 * @param home
+	 *            - reference back to the home screen GUI
+	 * @param person
+	 *            - to be edited or null if we are adding a new connection
+	 */
 	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
 		this.connectionEdited = connection;
 		this.home = home;
@@ -77,15 +86,15 @@ public class AddEditConnectionGUI implements ActionListener {
 		targetNames = new ArrayList<>();
 
 		baseNameChoices = new Vector<String>(
-				Arrays.asList("", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White"));
-		baseName = new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
+				Arrays.asList("--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White"));
+		baseName = new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
 		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		typeChoices = new Vector<String>(Arrays.asList("", "Journal", "Letter", "Other"));
-		type = new JComboBox<>(new String[] { "", "Journal", "Letter", "Other" });
-		locationChoices = new Vector<String>(Arrays.asList("", "Paris", "Other"));
-		location = new JComboBox<>(new String[] { "", "Paris", "Other" });
+		typeChoices = new Vector<String>(Arrays.asList("None", "Journal", "Letter", "Other"));
+		type = new JComboBox<>(new String[] { "None", "Journal", "Letter", "Other" });
+		locationChoices = new Vector<String>(Arrays.asList("None", "Paris", "Other"));
+		location = new JComboBox<>(new String[] { "None", "Paris", "Other" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		citation = new JTextArea(2, 10);
@@ -182,7 +191,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		for (int i = targetNames.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			targetNames
-					.add(new JComboBox<>(new String[] { "", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
+					.add(new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
@@ -208,9 +217,9 @@ public class AddEditConnectionGUI implements ActionListener {
 		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		westPanel.add(baseNameLabel);
 		if (numNames > 0) {
-			directionChoices = new Vector<String>(Arrays.asList("", "To", "From"));
+			directionChoices = new Vector<String>(Arrays.asList("No direction", "To", "From"));
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			direction = new JComboBox<>(new String[] { "", "To", "From" });
+			direction = new JComboBox<>(new String[] { "No direction", "To", "From" });
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			toFromPanel.add(direction);
 			panel.add(toFromPanel);
@@ -265,6 +274,12 @@ public class AddEditConnectionGUI implements ActionListener {
 		refreshPanel();
 	}
 
+	/**
+	 * Sets the Options in the Edit connection GUI to the selected connection's data
+	 * 
+	 * @param connection
+	 *            - the connection who's data will fill in the GUI
+	 */
 	void setConnectionData(Connection connection) {
 		Connection connectionToEdit = connection;
 		List<Person> peopleList = connectionToEdit.getPeopleList();
@@ -303,6 +318,14 @@ public class AddEditConnectionGUI implements ActionListener {
 		makeVisible();
 	}
 
+	/**
+	 * Will set the edited connection's data to whatever was put into the GUI if it
+	 * is already a connection filled in. Will Add a new connection with all of the data
+	 * filled in the GUI if there was not a connection already selected. Saves the
+	 * connection data
+	 * 
+	 * @throws IOException
+	 */
 	private void submitClicked() throws IOException {
 		DataStorage storage = DataStorage.getMainDataStorage();
 		ArrayList<Person> personListForConn = new ArrayList<>();
@@ -333,6 +356,13 @@ public class AddEditConnectionGUI implements ActionListener {
 		frame.dispose();
 	}
 
+	/**
+	 * Based on the source of the event, the method will choose what the ConnectionGUI
+	 * will do next.
+	 * 
+	 * @param ActionEvent
+	 *            - event from the Add/Edit ConnectionGUI
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {

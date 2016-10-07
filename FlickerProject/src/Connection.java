@@ -12,7 +12,7 @@ public class Connection implements TableRowViewable {
 	private String direction;
 	private int edgeId;
 
-	// constructor
+	// default constructor
 	public Connection(int edgeID, String date, String typeInteraction, String location, String citation,
 			String socialNotes, List<Person> people, String direction) {
 		this.edgeId = edgeID;
@@ -25,6 +25,11 @@ public class Connection implements TableRowViewable {
 		this.direction = direction;
 	}
 
+	/**
+	 * Creates the string array that will be used in the CSV
+	 * 
+	 * @return String[] of the connection information
+	 */
 	 public String[] toCSVRowArray() {
 		 String idListText = peopleListToIdText();
 		 return new String[] { Integer.toString(edgeId), idListText, date,
@@ -33,7 +38,6 @@ public class Connection implements TableRowViewable {
 	 
 	 /** 
 	  * Retrieves the ID for each person in a connection and returns it.
-	  * 
 	  * 
 	  * @return String 
 	  */
