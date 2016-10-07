@@ -101,7 +101,6 @@ public class HomeScreenGUI implements ActionListener {
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.setDefaultRenderer(Object.class, centerRenderer);
-		// table.setEnabled(false);
 		return table;
 	}
 
@@ -142,7 +141,6 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			// tableDisplay.setEnabled(false);
 			searchGUI.setDefault();
 			searchGUI.makeVisible();
 		} else if (source == searchGUI.search) {
