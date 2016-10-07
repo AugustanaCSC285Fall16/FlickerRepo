@@ -291,8 +291,6 @@ public class SearchGUI implements ActionListener {
 			for(int i=0; i < artists.size(); i++){
 				System.out.println("Artist at "+i+" is " + artists.get(i).getSelectedItem().toString());
 			}
-
-
 		} else if (event.getSource() == reset) {
 			// reset fields
 			setDefault();
