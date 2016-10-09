@@ -243,6 +243,7 @@ public class AddEditPersonGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
+				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 				home.updateTable();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
