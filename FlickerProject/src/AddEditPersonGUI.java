@@ -87,7 +87,7 @@ public class AddEditPersonGUI implements ActionListener {
 		genderPanel.add(gender);
 		occupationPanel.add(occupation);
 		notesPanel.add(scroll);
-		
+
 		frame = new JFrame("Frame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 300);
@@ -233,8 +233,8 @@ public class AddEditPersonGUI implements ActionListener {
 	}
 
 	/**
-	 * Based on the source of the event, the method will choose what the PersonGUI
-	 * will do next.
+	 * Based on the source of the event, the method will choose what the
+	 * PersonGUI will do next.
 	 * 
 	 * @param ActionEvent
 	 *            - event from the Add/Edit PersonGUI

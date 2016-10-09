@@ -23,7 +23,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton edit;
 	private JButton save;
 	private JTabbedPane databases;
-	// private JTabbedPane connectionsTab;
 	private JButton export;
 	private JPanel centerPanel;
 	private JPanel southPanel;
@@ -39,10 +38,7 @@ public class HomeScreenGUI implements ActionListener {
 		add = new JButton("Add");
 		edit = new JButton("Edit");
 		databases = new JTabbedPane();
-		// connectionsTab = new JTabbedPane();
 		export = new JButton("Export");
-		// tableDisplay = displayTable(mainStorage.getPersonHeaderRow(),
-		// mainStorage.getPeopleList());
 
 		searchGUI = new SearchGUI(this);
 		exportGUI = new ExportGUI(this);
@@ -67,12 +63,13 @@ public class HomeScreenGUI implements ActionListener {
 	}
 
 	/**
-	 * This method creates a table to be displayed. Also overrides the 
-	 * table model to make it non Editable. 
-	 * Centers the data. 
+	 * This method creates a table to be displayed. Also overrides the table
+	 * model to make it non Editable. Centers the data.
 	 * 
-	 * @param columnNamesArray - String Array of column titles
-	 * @param rowItems - What will be in the rows. Could be for Person or Connection
+	 * @param columnNamesArray
+	 *            - String Array of column titles
+	 * @param rowItems
+	 *            - What will be in the rows. Could be for Person or Connection
 	 * @return JTable - Table that is all filled out with the correct data
 	 * @throws IOException
 	 */
@@ -136,9 +133,9 @@ public class HomeScreenGUI implements ActionListener {
 		centerPanel.add(databases);
 		return centerPanel;
 	}
-	
+
 	/**
-	 * Updates the table to see new data that was added. 
+	 * Updates the table to see new data that was added.
 	 * 
 	 * @throws IOException
 	 */
@@ -149,12 +146,12 @@ public class HomeScreenGUI implements ActionListener {
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		frame.revalidate();
 	}
-	
+
 	/**
-	 * A search PopUp will open and the user will be able to 
-	 * fill it out to search for their criteria.
+	 * A search PopUp will open and the user will be able to fill it out to
+	 * search for their criteria.
 	 */
-	public void searchClicked(){
+	public void searchClicked() {
 		southPanel.removeAll();
 		southPanel = new JPanel(new GridLayout(1, 2));
 		JButton clear = new JButton("Clear");
@@ -163,12 +160,12 @@ public class HomeScreenGUI implements ActionListener {
 		centerPanel.add(southPanel, BorderLayout.SOUTH);
 		centerPanel.revalidate();
 	}
-	
+
 	/**
 	 * A message dialog will first pop up asking what the user would like to add
-	 * then PopUp will open based on what button they choose.  
+	 * then PopUp will open based on what button they choose.
 	 */
-	public void addClicked(){
+	public void addClicked() {
 		Object[] options = { "Add Artist", "Add Connection" };
 		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
@@ -176,18 +173,18 @@ public class HomeScreenGUI implements ActionListener {
 			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
 			personGUI.makeVisible();
 		} else if (val == 1) { // if connection
-			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,null);
+			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null);
 			connectionGUI.makeVisible();
 		}
 	}
-	
+
 	/**
-	 * A Popup with either the a person information filled in or a connection 
-	 * information filled in will pop up. If no row is selected, a message
-	 * will pop up informing the user to click a row to edit.
-	 *  
+	 * A Popup with either the a person information filled in or a connection
+	 * information filled in will pop up. If no row is selected, a message will
+	 * pop up informing the user to click a row to edit.
+	 * 
 	 */
-	public void editClicked(){
+	public void editClicked() {
 		if (databases.getSelectedComponent() == personTableDisplay) {
 			int selectedRow = personTableDisplay.getSelectedRow();
 			if (selectedRow > -1) {
@@ -204,7 +201,8 @@ public class HomeScreenGUI implements ActionListener {
 			if (selectedRow > -1) {
 				String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int connectionID = Integer.parseInt(IDCellText);
-				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, mainStorage.getConnectionFromID(connectionID));
+				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,
+						mainStorage.getConnectionFromID(connectionID));
 				connectionGUI.makeVisible();
 			} else {
 				JOptionPane.showMessageDialog(frame, "Click a row first!");
@@ -214,10 +212,11 @@ public class HomeScreenGUI implements ActionListener {
 	}
 
 	/**
-	 * Based on the source of the event, the method will choose what the 
-	 * GUI will do next.
+	 * Based on the source of the event, the method will choose what the GUI
+	 * will do next.
 	 * 
-	 * @param ActionEvent - event from the HomeScreenGUI
+	 * @param ActionEvent
+	 *            - event from the HomeScreenGUI
 	 */
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();

@@ -22,19 +22,19 @@ public class NewUser implements ActionListener {
 		frame.setSize(300, 200);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
-		
+
 		fullName = new JTextField(15);
 		userName = new JTextField(15);
 		password = new JPasswordField(15);
 		confirm = new JPasswordField(15);
 		create = new JButton("Create");
 		cancel = new JButton("Cancel");
-		
+
 		JLabel label1 = new JLabel("Full Name:");
 		JLabel label2 = new JLabel("Username:");
 		JLabel label3 = new JLabel("Password:");
 		JLabel label4 = new JLabel("Confirm Password:");
-		
+
 		JPanel centerPanel = new JPanel(new FlowLayout());
 		centerPanel.add(label1);
 		centerPanel.add(fullName);
@@ -44,15 +44,14 @@ public class NewUser implements ActionListener {
 		centerPanel.add(password);
 		centerPanel.add(label4);
 		centerPanel.add(confirm);
-		
+
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(create);
 		southPanel.add(cancel);
-		
-		frame.add(centerPanel,BorderLayout.CENTER);
+
+		frame.add(centerPanel, BorderLayout.CENTER);
 		frame.add(southPanel, BorderLayout.SOUTH);
-		
-		
+
 		create.addActionListener(this);
 		cancel.addActionListener(this);
 
@@ -62,9 +61,9 @@ public class NewUser implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		if(event.getSource() == create){
-			int option=JOptionPane.showConfirmDialog(frame,"Is this correct?");
-			if(option==0){
+		if (event.getSource() == create) {
+			int option = JOptionPane.showConfirmDialog(frame, "Is this correct?");
+			if (option == 0) {
 				frame.dispose();
 				try {
 					HomeScreenGUI homeScreenGUI = new HomeScreenGUI();
@@ -73,7 +72,7 @@ public class NewUser implements ActionListener {
 					e.printStackTrace();
 				}
 			}
-		} else if (event.getSource() == cancel){
+		} else if (event.getSource() == cancel) {
 			frame.dispose();
 			LoginGUI login = new LoginGUI();
 

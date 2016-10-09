@@ -30,91 +30,178 @@ public class Connection implements TableRowViewable {
 	 * 
 	 * @return String[] of the connection information
 	 */
-	 public String[] toCSVRowArray() {
-		 String idListText = peopleListToIdText();
-		 return new String[] { Integer.toString(edgeId), idListText, date,
-				 typeInteraction, location, citation, socialNotes, direction };
+	public String[] toCSVRowArray() {
+		String idListText = peopleListToIdText();
+		return new String[] { Integer.toString(edgeId), idListText, date, typeInteraction, location, citation,
+				socialNotes, direction };
 	}
-	 
-	 /** 
-	  * Retrieves the ID for each person in a connection and returns it.
-	  * 
-	  * @return String 
-	  */
-	 public String peopleListToIdText() {
-		 String result = "";
-		 for(Person person: peopleList) {
+
+	/**
+	 * Retrieves the ID for each person in a connection and returns it.
+	 * 
+	 * @return String
+	 */
+	public String peopleListToIdText() {
+		String result = "";
+		for (Person person : peopleList) {
 			result += person.getID() + ":";
-			 //FIXME: Make it so there is not an extra colon at the end. 
-		 }
-		 return result;
-	 }
-	 
+			// FIXME: Make it so there is not an extra colon at the end.
+		}
+		return result;
+	}
+
+	/**
+	 * Creates an array of type string formatted to fill a row in the connection
+	 * table and returns the array.
+	 * 
+	 * @return String array of table row connection
+	 */
 	public String[] toTableRowArray() {
 		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location,
 				citation, socialNotes, direction };
 	}
-	
 
+	/**
+	 * Retrieves and returns the list of people involved in the connection
+	 * 
+	 * @return list of type Person
+	 */
 	public List<Person> getPeopleList() {
 		return peopleList;
 	}
-	
+
+	/**
+	 * Takes in a list of people and sets that list to the data field
+	 * peopleList, which contains the list of people involved in the connection.
+	 * 
+	 * @param peopleList
+	 */
 	public void setPeopleList(List<Person> peopleList) {
 		this.peopleList = peopleList;
 	}
 
+	/**
+	 * Retrieves and returns the edge Id of the connection.
+	 * 
+	 * @return int edge id
+	 */
 	public int getEdgeId() {
 		return edgeId;
 	}
 
+	/**
+	 * Retrieves and returns the date of the connection as a string.
+	 * 
+	 * @return String date of connection
+	 */
 	public String getDate() {
-		
 		return date;
 	}
 
+	/**
+	 * Takes in a date of type String and sets the data field date, which is the
+	 * date the interaction occurred.
+	 * 
+	 * @param date
+	 */
 	public void setDate(String date) {
 		this.date = date;
 	}
 
+	/**
+	 * Retrieves and returns the type of interaction as a String
+	 * 
+	 * @return interaction type as a String
+	 */
 	public String getTypeInteraction() {
 		return typeInteraction;
 	}
 
+	/**
+	 * Takes in a type of interaction of type String and sets the data field
+	 * typeInteraction, which is the type of interaction that occured in the
+	 * connection.
+	 * 
+	 * @param typeInteraction
+	 */
 	public void setTypeInteraction(String typeInteraction) {
 		this.typeInteraction = typeInteraction;
 	}
 
+	/**
+	 * Retrieves and returns the location of the interaction
+	 * 
+	 * @return location of interaction as type String
+	 */
 	public String getLocation() {
 		return location;
 	}
 
+	/**
+	 * Takes in a location of type String and sets the data field location,
+	 * which is the location the interaction occurred.
+	 * 
+	 * @param location
+	 */
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
+	/**
+	 * Retrieves and returns the citation of the connection
+	 * 
+	 * @return citation of the interaction of type String
+	 */
 	public String getCitation() {
 		return citation;
 	}
 
+	/**
+	 * Takes in a String citation and sets the data field citation, which is the
+	 * citation of the connection
+	 * 
+	 * @param citation
+	 */
 	public void setCitation(String citation) {
 		this.citation = citation;
 	}
 
+	/**
+	 * Retrieves and returns the direction of the interaction
+	 * 
+	 * @return direction of interaction as type String
+	 */
 	public String getDirection() {
 		return direction;
 	}
 
+	/**
+	 * Takes in a direction as type String and sets the data field direction,
+	 * which corresponds to the direction of the interaction
+	 * 
+	 * @param direction
+	 */
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
 
-	public String getSocialNotes(){
+	/**
+	 * Retrieves and returns the social notes as type String
+	 * 
+	 * @return social notes of interaction as type String
+	 */
+	public String getSocialNotes() {
 		return socialNotes;
 	}
-	
-	public void setSocialNotes(String socialNotes){
+
+	/**
+	 * Takes in social notes as type String and sets the data field socialNotes,
+	 * which are the notes on the interaction
+	 * 
+	 * @param socialNotes
+	 */
+	public void setSocialNotes(String socialNotes) {
 		this.socialNotes = socialNotes;
 	}
-	
+
 }

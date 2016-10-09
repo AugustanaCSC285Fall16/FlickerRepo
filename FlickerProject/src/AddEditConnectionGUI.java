@@ -69,7 +69,6 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	private Connection connectionEdited;
 
-	
 	/**
 	 * Creates the add/edit connection GUI
 	 * 
@@ -190,8 +189,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		for (int i = targetNames.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			targetNames
-					.add(new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
+			targetNames.add(
+					new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
@@ -252,7 +251,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	/**
 	 * Makes the frame visible.
 	 */
-
 	void makeVisible() {
 		frame.setVisible(true);
 	}
@@ -275,7 +273,8 @@ public class AddEditConnectionGUI implements ActionListener {
 	}
 
 	/**
-	 * Sets the Options in the Edit connection GUI to the selected connection's data
+	 * Sets the Options in the Edit connection GUI to the selected connection's
+	 * data
 	 * 
 	 * @param connection
 	 *            - the connection who's data will fill in the GUI
@@ -299,7 +298,7 @@ public class AddEditConnectionGUI implements ActionListener {
 			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		date.setText(connectionToEdit.getDate());
-		//date.setValue(connectionToEdit.getDate());
+		// date.setValue(connectionToEdit.getDate());
 		refreshPanel();
 	}
 
@@ -319,10 +318,10 @@ public class AddEditConnectionGUI implements ActionListener {
 	}
 
 	/**
-	 * Will set the edited connection's data to whatever was put into the GUI if it
-	 * is already a connection filled in. Will Add a new connection with all of the data
-	 * filled in the GUI if there was not a connection already selected. Saves the
-	 * connection data
+	 * Will set the edited connection's data to whatever was put into the GUI if
+	 * it is already a connection filled in. Will Add a new connection with all
+	 * of the data filled in the GUI if there was not a connection already
+	 * selected. Saves the connection data
 	 * 
 	 * @throws IOException
 	 */
@@ -357,8 +356,8 @@ public class AddEditConnectionGUI implements ActionListener {
 	}
 
 	/**
-	 * Based on the source of the event, the method will choose what the ConnectionGUI
-	 * will do next.
+	 * Based on the source of the event, the method will choose what the
+	 * ConnectionGUI will do next.
 	 * 
 	 * @param ActionEvent
 	 *            - event from the Add/Edit ConnectionGUI

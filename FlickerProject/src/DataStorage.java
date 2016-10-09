@@ -64,10 +64,10 @@ public class DataStorage {
 		return personHeaderRow;
 	}
 
-	public Person getPersonFromID(int ID){
+	public Person getPersonFromID(int ID) {
 		return personMap.get(ID);
 	}
-	
+
 	public Collection<Person> getPeopleList() {
 		return personMap.values();
 	}
@@ -90,7 +90,6 @@ public class DataStorage {
 		List<String[]> myRows = reader.readAll();
 		connectionHeaderRow = myRows.remove(0);
 
-		// 1, 0, 1:2, 9/20/16, Letter, Olin, google.com, To
 		for (String[] row : myRows) {
 			int edgeID = Integer.parseInt(row[0]);
 			String baseIdListText = row[1];
@@ -121,10 +120,10 @@ public class DataStorage {
 		connectionsMap.put(connection.getEdgeId(), connection);
 	}
 
-	public Connection getConnectionFromID(int ID){
+	public Connection getConnectionFromID(int ID) {
 		return connectionsMap.get(ID);
 	}
-	
+
 	public String[] getConnectionHeaderRow() {
 		return connectionHeaderRow;
 	}
@@ -132,10 +131,10 @@ public class DataStorage {
 	public Collection<Connection> getConnectionList() {
 		return connectionsMap.values();
 	}
-	
-	public Person getPersonListForConnection(String name){
-		for (Person person: personMap.values()){
-			if (name.equals(person.getName())){
+
+	public Person getPersonListForConnection(String name) {
+		for (Person person : personMap.values()) {
+			if (name.equals(person.getName())) {
 				int id = person.getID();
 				return personMap.get(id);
 			}
