@@ -9,9 +9,10 @@ public class DataStorage {
 	public Map<Integer, Person> personMap;
 	private Map<Integer, Connection> connectionsMap;
 	private String[] personHeaderRow;
-
 	private String[] connectionHeaderRow;
-
+	private ArrayList<String> interactionTypes;
+	private ArrayList<String> locationTypes;
+	
 	private int nextIdNum;
 	private int nextConnNum;
 
@@ -19,6 +20,8 @@ public class DataStorage {
 	private static final String PERSON_FILE_NAME = "PersonData.csv";
 	private static final String CONNECTION_FILE_NAME = "ConnectionData.csv";
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
+	private static final String TYPE_INTERACTION_FILE_NAME = "TypeInteraction.csv";
+	private static final String LOCATION_TYPES_FILE_NAME = "LocationTypes.csv";
 
 	private static DataStorage primaryDataStorage = null;
 
@@ -40,9 +43,13 @@ public class DataStorage {
 	private DataStorage() throws IOException {
 		personMap = new TreeMap<>();
 		connectionsMap = new TreeMap<>();
+		interactionTypes = new ArrayList<>();
+		locationTypes = new ArrayList<>();
 		loadPeople();
 		loadConnections();
 		loadIdAndConnNum();
+		loadDataTypes(TYPE_INTERACTION_FILE_NAME,interactionTypes);
+		loadDataTypes(LOCATION_TYPES_FILE_NAME,locationTypes);
 	}
 
 	/**
@@ -70,6 +77,12 @@ public class DataStorage {
 
 	public Collection<Person> getPeopleList() {
 		return personMap.values();
+	}
+	
+	public ArrayList<Person> getPeopleArrayList() {
+		ArrayList<Person> personList = new ArrayList<>(personMap.values());
+		return personList;
+		
 	}
 
 	public void addPerson(Person person) {
@@ -149,6 +162,24 @@ public class DataStorage {
 			writer.writeNext(connection.toCSVRowArray());
 		}
 		writer.close();
+	}
+	
+	private void loadDataTypes(String fileName, ArrayList<String> list) throws IOException {
+		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + fileName));
+	    String [] nextLine;
+	    while ((nextLine = reader.readNext()) != null) {
+	       // nextLine[] is an array of values from the line
+	    	String item = nextLine[0];
+	       list.add(item);
+	    }
+	}
+	
+	public ArrayList<String> getInteractionTypes() {
+		return interactionTypes;
+	}
+	
+	public ArrayList<String> getLocationTypes() {
+		return locationTypes;
 	}
 
 	private void loadIdAndConnNum() throws IOException {
