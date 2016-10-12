@@ -21,7 +21,7 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
 	private static final String[] FIELDS = new String[]{"", "Type","Location"};
-	private static final int WIDTH = 260;
+	private static final int WIDTH = 270;
 	private static final int HEIGHT = 300;
 
 	// data fields
