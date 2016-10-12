@@ -26,10 +26,10 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	// data fields
 	private JFrame frame;
-	private JComboBox<String> baseName;
+	private JComboBox<Object> baseName;
 	private JFormattedTextField date;
-	private JComboBox<String> type;
-	private JComboBox<String> location;
+	private JComboBox<Object> type;
+	private JComboBox<Object> location;
 	private JTextArea socialNotes;
 	private JTextArea citation;
 	private JComboBox<String> direction;
@@ -66,12 +66,16 @@ public class AddEditConnectionGUI implements ActionListener {
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
 	HomeScreenGUI home;
+
 	private boolean editing;
 
+	DataStorage storage;
+
+
 	// class that relates to controlled vocabulary
-	Vector<String> baseNameChoices;
-	Vector<String> typeChoices;
-	Vector<String> locationChoices;
+	ArrayList<Person> baseNameChoices;
+	ArrayList<String> typeChoices;
+	ArrayList<String> locationChoices;
 	Vector<String> directionChoices;
 
 	private Connection connectionEdited;
@@ -85,6 +89,12 @@ public class AddEditConnectionGUI implements ActionListener {
 	 *            - to be edited or null if we are adding a new connection
 	 */
 	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
+		try {
+			storage = DataStorage.getMainDataStorage();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.connectionEdited = connection;
 		this.home = home;
 
@@ -92,16 +102,18 @@ public class AddEditConnectionGUI implements ActionListener {
 		targetNames = new ArrayList<>();
 		editing = false;
 
-		baseNameChoices = new Vector<String>(
-				Arrays.asList("--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White"));
-		baseName = new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" });
+		baseNameChoices = storage.getPeopleArrayList();
+		baseName = new JComboBox<>(baseNameChoices.toArray());
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
 		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		typeChoices = new Vector<String>(Arrays.asList("None", "Journal", "Letter", "Other"));
-		type = new JComboBox<>(new String[] { "None", "Journal", "Letter", "Other" });
-		locationChoices = new Vector<String>(Arrays.asList("None", "Paris", "Other"));
-		location = new JComboBox<>(new String[] { "None", "Paris", "Other" });
+		typeChoices = storage.getInteractionTypes();
+		type = new JComboBox<>(typeChoices.toArray());
+		locationChoices = storage.getLocationTypes();
+		location = new JComboBox<>(locationChoices.toArray());
+		directionChoices = new Vector<String>(
+				Arrays.asList("No direction", "One-to-One", "One-to-Many", "Many-to-Many"));
+		direction = new JComboBox<>(new String[] { "No direction", "One-to-One", "One-to-Many", "Many-to-Many" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		citation = new JTextArea(2, 10);
@@ -201,8 +213,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		for (int i = targetNames.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			targetNames.add(
-					new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
+			targetNames.add(new JComboBox<>(baseNameChoices.toArray()));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
@@ -228,9 +239,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
 		westPanel.add(baseNameLabel);
 		if (numNames > 0) {
-			directionChoices = new Vector<String>(Arrays.asList("No direction", "To", "From"));
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			direction = new JComboBox<>(new String[] { "No direction", "To", "From" });
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			toFromPanel.add(direction);
 			panel.add(toFromPanel);
@@ -299,9 +308,10 @@ public class AddEditConnectionGUI implements ActionListener {
 	void setConnectionData(Connection connection) {
 		Connection connectionToEdit = connection;
 		List<Person> peopleList = connectionToEdit.getPeopleList();
-		baseName.setSelectedIndex(baseNameChoices.indexOf(peopleList.get(0).toString()));
+		baseName.setSelectedIndex(baseNameChoices.indexOf(peopleList.get(0)));
+
 		for (int i = 0; i < additionalNames; i++) {
-			targetNames.get(i).setSelectedIndex(baseNameChoices.indexOf(peopleList.get(i + 1).toString()));
+			targetNames.get(i).setSelectedIndex(baseNameChoices.indexOf(peopleList.get(i + 1)));
 		}
 		type.setSelectedIndex(typeChoices.indexOf(connectionToEdit.getTypeInteraction()));
 		location.setSelectedIndex(locationChoices.indexOf(connectionToEdit.getLocation()));
@@ -354,7 +364,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @throws IOException
 	 */
 	private void submitClicked() throws IOException {
-		DataStorage storage = DataStorage.getMainDataStorage();
+		// DataStorage storage = DataStorage.getMainDataStorage();
 		ArrayList<Person> personListForConn = new ArrayList<>();
 		personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
 
