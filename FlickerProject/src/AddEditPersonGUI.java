@@ -12,6 +12,10 @@ import java.util.Vector;
 import javax.swing.*;
 
 public class AddEditPersonGUI implements ActionListener {
+	
+	private static final int WIDTH = 260;
+	private static final int HEIGHT = 250;
+	private static final String[] FIELDS = new String[]{"", "Cultural ID", "Gender", "Occupation"};
 
 	private JFrame frame;
 	private JTextField name;
@@ -19,22 +23,32 @@ public class AddEditPersonGUI implements ActionListener {
 	private JComboBox<String> gender;
 	private JComboBox<String> occupation;
 	private JTextArea notes;
+	
 	private JPanel namePanel;
 	private JPanel culturePanel;
+	private JPanel cultureFlowPanel;
+	private JPanel newCultureFlowPanel;
 	private JPanel genderPanel;
 	private JPanel occupationPanel;
 	private JPanel notesPanel;
 	private JPanel centerPanel;
 	private JPanel westPanel;
+	private JPanel southPanel;
+	
 	private JLabel nameLabel;
 	private JLabel culturalLabel;
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
+	
 	JButton submitButton;
+	JButton deleteButton;
 	private JButton cancel;
+	private JButton addData;
 	HomeScreenGUI home;
 	private JScrollPane scroll;
+	
+	private boolean editing;
 
 	// class that relates to controlled vocabulary
 	private Vector<String> cultureChoices;
@@ -54,6 +68,8 @@ public class AddEditPersonGUI implements ActionListener {
 	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
 		this.personEdited = person;
 		this.home = home;
+		
+		editing = false;
 
 		name = new JTextField(10);
 		cultureChoices = new Vector<String>(Arrays.asList("None", "French", "American", "Italian", "German", "Other"));
@@ -62,10 +78,12 @@ public class AddEditPersonGUI implements ActionListener {
 		gender = new JComboBox<>(new String[] { "None", "Male", "Female", "Other" });
 		occupationChoices = new Vector<String>(Arrays.asList("", "Artist", "Bartender", "Other"));
 		occupation = new JComboBox<>(new String[] { "None", "Artist", "Bartender", "Other" });
-		notes = new JTextArea(2, 15);
+		notes = new JTextArea(2, 10);
 		notes.setLineWrap(true);
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
+		deleteButton = new JButton("Delete");
+		addData = new JButton("Add Data");
 
 		nameLabel = new JLabel("Artist Name:");
 		culturalLabel = new JLabel("Cultural ID:");
@@ -73,11 +91,11 @@ public class AddEditPersonGUI implements ActionListener {
 		occupationLabel = new JLabel("Occupation:");
 		biographyLabel = new JLabel("Biography:");
 
-		namePanel = new JPanel(new FlowLayout());
-		culturePanel = new JPanel(new FlowLayout());
-		genderPanel = new JPanel(new FlowLayout());
-		occupationPanel = new JPanel(new FlowLayout());
-		notesPanel = new JPanel(new FlowLayout());
+		namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		culturePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		genderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		occupationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		notesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 
 		scroll = new JScrollPane(notes);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -87,10 +105,10 @@ public class AddEditPersonGUI implements ActionListener {
 		genderPanel.add(gender);
 		occupationPanel.add(occupation);
 		notesPanel.add(scroll);
-		
+
 		frame = new JFrame("Frame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(300, 300);
+		frame.setSize(WIDTH, HEIGHT);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
@@ -99,6 +117,8 @@ public class AddEditPersonGUI implements ActionListener {
 
 		submitButton.addActionListener(this);
 		cancel.addActionListener(this);
+		deleteButton.addActionListener(this);
+		addData.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -151,9 +171,14 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @return JPanel This returns the completed south panel.
 	 */
 	private JPanel createSouthPanel() {
-		JPanel southPanel = new JPanel(new FlowLayout());
+		southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
 		southPanel.add(cancel);
+		if(editing){
+			southPanel.add(deleteButton);
+		} else {
+			southPanel.add(addData);
+		}
 		return southPanel;
 	}
 
@@ -173,6 +198,7 @@ public class AddEditPersonGUI implements ActionListener {
 		gender.setSelectedIndex(0);
 		occupation.setSelectedIndex(0);
 		notes.setText("");
+		editing = false;
 		refreshPanel();
 	}
 
@@ -198,10 +224,23 @@ public class AddEditPersonGUI implements ActionListener {
 	private void refreshPanel() {
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
+		frame.remove(southPanel);
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		frame.add(createWestPanel(), BorderLayout.WEST);
-		frame.setSize(260, 300 + 40);
+		frame.add(createSouthPanel(), BorderLayout.SOUTH);
+		frame.setSize(WIDTH, HEIGHT + 40);
 		makeVisible();
+	}
+	
+	/**
+	 * This method will add a delete button to the frame when the edit button
+	 * is clicked from within the home screen. It will only be displayed when
+	 * that button is clicked.
+	 */
+	
+	public void addDeleteButton(){
+		editing = true;
+		refreshPanel();
 	}
 
 	/**
@@ -233,8 +272,8 @@ public class AddEditPersonGUI implements ActionListener {
 	}
 
 	/**
-	 * Based on the source of the event, the method will choose what the PersonGUI
-	 * will do next.
+	 * Based on the source of the event, the method will choose what the
+	 * PersonGUI will do next.
 	 * 
 	 * @param ActionEvent
 	 *            - event from the Add/Edit PersonGUI
@@ -243,6 +282,7 @@ public class AddEditPersonGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
+				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 				home.updateTable();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
@@ -250,6 +290,10 @@ public class AddEditPersonGUI implements ActionListener {
 			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			frame.dispose();
+		} else if (event.getSource() == deleteButton){
+			//delete this person...why tho?
+		} else if (event.getSource() == addData){
+			AddData add = new AddData(FIELDS);
 		}
 	}
 }

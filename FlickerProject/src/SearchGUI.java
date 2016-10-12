@@ -12,8 +12,10 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
 public class SearchGUI implements ActionListener {
-	
+
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
+	private static final int WIDTH = 260;
+	private static final int HEIGHT = 300;
 
 	private JFrame frame;
 	private JComboBox<String> name;
@@ -27,7 +29,7 @@ public class SearchGUI implements ActionListener {
 	private JComboBox<String> toFrom;
 	private JButton reset;
 	JButton search;
-	
+
 	private JLabel nameLabel;
 	private JLabel dateLabel;
 	private JLabel typeLabel;
@@ -35,7 +37,7 @@ public class SearchGUI implements ActionListener {
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel locationLabel;
-	
+
 	private JPanel namePanel;
 	private JPanel datePanel;
 	private JPanel typePanel;
@@ -46,31 +48,31 @@ public class SearchGUI implements ActionListener {
 
 	private JButton moreNames;
 	private JButton moreDates;
-	
+
 	private JPanel innerNamePanel;
 	private JPanel innerPlusPanel;
 	private JPanel innerDatePanel;
 	private JPanel innerDatePlusPanel;
-	
+
 	private int additionalNames;
 	private int numDates;
-	
+
 	private JPanel centerPanel;
 	private JPanel westPanel;
-	
+
 	HomeScreenGUI home;
-	
+
 	private ArrayList<JComboBox> artists;
 
 	public SearchGUI(HomeScreenGUI home) {
-		
+
 		artists = new ArrayList<>();
-		
-		this.home=home;
-		
+
+		this.home = home;
+
 		additionalNames = 0;
 		numDates = 0;
-		
+
 		name = new JComboBox<>(new String[] { "", "White", "Black" });
 		date = new JFormattedTextField(DATE_FORMAT);
 		date.setColumns(7);
@@ -95,27 +97,27 @@ public class SearchGUI implements ActionListener {
 		locationLabel = new JLabel("Location:");
 		moreNames = new JButton("+");
 		moreDates = new JButton("+");
-		
+
 		namePanel = new JPanel(new BorderLayout());
 		innerNamePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		innerNamePanel.add(name);
-		
+
 		innerPlusPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		innerPlusPanel.add(moreNames);
-		
+
 		datePanel = new JPanel(new BorderLayout());
 		innerDatePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		innerDatePanel.add(date);
-		
+
 		innerDatePlusPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		innerDatePlusPanel.add(moreDates);
-		
+
 		typePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		genderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		culturePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		occupationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		
+
 		namePanel.add(innerNamePanel, BorderLayout.CENTER);
 		namePanel.add(innerPlusPanel, BorderLayout.EAST);
 		datePanel.add(innerDatePanel, BorderLayout.CENTER);
@@ -125,19 +127,19 @@ public class SearchGUI implements ActionListener {
 		culturePanel.add(culture);
 		occupationPanel.add(occupation);
 		locationPanel.add(location);
-		
+
 		try {
-            MaskFormatter dateMask = new MaskFormatter("####/##/##");
-            MaskFormatter dateMask2 = new MaskFormatter("####/##/##");
-            dateMask.install(date);
-            dateMask2.install(otherDate);
-        } catch (ParseException ex) {
-            Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+			MaskFormatter dateMask = new MaskFormatter("####/##/##");
+			MaskFormatter dateMask2 = new MaskFormatter("####/##/##");
+			dateMask.install(date);
+			dateMask2.install(otherDate);
+		} catch (ParseException ex) {
+			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(250, 300);
+		frame.setSize(WIDTH, HEIGHT);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
@@ -154,18 +156,20 @@ public class SearchGUI implements ActionListener {
 	}
 
 	/**
-	 * This method is used to create the west panel.
-	 * It adds the appropriate buttons to the panel.
-	 * @param numNames The number of additional names need in the panel.
+	 * This method is used to create the west panel. It adds the appropriate
+	 * buttons to the panel.
+	 * 
+	 * @param numNames
+	 *            The number of additional names need in the panel.
 	 * @return JPanel This returns the completed center panel.
 	 */
-	
+
 	private JPanel createCenterPanel(int numNames) {
-		centerPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
+		centerPanel = new JPanel(new GridLayout(7 + numNames + numDates, 1));
 		centerPanel.add(namePanel);
-		for(int i = 0 ; i < artists.size(); i++){
+		for (int i = 0; i < artists.size(); i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			JPanel namePanel = new JPanel (new FlowLayout(FlowLayout.LEADING));
+			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(artists.get(i));
 			panel.add(namePanel);
 			centerPanel.add(panel);
@@ -179,7 +183,7 @@ public class SearchGUI implements ActionListener {
 			centerPanel.add(panel);
 		}
 		centerPanel.add(datePanel);
-		if(numDates > 0){
+		if (numDates > 0) {
 			JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			panel2.add(otherDate);
 			centerPanel.add(panel2);
@@ -191,30 +195,32 @@ public class SearchGUI implements ActionListener {
 		centerPanel.add(locationPanel);
 		return centerPanel;
 	}
-	
+
 	/**
-	 * This method is used to create the west panel.
-	 * It adds the appropriate labels to the panel.
-	 * @param numNames The number of additional names needed in the panel.
+	 * This method is used to create the west panel. It adds the appropriate
+	 * labels to the panel.
+	 * 
+	 * @param numNames
+	 *            The number of additional names needed in the panel.
 	 * @return JPanel This returns the completed west panel.
 	 */
 
 	private JPanel createWestPanel(int numNames) {
-		westPanel = new JPanel(new GridLayout(7+numNames+numDates, 1));
+		westPanel = new JPanel(new GridLayout(7 + numNames + numDates, 1));
 		westPanel.add(nameLabel);
-		if(numNames>0){
+		if (numNames > 0) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			toFromPanel.add(toFrom);
 			panel.add(toFromPanel);
 			westPanel.add(panel);
 		}
-		for(int i = 1; i < numNames ; i++){
+		for (int i = 1; i < numNames; i++) {
 			JPanel tempPanel = new JPanel();
 			westPanel.add(tempPanel);
 		}
 		westPanel.add(dateLabel);
-		if(numDates > 0){
+		if (numDates > 0) {
 			JPanel tepPanel = new JPanel();
 			westPanel.add(tepPanel);
 		}
@@ -225,10 +231,10 @@ public class SearchGUI implements ActionListener {
 		westPanel.add(locationLabel);
 		return westPanel;
 	}
-	
+
 	/**
-	 * Creates the south panel and adds the appropriate
-	 * buttons.
+	 * Creates the south panel and adds the appropriate buttons.
+	 * 
 	 * @return JPanel This returns the finished south panel.
 	 */
 
@@ -238,25 +244,25 @@ public class SearchGUI implements ActionListener {
 		southPanel.add(search);
 		return southPanel;
 	}
-	
+
 	/**
 	 * Makes the frame visible.
 	 */
 
-	void makeVisible(){
+	void makeVisible() {
 		frame.setVisible(true);
 	}
 
 	/**
-	 * Sets all data fields to the default value. Refreshes the frame
-	 * by calling the refreshPanel() method.
+	 * Sets all data fields to the default value. Refreshes the frame by calling
+	 * the refreshPanel() method.
 	 */
-	
-	void setDefault(){
-		numDates=0;
-		additionalNames=0;
+
+	void setDefault() {
+		numDates = 0;
+		additionalNames = 0;
 		artists.clear();
-		
+
 		name.setSelectedIndex(0);
 		type.setSelectedIndex(0);
 		culture.setSelectedIndex(0);
@@ -264,43 +270,44 @@ public class SearchGUI implements ActionListener {
 		occupation.setSelectedIndex(0);
 		location.setSelectedIndex(0);
 		toFrom.setSelectedIndex(0);
-		
+
 		refreshPanel();
 	}
-	
+
 	/**
-	 * Removes current panels from the search frame. Updates the frame's
-	 * size and adds the panels back to the frame.
+	 * Removes current panels from the search frame. Updates the frame's size
+	 * and adds the panels back to the frame.
 	 */
-	
-	private void refreshPanel(){
+
+	private void refreshPanel() {
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
-		
+
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
-		
-		frame.setSize(250,300+40*(additionalNames+numDates));
+
+		frame.setSize(WIDTH, HEIGHT + 40 * (additionalNames + numDates));
 		makeVisible();
 	}
+
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == search) {
 			// search things
 			frame.dispose();
 			home.actionPerformed(event);
-			for(int i=0; i < artists.size(); i++){
-				System.out.println("Artist at "+i+" is " + artists.get(i).getSelectedItem().toString());
+			for (int i = 0; i < artists.size(); i++) {
+				System.out.println("Artist at " + i + " is " + artists.get(i).getSelectedItem().toString());
 			}
 		} else if (event.getSource() == reset) {
 			// reset fields
 			setDefault();
-		} else if (event.getSource()== moreNames){
+		} else if (event.getSource() == moreNames) {
 			additionalNames++;
 			refreshPanel();
-		} else if(event.getSource() == moreDates){
+		} else if (event.getSource() == moreDates) {
 			numDates = 1;
 			refreshPanel();
-		} 
+		}
 	}
 
 }

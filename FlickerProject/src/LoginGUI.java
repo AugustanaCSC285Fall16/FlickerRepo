@@ -4,8 +4,7 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-
-public class LoginGUI implements ActionListener{
+public class LoginGUI implements ActionListener {
 	private JFrame frame;
 	private JTextField username;
 	private JPasswordField password;
@@ -13,15 +12,15 @@ public class LoginGUI implements ActionListener{
 	private JButton submit;
 	private JLabel label1;
 	private JLabel label2;
-	
-	public LoginGUI(){
+
+	public LoginGUI() {
 		username = new JTextField(15);
 		password = new JPasswordField(15);
 		add = new JButton("Add User");
 		submit = new JButton("Submit");
 		label1 = new JLabel("Username:");
 		label2 = new JLabel("Password:");
-		
+
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 125);
@@ -29,21 +28,22 @@ public class LoginGUI implements ActionListener{
 		frame.setLayout(new BorderLayout());
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
-		
+
 		add.addActionListener(this);
 		submit.addActionListener(this);
-		
+
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 	}
-	
+
 	/**
-	 * This method is used to create the center panel.
-	 * It adds the appropriate labels to the panel.
+	 * This method is used to create the center panel. It adds the appropriate
+	 * labels to the panel.
+	 * 
 	 * @return JPanel This returns the completed center panel.
-	 */	
-	
-	private JPanel createCenterPanel(){
+	 */
+
+	private JPanel createCenterPanel() {
 		JPanel centerPanel = new JPanel(new FlowLayout());
 		centerPanel.add(label1);
 		centerPanel.add(username);
@@ -51,25 +51,23 @@ public class LoginGUI implements ActionListener{
 		centerPanel.add(password);
 		return centerPanel;
 	}
-	
+
 	/**
-	 * This method is used to create the south panel.
-	 * It adds the appropriate labels to the panel.
+	 * This method is used to create the south panel. It adds the appropriate
+	 * labels to the panel.
+	 * 
 	 * @return JPanel This returns the completed south panel.
-	 */	
-	
-	private JPanel createSouthPanel(){
+	 */
+
+	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submit);
 		southPanel.add(add);
 		return southPanel;
 	}
-	
-	
-	
-	
-	public void actionPerformed(ActionEvent event){
-		if(event.getSource() == add){
+
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == add) {
 			frame.dispose();
 			NewUser newUser = new NewUser();
 		} else {

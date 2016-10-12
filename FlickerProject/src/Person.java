@@ -9,7 +9,6 @@ public class Person implements TableRowViewable {
 	private String culturalId;
 	private String biographicalNotes;
 
-	
 	// default constructor
 	public Person(int id, String name, String occupation, String gender, String culturalId, String biographicalNotes)
 			throws IOException {

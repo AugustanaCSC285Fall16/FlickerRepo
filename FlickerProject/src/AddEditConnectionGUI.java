@@ -20,6 +20,9 @@ import javax.swing.text.MaskFormatter;
 public class AddEditConnectionGUI implements ActionListener {
 
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
+	private static final String[] FIELDS = new String[]{"", "Type","Location"};
+	private static final int WIDTH = 260;
+	private static final int HEIGHT = 300;
 
 	// data fields
 	private JFrame frame;
@@ -41,6 +44,7 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	private JPanel centerPanel;
 	private JPanel westPanel;
+	private JPanel southPanel;
 
 	private JPanel moreNamesPanel;
 	private JPanel baseNamePanel;
@@ -57,9 +61,12 @@ public class AddEditConnectionGUI implements ActionListener {
 	JButton submitButton;
 	private JButton cancel;
 	private JButton moreNames;
+	private JButton deleteButton;
+	private JButton addData;
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
 	HomeScreenGUI home;
+	private boolean editing;
 
 	// class that relates to controlled vocabulary
 	Vector<String> baseNameChoices;
@@ -69,7 +76,6 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	private Connection connectionEdited;
 
-	
 	/**
 	 * Creates the add/edit connection GUI
 	 * 
@@ -84,6 +90,7 @@ public class AddEditConnectionGUI implements ActionListener {
 
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
+		editing = false;
 
 		baseNameChoices = new Vector<String>(
 				Arrays.asList("--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White"));
@@ -102,6 +109,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 		moreNames = new JButton("+");
+		deleteButton = new JButton("Delete");
+		addData = new JButton("Add Data");
 
 		baseNameLabel = new JLabel("Base Name:");
 		dateLabel = new JLabel("Date:");
@@ -143,7 +152,7 @@ public class AddEditConnectionGUI implements ActionListener {
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(250, 300);
+		frame.setSize(WIDTH, HEIGHT);
 		frame.setTitle("Frame");
 		frame.setLayout(new BorderLayout());
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
@@ -164,6 +173,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		submitButton.addActionListener(this);
 		cancel.addActionListener(this);
 		moreNames.addActionListener(this);
+		deleteButton.addActionListener(this);
+		addData.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -190,8 +201,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		for (int i = targetNames.size(); i < numNames; i++) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-			targetNames
-					.add(new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
+			targetNames.add(
+					new JComboBox<>(new String[] { "--", "Lauren", "Megan", "Tony", "Andrew", "Forrest", "White" }));
 			JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			namePanel.add(targetNames.get(i));
 			panel.add(namePanel);
@@ -243,16 +254,20 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @return JPanel This returns the finished south panel.
 	 */
 	private JPanel createSouthPanel() {
-		JPanel southPanel = new JPanel(new FlowLayout());
+		southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
 		southPanel.add(cancel);
+		if(editing){
+			southPanel.add(deleteButton);
+		} else {
+			southPanel.add(addData);
+		}
 		return southPanel;
 	}
 
 	/**
 	 * Makes the frame visible.
 	 */
-
 	void makeVisible() {
 		frame.setVisible(true);
 	}
@@ -275,7 +290,8 @@ public class AddEditConnectionGUI implements ActionListener {
 	}
 
 	/**
-	 * Sets the Options in the Edit connection GUI to the selected connection's data
+	 * Sets the Options in the Edit connection GUI to the selected connection's
+	 * data
 	 * 
 	 * @param connection
 	 *            - the connection who's data will fill in the GUI
@@ -299,7 +315,7 @@ public class AddEditConnectionGUI implements ActionListener {
 			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		date.setText(connectionToEdit.getDate());
-		//date.setValue(connectionToEdit.getDate());
+		// date.setValue(connectionToEdit.getDate());
 		refreshPanel();
 	}
 
@@ -314,15 +330,26 @@ public class AddEditConnectionGUI implements ActionListener {
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
 
-		frame.setSize(250, 300 + 40 * (additionalNames));
+		frame.setSize(WIDTH, HEIGHT + 40 * (additionalNames));
 		makeVisible();
+	}
+	
+	/**
+	 * This method will add a delete button to the frame when the edit button
+	 * is clicked from within the home screen. It will only be displayed when
+	 * that button is clicked.
+	 */
+	
+	public void addDeleteButton(){
+		editing = true;
+		refreshPanel();
 	}
 
 	/**
-	 * Will set the edited connection's data to whatever was put into the GUI if it
-	 * is already a connection filled in. Will Add a new connection with all of the data
-	 * filled in the GUI if there was not a connection already selected. Saves the
-	 * connection data
+	 * Will set the edited connection's data to whatever was put into the GUI if
+	 * it is already a connection filled in. Will Add a new connection with all
+	 * of the data filled in the GUI if there was not a connection already
+	 * selected. Saves the connection data
 	 * 
 	 * @throws IOException
 	 */
@@ -357,8 +384,8 @@ public class AddEditConnectionGUI implements ActionListener {
 	}
 
 	/**
-	 * Based on the source of the event, the method will choose what the ConnectionGUI
-	 * will do next.
+	 * Based on the source of the event, the method will choose what the
+	 * ConnectionGUI will do next.
 	 * 
 	 * @param ActionEvent
 	 *            - event from the Add/Edit ConnectionGUI
@@ -367,6 +394,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
+				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 				home.updateTable();
 			} catch (IOException e) {
 				// TODO: show message dialog about error saving data?
@@ -380,6 +408,10 @@ public class AddEditConnectionGUI implements ActionListener {
 		} else if (event.getSource() == moreNames) {
 			additionalNames++;
 			refreshPanel();
+		} else if (event.getSource() == deleteButton){
+			//delete this connection!
+		} else if (event.getSource() == addData){
+			AddData add = new AddData(FIELDS);
 		}
 	}
 
