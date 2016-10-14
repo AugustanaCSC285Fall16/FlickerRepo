@@ -22,8 +22,10 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton add;
 	private JButton edit;
 	private JButton save;
-	private JTabbedPane databases;
+	private JButton clear;
 	private JButton export;
+	private JButton exportAll;
+	private JTabbedPane databases;
 	private JPanel centerPanel;
 	private JPanel southPanel;
 	private JTable personTableDisplay;
@@ -154,9 +156,11 @@ public class HomeScreenGUI implements ActionListener {
 	public void searchClicked() {
 		southPanel.removeAll();
 		southPanel = new JPanel(new GridLayout(1, 2));
-		JButton clear = new JButton("Clear");
+		clear = new JButton("Clear");
+		exportAll = new JButton("Export All");
 		southPanel.add(clear);
 		southPanel.add(export);
+		southPanel.add(exportAll);
 		centerPanel.add(southPanel, BorderLayout.SOUTH);
 		centerPanel.revalidate();
 	}
@@ -234,6 +238,9 @@ public class HomeScreenGUI implements ActionListener {
 			addClicked();
 		} else if (source == edit) {
 			editClicked();
+		} else if (source == export){
+			ExportGUI export= new ExportGUI(this);
+			exportGUI.makeVisible();
 		}
 	}
 }
