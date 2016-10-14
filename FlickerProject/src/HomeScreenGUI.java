@@ -152,13 +152,14 @@ public class HomeScreenGUI implements ActionListener {
 	 * search for their criteria.
 	 */
 	public void searchClicked() {
-		southPanel.removeAll();
-		southPanel = new JPanel(new GridLayout(1, 2));
-		JButton clear = new JButton("Clear");
-		southPanel.add(clear);
-		southPanel.add(export);
-		centerPanel.add(southPanel, BorderLayout.SOUTH);
-		centerPanel.revalidate();
+		if (databases.getSelectedComponent() == personTableDisplay) {
+			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null, true);
+			personGUI.makeVisible();
+		} else { // is connectionTableDisplay
+			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null, true);
+			connectionGUI.makeVisible();
+		}
+
 	}
 
 	/**
@@ -166,18 +167,18 @@ public class HomeScreenGUI implements ActionListener {
 	 * then PopUp will open based on what button they choose.
 	 */
 	public void addClicked() {
-		Object[] options = { "Add Person", "Add Connection", "Add Controlled Vocab"};
+		Object[] options = { "Add Person", "Add Connection", "Add Controlled Vocab" };
 		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		if (val == 0) { // if artist
-			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
+			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null, false);
 			personGUI.makeVisible();
 		} else if (val == 1) { // if connection
-			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null);
+			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null, false);
 			connectionGUI.makeVisible();
 		} else if (val == 2) { // if controlled vocabulary
 			AddData vocabGUI = new AddData();
-			//vocabGUI.makeVisible();
+			// vocabGUI.makeVisible();
 		}
 	}
 
@@ -194,7 +195,7 @@ public class HomeScreenGUI implements ActionListener {
 				personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				String IDCellText = (String) personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int personID = Integer.parseInt(IDCellText);
-				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID));
+				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID), false);
 				personGUI.addDeleteButton();
 				personGUI.makeVisible();
 			} else {
@@ -206,7 +207,7 @@ public class HomeScreenGUI implements ActionListener {
 				String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int connectionID = Integer.parseInt(IDCellText);
 				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,
-						mainStorage.getConnectionFromID(connectionID));
+						mainStorage.getConnectionFromID(connectionID), false);
 				connectionGUI.addDeleteButton();
 				connectionGUI.makeVisible();
 			} else {
@@ -216,6 +217,7 @@ public class HomeScreenGUI implements ActionListener {
 
 	}
 
+	
 	/**
 	 * Based on the source of the event, the method will choose what the GUI
 	 * will do next.
@@ -226,10 +228,9 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			searchGUI.setDefault();
-			searchGUI.makeVisible();
-		} else if (source == searchGUI.search) {
 			searchClicked();
+		} else if (source == searchGUI.search) {
+			//pop-up for data from search? 
 		} else if (source == add) {
 			addClicked();
 		} else if (source == edit) {

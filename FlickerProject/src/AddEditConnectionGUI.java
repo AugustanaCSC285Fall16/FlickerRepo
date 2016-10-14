@@ -87,7 +87,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new connection
 	 */
-	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
+	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection, boolean isSearch) {
 		try {
 			storage = DataStorage.getMainDataStorage();
 		} catch (IOException e) {

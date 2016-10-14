@@ -59,6 +59,7 @@ public class AddEditPersonGUI implements ActionListener {
 	private ArrayList<String> occupationChoices;
 
 	private Person personEdited;
+	private boolean isSearch;
 
 	/**
 	 * Creates the add/edit person GUI
@@ -68,9 +69,10 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new person
 	 */
-	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
+	public AddEditPersonGUI(HomeScreenGUI home, Person person, boolean isSearch) {
 		this.personEdited = person;
 		this.home = home;
+		this.isSearch = isSearch;
 		
 		try {
 			storage = DataStorage.getMainDataStorage();
@@ -265,23 +267,32 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @throws IOException
 	 */
 	private void submitClicked() throws IOException {
-		if (personEdited != null) {
+		if (personEdited != null && isSearch == false) {
 			personEdited.setName(name.getText());
 			personEdited.setNodeName(nodeName.getText());
 			personEdited.setOccupation(occupation.getSelectedItem().toString());
 			personEdited.setGender(gender.getSelectedItem().toString());
 			personEdited.setCulturalId(culture.getSelectedItem().toString());
 			personEdited.setBiographicalNotes(notes.getText());
-		} else {
+			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+			storage.savePeople();
+			frame.dispose();
+		} else if (personEdited == null && isSearch == false) {
 			int nextID = storage.incrementAndGetNextPersonIdNum();
-
+			if(name.getText().equals("") || nodeName.getText().equals("")){
+				JOptionPane.showMessageDialog(frame, "Name and Node Name have to be filled in");
+			} else {
 			Person newPerson = new Person(nextID, name.getText(), nodeName.getText(), occupation.getSelectedItem().toString(),
 					gender.getSelectedItem().toString(), culture.getSelectedItem().toString(), notes.getText());
 
 			storage.addPerson(newPerson);
+			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+			storage.savePeople();
+			frame.dispose();
+			}
+		} else{
+			//search functionality. 
 		}
-		storage.savePeople();
-		frame.dispose();
 	}
 
 	/**
@@ -295,7 +306,6 @@ public class AddEditPersonGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
-				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 				home.updateTable();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
