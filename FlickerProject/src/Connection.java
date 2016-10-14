@@ -3,7 +3,10 @@ import java.util.*;
 
 public class Connection implements TableRowViewable {
 	// data fields
-	private String date;
+	//private String date;
+	private String day;
+	private String month;
+	private String year;
 	private String typeInteraction;
 	private String location;
 	private String citation;
@@ -13,10 +16,12 @@ public class Connection implements TableRowViewable {
 	private int edgeId;
 
 	// default constructor
-	public Connection(int edgeID, String date, String typeInteraction, String location, String citation,
+	public Connection(int edgeID, String day, String month, String year, String typeInteraction, String location, String citation,
 			String socialNotes, List<Person> people, String direction) {
 		this.edgeId = edgeID;
-		this.date = date;
+		this.day = day;
+		this.month = month;
+		this.year = year;
 		this.typeInteraction = typeInteraction;
 		this.location = location;
 		this.citation = citation;
@@ -32,8 +37,14 @@ public class Connection implements TableRowViewable {
 	 */
 	public String[] toCSVRowArray() {
 		String idListText = peopleListToIdText();
-		return new String[] { Integer.toString(edgeId), idListText, date, typeInteraction, location, citation,
+		String dateText = dateToCSVText();
+		return new String[] { Integer.toString(edgeId), idListText, dateText, typeInteraction, location, citation,
 				socialNotes, direction };
+	}
+	
+	public String dateToCSVText() {
+		String result = day + ":" + month + ":" +  year;
+		return result;
 	}
 
 	/**
@@ -57,7 +68,8 @@ public class Connection implements TableRowViewable {
 	 * @return String array of table row connection
 	 */
 	public String[] toTableRowArray() {
-		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location,
+		String date1 = day + "/" + month + "/" + year;
+		return new String[] { Integer.toString(edgeId), peopleList.toString(), date1, typeInteraction, location,
 				citation, socialNotes, direction };
 	}
 
@@ -94,8 +106,16 @@ public class Connection implements TableRowViewable {
 	 * 
 	 * @return String date of connection
 	 */
-	public String getDate() {
-		return date;
+	public String getDay() {
+		return day;
+	}
+	
+	public String getMonth() {
+		return month;
+	}
+	
+	public String getYear() {
+		return year;
 	}
 
 	/**
@@ -104,8 +124,16 @@ public class Connection implements TableRowViewable {
 	 * 
 	 * @param date
 	 */
-	public void setDate(String date) {
-		this.date = date;
+	public void setDay(String day) {
+		this.day = day;
+	}
+	
+	public void setMonth(String month) {
+		this.month = month;
+	}
+	
+	public void setYear(String year) {
+		this.year = year;
 	}
 
 	/**

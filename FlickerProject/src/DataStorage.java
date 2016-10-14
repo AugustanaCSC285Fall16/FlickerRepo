@@ -114,7 +114,7 @@ public class DataStorage {
 		for (String[] row : myRows) {
 			int edgeID = Integer.parseInt(row[0]);
 			String baseIdListText = row[1];
-			String date = row[2];
+			String dateText = row[2];
 			String typeInteraction = row[3];
 			String location = row[4];
 			String citation = row[5];
@@ -123,6 +123,12 @@ public class DataStorage {
 
 			String[] idArray = baseIdListText.split(":");
 			List<Person> peopleConnectingNamesList = new ArrayList<Person>();
+			
+			String[] dateArray = dateText.split(":");
+			//System.out.println(dateArray.toString());
+			String day = dateArray[0];
+			String month = dateArray[1];
+			String year = dateArray[2];
 
 			for (String idStr : idArray) {
 				int id = Integer.parseInt(idStr);
@@ -130,7 +136,7 @@ public class DataStorage {
 				peopleConnectingNamesList.add(person);
 			}
 
-			addConnection(new Connection(edgeID, date, typeInteraction, location, citation, socialNotes,
+			addConnection(new Connection(edgeID, day, month, year, typeInteraction, location, citation, socialNotes,
 					peopleConnectingNamesList, direction));
 
 		}

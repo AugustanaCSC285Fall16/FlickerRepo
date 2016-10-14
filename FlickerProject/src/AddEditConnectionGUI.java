@@ -295,6 +295,9 @@ public class AddEditConnectionGUI implements ActionListener {
 		additionalNames = 1;
 		targetNames.clear();
 //		date.setText("");
+		day.setText("");
+		month.setText("");
+		year.setText("");
 		baseName.setSelectedIndex(0);
 		type.setSelectedIndex(0);
 		location.setSelectedIndex(0);
@@ -311,7 +314,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @param connection
 	 *            - the connection who's data will fill in the GUI
 	 */
-/*	
+	
 	void setConnectionData(Connection connection) {
 		Connection connectionToEdit = connection;
 		List<Person> peopleList = connectionToEdit.getPeopleList();
@@ -325,17 +328,20 @@ public class AddEditConnectionGUI implements ActionListener {
 		direction.setSelectedIndex(directionChoices.indexOf(connectionToEdit.getDirection()));
 		socialNotes.setText(connectionToEdit.getSocialNotes());
 		citation.setText(connectionToEdit.getCitation());
-		
+/*		
 		try {
 			MaskFormatter dateMask = new MaskFormatter("##/##/####");
 			dateMask.install(date);
 		} catch (ParseException ex) {
 			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		date.setText(connectionToEdit.getDate());
+*/
+		day.setText(connectionToEdit.getDay());
+		month.setText(connectionToEdit.getMonth());
+		year.setText(connectionToEdit.getYear());
 		refreshPanel();
 	}
-*/
+
 
 
 	/**
@@ -374,7 +380,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * 
 	 * @throws IOException
 	 */
-/*	
+	
 	private void submitClicked() throws IOException {
 		ArrayList<Person> personListForConn = new ArrayList<>();
 		personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
@@ -390,11 +396,14 @@ public class AddEditConnectionGUI implements ActionListener {
 			connectionEdited.setDirection(direction.getSelectedItem().toString());
 			connectionEdited.setCitation(citation.getText());
 			connectionEdited.setSocialNotes(socialNotes.getText());
-			connectionEdited.setDate(date.getText());
+			//connectionEdited.setDate(date.getText());
+			connectionEdited.setDay(day.getText());
+			connectionEdited.setMonth(month.getText());
+			connectionEdited.setYear(year.getText());
 		} else {
 			int nextID = storage.incrementAndGetNextConnectionIdNum();
 
-			Connection newConnection = new Connection(nextID, date.getText(), type.getSelectedItem().toString(),
+			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(), type.getSelectedItem().toString(),
 					location.getSelectedItem().toString(), citation.getText(), socialNotes.getText(), personListForConn,
 					direction.getSelectedItem().toString());
 
@@ -403,7 +412,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		storage.saveConnections();
 		frame.dispose();
 	}
-*/
+
 
 	/**
 	 * Based on the source of the event, the method will choose what the
@@ -415,7 +424,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {
-//				submitClicked();
+				submitClicked();
 				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 				home.updateTable();
 			} catch (IOException e) {
