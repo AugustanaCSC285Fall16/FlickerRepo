@@ -336,9 +336,11 @@ public class AddEditConnectionGUI implements ActionListener {
 	private void refreshPanel() {
 		frame.remove(centerPanel);
 		frame.remove(westPanel);
+		frame.remove(southPanel);
 
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
+		frame.add(createSouthPanel(), BorderLayout.SOUTH);
 
 		frame.setSize(WIDTH, HEIGHT + 40 * (additionalNames));
 		makeVisible();

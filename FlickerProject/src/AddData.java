@@ -18,7 +18,7 @@ public class AddData implements ActionListener{
 	
 	public AddData(String[] options){
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(450, 100);
 		frame.setTitle("Home");
 		frame.setLayout(new GridLayout(2,1));
