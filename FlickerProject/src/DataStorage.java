@@ -10,8 +10,10 @@ public class DataStorage {
 	private Map<Integer, Connection> connectionsMap;
 	private String[] personHeaderRow;
 	private String[] connectionHeaderRow;
-	private ArrayList<String> interactionTypes;
-	private ArrayList<String> locationTypes;
+	private ArrayList<String> interactionChoices;
+	private ArrayList<String> locationChoices;
+	private ArrayList<String> cultureChoices;
+	private ArrayList<String> occupationChoices;
 	
 	private int nextIdNum;
 	private int nextConnNum;
@@ -20,8 +22,10 @@ public class DataStorage {
 	private static final String PERSON_FILE_NAME = "PersonData.csv";
 	private static final String CONNECTION_FILE_NAME = "ConnectionData.csv";
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
-	private static final String TYPE_INTERACTION_FILE_NAME = "TypeInteraction.csv";
-	private static final String LOCATION_TYPES_FILE_NAME = "LocationTypes.csv";
+	private static final String INTERACTION_CHOICES_FILE_NAME = "InteractionChoices.csv";
+	private static final String LOCATION_CHOICES_FILE_NAME = "LocationChoices.csv";
+	private static final String CULTURE_CHOICES_FILE_NAME = "CultureChoices.csv";
+	private static final String OCCUPATION_CHOICES_FILE_NAME = "OccupationChoices.csv";
 
 	private static DataStorage primaryDataStorage = null;
 
@@ -29,7 +33,7 @@ public class DataStorage {
 	 * Creates our main Data Storage Object that will be used all over in the
 	 * program to call methods.
 	 * 
-	 * @return Data Storage object that will be our simpleton
+	 * @return Data Storage object that will be our singleton
 	 * @throws IOException
 	 */
 	public static DataStorage getMainDataStorage() throws IOException {
@@ -43,13 +47,17 @@ public class DataStorage {
 	private DataStorage() throws IOException {
 		personMap = new TreeMap<>();
 		connectionsMap = new TreeMap<>();
-		interactionTypes = new ArrayList<>();
-		locationTypes = new ArrayList<>();
+		interactionChoices = new ArrayList<>();
+		locationChoices = new ArrayList<>();
+		cultureChoices = new ArrayList<>();
+		occupationChoices = new ArrayList<>();
 		loadPeople();
 		loadConnections();
 		loadIdAndConnNum();
-		loadDataTypes(TYPE_INTERACTION_FILE_NAME,interactionTypes);
-		loadDataTypes(LOCATION_TYPES_FILE_NAME,locationTypes);
+		loadDataTypes(INTERACTION_CHOICES_FILE_NAME,interactionChoices);
+		loadDataTypes(LOCATION_CHOICES_FILE_NAME,locationChoices);
+		loadDataTypes(CULTURE_CHOICES_FILE_NAME,cultureChoices);
+		loadDataTypes(OCCUPATION_CHOICES_FILE_NAME,occupationChoices);
 	}
 
 	/**
@@ -174,12 +182,82 @@ public class DataStorage {
 	    }
 	}
 	
+	// Could we make these next 4 methods into one and have the parameters be the file name 
+	// and the ArrayList<String> that is being saved???
+	public void saveOccupationControlledVocab() throws IOException{
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + OCCUPATION_CHOICES_FILE_NAME));
+		List<String[]> choicesArray = new ArrayList<>();
+		for(int i = 0; i < occupationChoices.size(); i++){
+			choicesArray.add(this.toCSVControlledVocabArray(occupationChoices.get(i)));
+		}
+		writer.writeAll(choicesArray);
+		writer.close();
+	}
+	
+	public void saveCulturalIDControlledVocab() throws IOException{
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + CULTURE_CHOICES_FILE_NAME));
+		List<String[]> choicesArray = new ArrayList<>();
+		for(int i = 0; i < cultureChoices.size(); i++){
+			choicesArray.add(this.toCSVControlledVocabArray(cultureChoices.get(i)));
+		}
+		writer.writeAll(choicesArray);
+		writer.close();
+	}
+	
+	public void saveLocationControlledVocab() throws IOException{
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + LOCATION_CHOICES_FILE_NAME));
+		List<String[]> choicesArray = new ArrayList<>();
+		for(int i = 0; i < locationChoices.size(); i++){
+			choicesArray.add(this.toCSVControlledVocabArray(locationChoices.get(i)));
+		}
+		writer.writeAll(choicesArray);
+		writer.close();
+	}
+	
+	public void saveInteractionControlledVocab() throws IOException{
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + INTERACTION_CHOICES_FILE_NAME));
+		List<String[]> choicesArray = new ArrayList<>();
+		for(int i = 0; i < interactionChoices.size(); i++){
+			choicesArray.add(this.toCSVControlledVocabArray(interactionChoices.get(i)));
+		}
+		writer.writeAll(choicesArray);
+		writer.close();
+	}
+	
+	public String[] toCSVControlledVocabArray(String item){
+		return new String[] {item};
+	}
+	
+	public void addOccupationChoice(String item){
+		occupationChoices.add(item);
+	}
+	
+	public void addCulteralIdChoice(String item){
+		cultureChoices.add(item);
+	}
+	
+	public void addLocationChoice(String item){
+		locationChoices.add(item);
+	}
+	
+	public void addInteractionChoice(String item){
+		interactionChoices.add(item);
+	}
+	
 	public ArrayList<String> getInteractionTypes() {
-		return interactionTypes;
+		return interactionChoices;
 	}
 	
 	public ArrayList<String> getLocationTypes() {
-		return locationTypes;
+		return locationChoices;
+	}
+	
+	public ArrayList<String> getCultureChoices() {
+		return cultureChoices;
+	}
+	
+	public ArrayList<String> getOccupationChoices() {
+		return occupationChoices;
 	}
 
 	private void loadIdAndConnNum() throws IOException {

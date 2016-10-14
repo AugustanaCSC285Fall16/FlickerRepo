@@ -20,8 +20,8 @@ import javax.swing.text.MaskFormatter;
 public class AddEditConnectionGUI implements ActionListener {
 
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
-	private static final String[] FIELDS = new String[]{"", "Type","Location"};
-	private static final int WIDTH = 270;
+	private static final String[] FIELDS = new String[]{"", "Type of Interaction","Location"};
+	private static final int WIDTH = 350;
 	private static final int HEIGHT = 300;
 
 	// data fields
@@ -62,7 +62,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	private JButton cancel;
 	private JButton moreNames;
 	private JButton deleteButton;
-	private JButton addData;
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
 	HomeScreenGUI home;
@@ -113,7 +112,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		location = new JComboBox<>(locationChoices.toArray());
 		directionChoices = new Vector<String>(
 				Arrays.asList("No direction", "One-to-One", "One-to-Many", "Many-to-Many"));
-		direction = new JComboBox<>(new String[] { "No direction", "One-to-One", "One-to-Many", "Many-to-Many" });
+		direction = new JComboBox<>(new String[] {"No direction", "One-to-One", "One-to-Many", "Many-to-Many" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		citation = new JTextArea(2, 10);
@@ -122,14 +121,13 @@ public class AddEditConnectionGUI implements ActionListener {
 		cancel = new JButton("Cancel");
 		moreNames = new JButton("+");
 		deleteButton = new JButton("Delete");
-		addData = new JButton("Add Data");
 
 		baseNameLabel = new JLabel("Base Name:");
 		dateLabel = new JLabel("Date:");
-		typeLabel = new JLabel("Type:");
+		typeLabel = new JLabel("Type of Interaction:");
 		locationLabel = new JLabel("Location:");
 		socialLabel = new JLabel("Social Notes:");
-		bibLabel = new JLabel("Bibliography:");
+		bibLabel = new JLabel("Bibliography Citation:");
 
 		baseNamePanel = new JPanel(new BorderLayout());
 		namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -186,7 +184,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		cancel.addActionListener(this);
 		moreNames.addActionListener(this);
 		deleteButton.addActionListener(this);
-		addData.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -268,9 +265,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		southPanel.add(cancel);
 		if(editing){
 			southPanel.add(deleteButton);
-		} else {
-			southPanel.add(addData);
-		}
+		} 
 		return southPanel;
 	}
 
@@ -325,7 +320,6 @@ public class AddEditConnectionGUI implements ActionListener {
 			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		date.setText(connectionToEdit.getDate());
-		// date.setValue(connectionToEdit.getDate());
 		refreshPanel();
 	}
 
@@ -366,7 +360,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @throws IOException
 	 */
 	private void submitClicked() throws IOException {
-		// DataStorage storage = DataStorage.getMainDataStorage();
 		ArrayList<Person> personListForConn = new ArrayList<>();
 		personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
 
@@ -409,8 +402,7 @@ public class AddEditConnectionGUI implements ActionListener {
 				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 				home.updateTable();
 			} catch (IOException e) {
-				// TODO: show message dialog about error saving data?
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
 			// adding or editing
 			home.actionPerformed(event);
@@ -422,8 +414,6 @@ public class AddEditConnectionGUI implements ActionListener {
 			refreshPanel();
 		} else if (event.getSource() == deleteButton){
 			//delete this connection!
-		} else if (event.getSource() == addData){
-			AddData add = new AddData(FIELDS);
 		}
 	}
 
