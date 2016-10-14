@@ -22,8 +22,10 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton add;
 	private JButton edit;
 	private JButton save;
-	private JTabbedPane databases;
+	private JButton clear;
 	private JButton export;
+	private JButton exportAll;
+	private JTabbedPane databases;
 	private JPanel centerPanel;
 	private JPanel southPanel;
 	private JTable personTableDisplay;
@@ -159,7 +161,6 @@ public class HomeScreenGUI implements ActionListener {
 			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null, true);
 			connectionGUI.makeVisible();
 		}
-
 	}
 
 	/**
@@ -235,6 +236,9 @@ public class HomeScreenGUI implements ActionListener {
 			addClicked();
 		} else if (source == edit) {
 			editClicked();
+		} else if (source == export){
+			ExportGUI export= new ExportGUI(this);
+			exportGUI.makeVisible();
 		}
 	}
 }
