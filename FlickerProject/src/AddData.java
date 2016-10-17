@@ -16,8 +16,16 @@ public class AddData implements ActionListener {
 	JTextField newData;
 	JButton submit;
 	JButton cancel;
+	DataStorage storage;
 
 	public AddData() {
+		try {
+			storage = DataStorage.getMainDataStorage();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(600, 100);
@@ -52,37 +60,61 @@ public class AddData implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
+	
+	public void submitClicked() throws IOException {
+		if (options.getSelectedIndex() == 0) {
+			if (!storage.getCultureChoices().contains(newData.getText())) {
+				storage.addCulteralIdChoice(newData.getText());
+				storage.saveCulturalIDControlledVocab();
+				JOptionPane.showMessageDialog(null, "Cultural Id successfully saved");
+				frame.dispose();
+			} else {
+				JOptionPane.showMessageDialog(null, "This cultural Id is already in the list!");
+			}
+		} else if (options.getSelectedIndex() == 1) {
+			if (!storage.getOccupationChoices().contains(newData.getText())) {
+				storage.addOccupationChoice(newData.getText());
+				storage.saveOccupationControlledVocab();
+				JOptionPane.showMessageDialog(null, "Occupation successfully saved");
+				frame.dispose();
+			} else {
+				JOptionPane.showMessageDialog(null, "This occupation is already in the list!");
+			}
+		} else if (options.getSelectedIndex() == 2) {
+			if (!storage.getInteractionTypes().contains(newData.getText())) {
+				storage.addInteractionChoice(newData.getText());
+				storage.saveInteractionControlledVocab();
+				JOptionPane.showMessageDialog(null, "Interaction type successfully saved");
+				frame.dispose();
+			} else {
+				JOptionPane.showMessageDialog(null, "This interaction type is already in the list!");
+			}
+		} else if (options.getSelectedIndex() == 3) {
+			if (!storage.getLocationTypes().contains(newData.getText())) {
+				storage.addLocationChoice(newData.getText());
+				storage.saveLocationControlledVocab();
+				JOptionPane.showMessageDialog(null, "Location successfully saved");
+				frame.dispose();
+			} else {
+				JOptionPane.showMessageDialog(null, "This location is already in the list!");
+			}
+		}
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
-		try {
-			DataStorage storage = DataStorage.getMainDataStorage();
 			if (source == submit) {
-				// make sure selectedIndexs are right after we change where the
-				// button is on the screen
-				if (options.getSelectedIndex() == 0) {
-					storage.addCulteralIdChoice(newData.getText());
-					storage.saveCulturalIDControlledVocab();
-				} else if (options.getSelectedIndex() == 1) {
-					storage.addOccupationChoice(newData.getText());
-					storage.saveOccupationControlledVocab();
-				} else if (options.getSelectedIndex() == 2) {
-					storage.addInteractionChoice(newData.getText());
-					storage.saveInteractionControlledVocab();
-				} else if (options.getSelectedIndex() == 3) {
-					storage.addLocationChoice(newData.getText());
-					storage.saveLocationControlledVocab();}
-				JOptionPane.showMessageDialog(null, "Controlled Vocab Successfully Saved");
-				frame.dispose();
-			}else {
-					// CLOSES THE WHOLE PROGRAM???
-					frame.dispose();
+				try {
+					submitClicked();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(null, "Data Could Not Be Loaded");
-		}
+			} else {
+				// CLOSES THE WHOLE PROGRAM???
+				frame.dispose();
+			}
 	}
 
 }
