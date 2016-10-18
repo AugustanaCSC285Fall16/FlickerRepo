@@ -70,7 +70,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	HomeScreenGUI home;
 
 	private boolean editing;
-
+	private boolean isSearch;
 	DataStorage storage;
 
 
@@ -99,6 +99,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		this.connectionEdited = connection;
 		this.home = home;
+		this.isSearch = isSearch;
 
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
@@ -380,7 +381,7 @@ public class AddEditConnectionGUI implements ActionListener {
 			personListForConn.add(storage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
 		}
 
-		if (connectionEdited != null) {
+		if (connectionEdited != null && isSearch == false) {
 			connectionEdited.setPeopleList(personListForConn);
 			connectionEdited.setTypeInteraction(type.getSelectedItem().toString());
 			connectionEdited.setLocation(location.getSelectedItem().toString());
@@ -390,17 +391,24 @@ public class AddEditConnectionGUI implements ActionListener {
 			connectionEdited.setDay(day.getText());
 			connectionEdited.setMonth(month.getText());
 			connectionEdited.setYear(year.getText());
-		} else {
+			storage.saveConnections();
+			frame.dispose();
+			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+			home.updateTable();
+		} else if (connectionEdited == null && isSearch == false)  {
 			int nextID = storage.incrementAndGetNextConnectionIdNum();
 
 			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(), type.getSelectedItem().toString(),
 					location.getSelectedItem().toString(), citation.getText(), socialNotes.getText(), personListForConn,
 					direction.getSelectedItem().toString());
-
 			storage.addConnection(newConnection);
+			storage.saveConnections();
+			frame.dispose();
+			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+			home.updateTable();
+		} else {
+			//search functionality
 		}
-		storage.saveConnections();
-		frame.dispose();
 	}
 
 
@@ -415,8 +423,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
-				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-				home.updateTable();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
