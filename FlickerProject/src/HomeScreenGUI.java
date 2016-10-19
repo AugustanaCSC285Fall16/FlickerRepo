@@ -43,6 +43,7 @@ public class HomeScreenGUI implements ActionListener {
 		edit = new JButton("Edit");
 		databases = new JTabbedPane();
 		export = new JButton("Export");
+		exportAll = new JButton("Export All");
 
 		searchGUI = new SearchGUI(this);
 		exportGUI = new ExportGUI(this);
@@ -60,6 +61,7 @@ public class HomeScreenGUI implements ActionListener {
 		add.addActionListener(this);
 		edit.addActionListener(this);
 		export.addActionListener(this);
+		exportAll.addActionListener(this);
 		save.addActionListener(this);
 
 		frame.setVisible(true);
@@ -114,10 +116,11 @@ public class HomeScreenGUI implements ActionListener {
 	 */
 
 	private JPanel createWestPanel() {
-		JPanel westPanel = new JPanel(new GridLayout(3, 1));
+		JPanel westPanel = new JPanel(new GridLayout(4, 1));
 		westPanel.add(search);
 		westPanel.add(add);
 		westPanel.add(edit);
+		westPanel.add(exportAll);
 		return westPanel;
 	}
 
@@ -239,6 +242,17 @@ public class HomeScreenGUI implements ActionListener {
 		} else if (source == export){
 			ExportGUI export= new ExportGUI(this);
 			exportGUI.makeVisible();
+		} else if (source == exportAll) {
+			Export exportAll = new Export();
+			try {
+				//exportAll.exportToPalladio(mainStorage.getConnectionList());
+				//exportAll.exportToGephiNodes();
+				exportAll.exportToGephiEdges(mainStorage.getConnectionList());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 	}
 }

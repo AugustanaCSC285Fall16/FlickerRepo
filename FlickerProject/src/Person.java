@@ -101,5 +101,10 @@ public class Person implements TableRowViewable {
 	public String toString() {
 		return name;
 	}
+	
+	public String [] toGephiNodeArray() {
+		return new String [] {Integer.toString(this.getID()),this.getNodeName()};
+	}
+	
 
 }
