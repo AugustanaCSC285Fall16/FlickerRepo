@@ -17,6 +17,8 @@ import com.opencsv.CSVReader;
 public class HomeScreenGUI implements ActionListener {
 	DataStorage mainStorage = DataStorage.getMainDataStorage();
 
+	private static final String[] ARTIST_FIELDS = new String[] {"Artist Name", "Culteral ID", "Gender", "Occupation"};
+	private static final String[] CONNECTION_FIELDS = new String[] {"Base Name", "Date", "Location", "Type"};
 	private JFrame frame;
 	private JButton search;
 	private JButton add;
@@ -155,11 +157,9 @@ public class HomeScreenGUI implements ActionListener {
 	 */
 	public void searchClicked() {
 		if (databases.getSelectedComponent() == personTableDisplay) {
-			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null, true);
-			personGUI.makeVisible();
+			SearchGUIV2 artistSearchGUI = new SearchGUIV2(ARTIST_FIELDS);
 		} else { // is connectionTableDisplay
-			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null, true);
-			connectionGUI.makeVisible();
+			SearchGUIV2 connectionSearchGUI = new SearchGUIV2(CONNECTION_FIELDS);
 		}
 	}
 
