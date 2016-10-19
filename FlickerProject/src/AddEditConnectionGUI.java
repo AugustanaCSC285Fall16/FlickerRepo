@@ -118,8 +118,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		locationChoices = storage.getLocationTypes();
 		location = new JComboBox<>(locationChoices.toArray());
 		directionChoices = new Vector<String>(
-				Arrays.asList("No direction", "One-to-One", "One-to-Many", "Many-to-Many"));
-		direction = new JComboBox<>(new String[] {"No direction", "One-to-One", "One-to-Many", "Many-to-Many" });
+				Arrays.asList("One-to-One", "One-to-Many", "Many-to-Many"));
+		direction = new JComboBox<>(new String[] {"One-to-One", "One-to-Many", "Many-to-Many" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		citation = new JTextArea(2, 10);

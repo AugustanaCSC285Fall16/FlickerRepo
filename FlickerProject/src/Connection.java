@@ -231,5 +231,13 @@ public class Connection implements TableRowViewable {
 	public void setSocialNotes(String socialNotes) {
 		this.socialNotes = socialNotes;
 	}
+	
+	public String[] toPalladioArray(Person source, Person target) {
+		return new String [] {source.getNodeName(), target.getNodeName()};
+	}
+	
+	public String[] toGephiEdgeArray(Person source, Person target, int edgeId) {
+		return new String[] {Integer.toString(source.getID()),Integer.toString(target.getID()), Integer.toString(edgeId)};
+	}
 
 }
