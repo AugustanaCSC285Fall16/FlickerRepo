@@ -10,7 +10,6 @@ public class ExportGUI implements ActionListener{
 
 	private JPanel northPanel;
 	private JPanel southPanel;
-	
 	private JRadioButton palladio;
 	private JRadioButton gephi;
 	private JButton export;
