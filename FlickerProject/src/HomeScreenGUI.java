@@ -160,9 +160,9 @@ public class HomeScreenGUI implements ActionListener {
 	 */
 	public void searchClicked() {
 		if (databases.getSelectedComponent() == personTableDisplay) {
-			SearchGUIV2 artistSearchGUI = new SearchGUIV2(ARTIST_FIELDS);
+			//SearchGUIV2 artistSearchGUI = new SearchGUIV2(ARTIST_FIELDS);
 		} else { // is connectionTableDisplay
-			SearchGUIV2 connectionSearchGUI = new SearchGUIV2(CONNECTION_FIELDS);
+			//SearchGUIV2 connectionSearchGUI = new SearchGUIV2(CONNECTION_FIELDS);
 		}
 	}
 
