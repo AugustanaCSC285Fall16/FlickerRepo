@@ -243,15 +243,17 @@ public class HomeScreenGUI implements ActionListener {
 			ExportGUI export= new ExportGUI(this);
 			exportGUI.makeVisible();
 		} else if (source == exportAll) {
+			//ExportGUI exportGui = new ExportGUI(this);
+			//exportGUI.makeVisible();
 			Export exportAll = new Export();
 			try {
-				//exportAll.exportToPalladio(mainStorage.getConnectionList());
-				//exportAll.exportToGephiNodes();
+				exportAll.exportToPalladio(mainStorage.getConnectionList());
+				exportAll.exportToGephiNodes();
 				exportAll.exportToGephiEdges(mainStorage.getConnectionList());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+		}
 			
 		}
 	}

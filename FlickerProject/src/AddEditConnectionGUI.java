@@ -19,15 +19,16 @@ import javax.swing.text.MaskFormatter;
 
 public class AddEditConnectionGUI implements ActionListener {
 
-//	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.mm.dd");
-	private static final String[] FIELDS = new String[]{"", "Type of Interaction","Location"};
+	// private static final DateFormat DATE_FORMAT = new
+	// SimpleDateFormat("yyyy.mm.dd");
+	private static final String[] FIELDS = new String[] { "", "Type of Interaction", "Location" };
 	private static final int WIDTH = 350;
 	private static final int HEIGHT = 300;
 
 	// data fields
 	private JFrame frame;
 	private JComboBox<Object> baseName;
-//	private JFormattedTextField date;
+	// private JFormattedTextField date;
 	private JTextField day;
 	private JTextField month;
 	private JTextField year;
@@ -73,7 +74,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	private boolean isSearch;
 	DataStorage storage;
 
-
 	// class that relates to controlled vocabulary
 	ArrayList<Person> baseNameChoices;
 	ArrayList<String> typeChoices;
@@ -107,9 +107,9 @@ public class AddEditConnectionGUI implements ActionListener {
 
 		baseNameChoices = storage.getPeopleArrayList();
 		baseName = new JComboBox<>(baseNameChoices.toArray());
-//		date = new JFormattedTextField(DATE_FORMAT);
-//		date.setColumns(7);
-//		date.setFocusLostBehavior(JFormattedTextField.PERSIST);
+		// date = new JFormattedTextField(DATE_FORMAT);
+		// date.setColumns(7);
+		// date.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		day = new JTextField(2);
 		month = new JTextField(2);
 		year = new JTextField(4);
@@ -117,9 +117,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		type = new JComboBox<>(typeChoices.toArray());
 		locationChoices = storage.getLocationTypes();
 		location = new JComboBox<>(locationChoices.toArray());
-		directionChoices = new Vector<String>(
-				Arrays.asList("One-to-One", "One-to-Many", "Many-to-Many"));
-		direction = new JComboBox<>(new String[] {"One-to-One", "One-to-Many", "Many-to-Many" });
+		directionChoices = new Vector<String>(Arrays.asList("One-to-One", "One-to-Many", "Many-to-Many"));
+		direction = new JComboBox<>(new String[] { "One-to-One", "One-to-Many", "Many-to-Many" });
 		socialNotes = new JTextArea(2, 10);
 		socialNotes.setLineWrap(true);
 		citation = new JTextArea(2, 10);
@@ -154,7 +153,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		namePanel.add(baseName);
 		baseNamePanel.add(namePanel, BorderLayout.CENTER);
 		baseNamePanel.add(moreNamesPanel, BorderLayout.EAST);
-//		datePanel.add(date);
+		// datePanel.add(date);
 		datePanel.add(day);
 		datePanel.add(month);
 		datePanel.add(year);
@@ -163,14 +162,12 @@ public class AddEditConnectionGUI implements ActionListener {
 		socialPanel.add(socialScroll);
 		bibPanel.add(bibScroll);
 
-/*
-		try {
-			MaskFormatter dateMask = new MaskFormatter("##/##/####");
-			dateMask.install(date);
-		} catch (ParseException ex) {
-			Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null, ex);
-		}
-*/
+		/*
+		 * try { MaskFormatter dateMask = new MaskFormatter("##/##/####");
+		 * dateMask.install(date); } catch (ParseException ex) {
+		 * Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null,
+		 * ex); }
+		 */
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -275,9 +272,9 @@ public class AddEditConnectionGUI implements ActionListener {
 		southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
 		southPanel.add(cancel);
-		if(editing){
+		if (editing) {
 			southPanel.add(deleteButton);
-		} 
+		}
 		return southPanel;
 	}
 
@@ -314,7 +311,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @param connection
 	 *            - the connection who's data will fill in the GUI
 	 */
-	
+
 	void setConnectionData(Connection connection) {
 		Connection connectionToEdit = connection;
 		List<Person> peopleList = connectionToEdit.getPeopleList();
@@ -334,8 +331,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		refreshPanel();
 	}
 
-
-
 	/**
 	 * Removes current panels from the search frame. Updates the frame's size
 	 * and adds the panels back to the frame.
@@ -352,14 +347,14 @@ public class AddEditConnectionGUI implements ActionListener {
 		frame.setSize(WIDTH, HEIGHT + 40 * (additionalNames));
 		makeVisible();
 	}
-	
+
 	/**
-	 * This method will add a delete button to the frame when the edit button
-	 * is clicked from within the home screen. It will only be displayed when
-	 * that button is clicked.
+	 * This method will add a delete button to the frame when the edit button is
+	 * clicked from within the home screen. It will only be displayed when that
+	 * button is clicked.
 	 */
-	
-	public void addDeleteButton(){
+
+	public void addDeleteButton() {
 		editing = true;
 		refreshPanel();
 	}
@@ -372,7 +367,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * 
 	 * @throws IOException
 	 */
-	
+
 	private void submitClicked() throws IOException {
 		ArrayList<Person> personListForConn = new ArrayList<>();
 		personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
@@ -395,22 +390,21 @@ public class AddEditConnectionGUI implements ActionListener {
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			home.updateTable();
-		} else if (connectionEdited == null && isSearch == false)  {
+		} else if (connectionEdited == null && isSearch == false) {
 			int nextID = storage.incrementAndGetNextConnectionIdNum();
 
-			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(), type.getSelectedItem().toString(),
-					location.getSelectedItem().toString(), citation.getText(), socialNotes.getText(), personListForConn,
-					direction.getSelectedItem().toString());
+			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(),
+					type.getSelectedItem().toString(), location.getSelectedItem().toString(), citation.getText(),
+					socialNotes.getText(), personListForConn, direction.getSelectedItem().toString());
 			storage.addConnection(newConnection);
 			storage.saveConnections();
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			home.updateTable();
 		} else {
-			//search functionality
+			// search functionality
 		}
 	}
-
 
 	/**
 	 * Based on the source of the event, the method will choose what the
@@ -434,8 +428,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		} else if (event.getSource() == moreNames) {
 			additionalNames++;
 			refreshPanel();
-		} else if (event.getSource() == deleteButton){
-			//delete this connection!
+		} else if (event.getSource() == deleteButton) {
+			// delete this connection!
 		}
 	}
 
