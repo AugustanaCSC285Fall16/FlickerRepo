@@ -14,7 +14,7 @@ public class DataStorage {
 	private ArrayList<String> locationChoices;
 	private ArrayList<String> cultureChoices;
 	private ArrayList<String> occupationChoices;
-	
+
 	private int nextIdNum;
 	private int nextConnNum;
 
@@ -54,10 +54,10 @@ public class DataStorage {
 		loadPeople();
 		loadConnections();
 		loadIdAndConnNum();
-		loadDataTypes(INTERACTION_CHOICES_FILE_NAME,interactionChoices);
-		loadDataTypes(LOCATION_CHOICES_FILE_NAME,locationChoices);
-		loadDataTypes(CULTURE_CHOICES_FILE_NAME,cultureChoices);
-		loadDataTypes(OCCUPATION_CHOICES_FILE_NAME,occupationChoices);
+		loadDataTypes(INTERACTION_CHOICES_FILE_NAME, interactionChoices);
+		loadDataTypes(LOCATION_CHOICES_FILE_NAME, locationChoices);
+		loadDataTypes(CULTURE_CHOICES_FILE_NAME, cultureChoices);
+		loadDataTypes(OCCUPATION_CHOICES_FILE_NAME, occupationChoices);
 	}
 
 	/**
@@ -86,11 +86,10 @@ public class DataStorage {
 	public Collection<Person> getPeopleList() {
 		return personMap.values();
 	}
-	
+
 	public ArrayList<Person> getPeopleArrayList() {
 		ArrayList<Person> personList = new ArrayList<>(personMap.values());
 		return personList;
-		
 	}
 
 	public void addPerson(Person person) {
@@ -123,9 +122,9 @@ public class DataStorage {
 
 			String[] idArray = baseIdListText.split(":");
 			List<Person> peopleConnectingNamesList = new ArrayList<Person>();
-			
+
 			String[] dateArray = dateText.split(":");
-			//System.out.println(dateArray.toString());
+			// System.out.println(dateArray.toString());
 			String day = dateArray[0];
 			String month = dateArray[1];
 			String year = dateArray[2];
@@ -177,91 +176,92 @@ public class DataStorage {
 		}
 		writer.close();
 	}
-	
+
 	private void loadDataTypes(String fileName, ArrayList<String> list) throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + fileName));
-	    String [] nextLine;
-	    while ((nextLine = reader.readNext()) != null) {
-	       // nextLine[] is an array of values from the line
-	    	String item = nextLine[0];
-	       list.add(item);
-	    }
+		String[] nextLine;
+		while ((nextLine = reader.readNext()) != null) {
+			// nextLine[] is an array of values from the line
+			String item = nextLine[0];
+			list.add(item);
+		}
 	}
-	
-	// Could we make these next 4 methods into one and have the parameters be the file name 
+
+	// Could we make these next 4 methods into one and have the parameters be
+	// the file name
 	// and the ArrayList<String> that is being saved???
-	public void saveOccupationControlledVocab() throws IOException{
+	public void saveOccupationControlledVocab() throws IOException {
 		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + OCCUPATION_CHOICES_FILE_NAME));
 		List<String[]> choicesArray = new ArrayList<>();
-		for(int i = 0; i < occupationChoices.size(); i++){
+		for (int i = 0; i < occupationChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(occupationChoices.get(i)));
 		}
 		writer.writeAll(choicesArray);
 		writer.close();
 	}
-	
-	public void saveCulturalIDControlledVocab() throws IOException{
+
+	public void saveCulturalIDControlledVocab() throws IOException {
 		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + CULTURE_CHOICES_FILE_NAME));
 		List<String[]> choicesArray = new ArrayList<>();
-		for(int i = 0; i < cultureChoices.size(); i++){
+		for (int i = 0; i < cultureChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(cultureChoices.get(i)));
 		}
 		writer.writeAll(choicesArray);
 		writer.close();
 	}
-	
-	public void saveLocationControlledVocab() throws IOException{
+
+	public void saveLocationControlledVocab() throws IOException {
 		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + LOCATION_CHOICES_FILE_NAME));
 		List<String[]> choicesArray = new ArrayList<>();
-		for(int i = 0; i < locationChoices.size(); i++){
+		for (int i = 0; i < locationChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(locationChoices.get(i)));
 		}
 		writer.writeAll(choicesArray);
 		writer.close();
 	}
-	
-	public void saveInteractionControlledVocab() throws IOException{
+
+	public void saveInteractionControlledVocab() throws IOException {
 		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + INTERACTION_CHOICES_FILE_NAME));
 		List<String[]> choicesArray = new ArrayList<>();
-		for(int i = 0; i < interactionChoices.size(); i++){
+		for (int i = 0; i < interactionChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(interactionChoices.get(i)));
 		}
 		writer.writeAll(choicesArray);
 		writer.close();
 	}
-	
-	public String[] toCSVControlledVocabArray(String item){
-		return new String[] {item};
+
+	public String[] toCSVControlledVocabArray(String item) {
+		return new String[] { item };
 	}
-	
-	public void addOccupationChoice(String item){
+
+	public void addOccupationChoice(String item) {
 		occupationChoices.add(item);
 	}
-	
-	public void addCulteralIdChoice(String item){
+
+	public void addCulteralIdChoice(String item) {
 		cultureChoices.add(item);
 	}
-	
-	public void addLocationChoice(String item){
+
+	public void addLocationChoice(String item) {
 		locationChoices.add(item);
 	}
-	
-	public void addInteractionChoice(String item){
+
+	public void addInteractionChoice(String item) {
 		interactionChoices.add(item);
 	}
-	
+
 	public ArrayList<String> getInteractionTypes() {
 		return interactionChoices;
 	}
-	
+
 	public ArrayList<String> getLocationTypes() {
 		return locationChoices;
 	}
-	
+
 	public ArrayList<String> getCultureChoices() {
 		return cultureChoices;
 	}
-	
+
 	public ArrayList<String> getOccupationChoices() {
 		return occupationChoices;
 	}

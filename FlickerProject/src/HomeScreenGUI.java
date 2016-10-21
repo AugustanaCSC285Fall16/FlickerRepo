@@ -175,10 +175,10 @@ public class HomeScreenGUI implements ActionListener {
 		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		if (val == 0) { // if artist
-			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null, false);
+			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
 			personGUI.makeVisible();
 		} else if (val == 1) { // if connection
-			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null, false);
+			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null);
 			connectionGUI.makeVisible();
 		} else if (val == 2) { // if controlled vocabulary
 			AddData vocabGUI = new AddData();
@@ -199,7 +199,7 @@ public class HomeScreenGUI implements ActionListener {
 				personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				String IDCellText = (String) personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int personID = Integer.parseInt(IDCellText);
-				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID), false);
+				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID));
 				personGUI.addDeleteButton();
 				personGUI.makeVisible();
 			} else {
@@ -211,7 +211,7 @@ public class HomeScreenGUI implements ActionListener {
 				String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int connectionID = Integer.parseInt(IDCellText);
 				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,
-						mainStorage.getConnectionFromID(connectionID), false);
+						mainStorage.getConnectionFromID(connectionID));
 				connectionGUI.addDeleteButton();
 				connectionGUI.makeVisible();
 			} else {

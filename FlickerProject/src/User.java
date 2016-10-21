@@ -1,19 +1,17 @@
 
 public class User {
 	// data fields
+	private String fullName;
 	private String username;
 	private String password;
-	private String firstName;
-	private String lastName;
-	private boolean permissions;
+	private String permissions;
 	
 	// constructor
-	public User(String username, String password, String firstName, String lastName, boolean permissions) {
+	public User(String fullName, String username, String password, String permissions) {
 		super();
+		this.fullName = fullName;
 		this.username = username;
 		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
 		this.permissions = permissions;
 	}
 
@@ -33,28 +31,24 @@ public class User {
 		this.password = password;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public boolean isPermissions() {
+	public String isPermissions() {
 		return permissions;
 	}
 
-	public void setPermissions(boolean permissions) {
+	public void setPermissions(String permissions) {
 		this.permissions = permissions;
+	}
+	
+	public String[] toCSVRowArray(){
+		return new String[] {fullName, username, password, permissions};
 	}
 	
 	
