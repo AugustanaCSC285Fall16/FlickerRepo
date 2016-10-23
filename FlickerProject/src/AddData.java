@@ -63,7 +63,7 @@ public class AddData implements ActionListener {
 	
 	public void submitClicked() throws IOException {
 		if (options.getSelectedIndex() == 0) {
-			if (!storage.getCultureChoices().contains(newData.getText())) {
+			if (!storage.getCultureChoices().contains(newData.getText().toLowerCase())) {
 				storage.addCulteralIdChoice(newData.getText());
 				storage.saveCulturalIDControlledVocab();
 				JOptionPane.showMessageDialog(null, "Cultural Id successfully saved");
@@ -72,7 +72,7 @@ public class AddData implements ActionListener {
 				JOptionPane.showMessageDialog(null, "This cultural Id is already in the list!");
 			}
 		} else if (options.getSelectedIndex() == 1) {
-			if (!storage.getOccupationChoices().contains(newData.getText())) {
+			if (!storage.getOccupationChoices().contains(newData.getText().toLowerCase())) {
 				storage.addOccupationChoice(newData.getText());
 				storage.saveOccupationControlledVocab();
 				JOptionPane.showMessageDialog(null, "Occupation successfully saved");
@@ -81,7 +81,7 @@ public class AddData implements ActionListener {
 				JOptionPane.showMessageDialog(null, "This occupation is already in the list!");
 			}
 		} else if (options.getSelectedIndex() == 2) {
-			if (!storage.getInteractionTypes().contains(newData.getText())) {
+			if (!storage.getInteractionTypes().contains(newData.getText().toLowerCase())) {
 				storage.addInteractionChoice(newData.getText());
 				storage.saveInteractionControlledVocab();
 				JOptionPane.showMessageDialog(null, "Interaction type successfully saved");
@@ -90,7 +90,7 @@ public class AddData implements ActionListener {
 				JOptionPane.showMessageDialog(null, "This interaction type is already in the list!");
 			}
 		} else if (options.getSelectedIndex() == 3) {
-			if (!storage.getLocationTypes().contains(newData.getText())) {
+			if (!storage.getLocationTypes().contains(newData.getText().toLowerCase())) {
 				storage.addLocationChoice(newData.getText());
 				storage.saveLocationControlledVocab();
 				JOptionPane.showMessageDialog(null, "Location successfully saved");

@@ -235,19 +235,19 @@ public class DataStorage {
 	}
 	
 	public void addOccupationChoice(String item){
-		occupationChoices.add(item);
+		occupationChoices.add(item.toLowerCase());
 	}
 	
 	public void addCulteralIdChoice(String item){
-		cultureChoices.add(item);
+		cultureChoices.add(item.toLowerCase());
 	}
 	
 	public void addLocationChoice(String item){
-		locationChoices.add(item);
+		locationChoices.add(item.toLowerCase());
 	}
 	
 	public void addInteractionChoice(String item){
-		interactionChoices.add(item);
+		interactionChoices.add(item.toLowerCase());
 	}
 	
 	public ArrayList<String> getInteractionTypes() {
