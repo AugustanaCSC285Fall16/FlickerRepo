@@ -17,8 +17,8 @@ import com.opencsv.CSVReader;
 public class HomeScreenGUI implements ActionListener {
 	DataStorage mainStorage = DataStorage.getMainDataStorage();
 
-	private static final String[] ARTIST_FIELDS = new String[] {"Artist Name", "Culteral ID", "Gender", "Occupation"};
-	private static final String[] CONNECTION_FIELDS = new String[] {"Base Name", "Date", "Location", "Type"};
+	private static final String[] PERSON_FIELDS = new String[] {"Name", "Culteral ID", "Gender", "Occupation"};
+	private static final String[] CONNECTION_FIELDS = new String[] {"Name", "Date", "Location", "Type"};
 	private JFrame frame;
 	private JButton search;
 	private JButton add;
@@ -32,6 +32,9 @@ public class HomeScreenGUI implements ActionListener {
 	private JPanel southPanel;
 	private JTable personTableDisplay;
 	private JTable connectionTableDisplay;
+	private JScrollPane personPane;
+	private JScrollPane connectionPane;
+	
 
 	private SearchGUI searchGUI;
 	private ExportGUI exportGUI;
@@ -45,7 +48,6 @@ public class HomeScreenGUI implements ActionListener {
 		export = new JButton("Export");
 		exportAll = new JButton("Export All");
 
-		searchGUI = new SearchGUI(this);
 		exportGUI = new ExportGUI(this);
 		southPanel = new JPanel();
 
@@ -135,8 +137,12 @@ public class HomeScreenGUI implements ActionListener {
 		personTableDisplay = createDisplayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 		connectionTableDisplay = createDisplayTable(mainStorage.getConnectionHeaderRow(),
 				mainStorage.getConnectionList());
-		databases.add("Persons Data", personTableDisplay);
-		databases.add("Connections Data", connectionTableDisplay);
+		personPane = new JScrollPane();
+		connectionPane = new JScrollPane();
+		personPane.getViewport().add(personTableDisplay);
+		connectionPane.getViewport().add(connectionTableDisplay);
+		databases.add("Persons Data", personPane);
+		databases.add("Connections Data", connectionPane);
 		centerPanel.add(databases);
 		return centerPanel;
 	}
@@ -157,12 +163,13 @@ public class HomeScreenGUI implements ActionListener {
 	/**
 	 * A search PopUp will open and the user will be able to fill it out to
 	 * search for their criteria.
+	 * @throws IOException 
 	 */
-	public void searchClicked() {
+	public void searchClicked() throws IOException {
 		if (databases.getSelectedComponent() == personTableDisplay) {
-			//SearchGUIV2 artistSearchGUI = new SearchGUIV2(ARTIST_FIELDS);
+			SearchGUI artistSearchGUI = new SearchGUI(this, PERSON_FIELDS);
 		} else { // is connectionTableDisplay
-			//SearchGUIV2 connectionSearchGUI = new SearchGUIV2(CONNECTION_FIELDS);
+			SearchGUI connectionSearchGUI = new SearchGUI(this, CONNECTION_FIELDS);
 		}
 	}
 
@@ -175,10 +182,10 @@ public class HomeScreenGUI implements ActionListener {
 		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		if (val == 0) { // if artist
-			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null, false);
+			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
 			personGUI.makeVisible();
 		} else if (val == 1) { // if connection
-			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null, false);
+			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null);
 			connectionGUI.makeVisible();
 		} else if (val == 2) { // if controlled vocabulary
 			AddData vocabGUI = new AddData();
@@ -193,13 +200,13 @@ public class HomeScreenGUI implements ActionListener {
 	 * 
 	 */
 	public void editClicked() {
-		if (databases.getSelectedComponent() == personTableDisplay) {
+		if (databases.getSelectedComponent() == personPane) {
 			int selectedRow = personTableDisplay.getSelectedRow();
 			if (selectedRow > -1) {
 				personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				String IDCellText = (String) personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int personID = Integer.parseInt(IDCellText);
-				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID), false);
+				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID));
 				personGUI.addDeleteButton();
 				personGUI.makeVisible();
 			} else {
@@ -211,7 +218,7 @@ public class HomeScreenGUI implements ActionListener {
 				String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int connectionID = Integer.parseInt(IDCellText);
 				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,
-						mainStorage.getConnectionFromID(connectionID), false);
+						mainStorage.getConnectionFromID(connectionID));
 				connectionGUI.addDeleteButton();
 				connectionGUI.makeVisible();
 			} else {
@@ -232,9 +239,12 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			searchClicked();
-		} else if (source == searchGUI.search) {
-			//pop-up for data from search? 
+			try {
+				searchClicked();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (source == add) {
 			addClicked();
 		} else if (source == edit) {
@@ -243,8 +253,8 @@ public class HomeScreenGUI implements ActionListener {
 			ExportGUI export= new ExportGUI(this);
 			exportGUI.makeVisible();
 		} else if (source == exportAll) {
-			//ExportGUI exportGui = new ExportGUI(this);
-			//exportGUI.makeVisible();
+			ExportGUI exportGui = new ExportGUI(this);
+			exportGUI.makeVisible();
 			Export exportAll = new Export();
 			try {
 				exportAll.exportToPalladio(mainStorage.getConnectionList());

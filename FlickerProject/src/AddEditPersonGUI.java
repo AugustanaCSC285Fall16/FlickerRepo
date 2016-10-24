@@ -12,10 +12,10 @@ import java.util.Vector;
 import javax.swing.*;
 
 public class AddEditPersonGUI implements ActionListener {
-	
+
 	private static final int WIDTH = 350;
 	private static final int HEIGHT = 300;
-	private static final String[] FIELDS = new String[]{"", "Cultural ID", "Gender", "Occupation"};
+	private static final String[] FIELDS = new String[] { "", "Cultural ID", "Gender", "Occupation" };
 
 	private JFrame frame;
 	private JTextField name;
@@ -24,7 +24,7 @@ public class AddEditPersonGUI implements ActionListener {
 	private JComboBox<String> gender;
 	private JComboBox<Object> occupation;
 	private JTextArea notes;
-	
+
 	private JPanel namePanel;
 	private JPanel nodeNamePanel;
 	private JPanel culturePanel;
@@ -36,20 +36,20 @@ public class AddEditPersonGUI implements ActionListener {
 	private JPanel centerPanel;
 	private JPanel westPanel;
 	private JPanel southPanel;
-	
+
 	private JLabel nameLabel;
 	private JLabel nodeNameLabel;
 	private JLabel culturalLabel;
 	private JLabel genderLabel;
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
-	
+
 	JButton submitButton;
 	JButton deleteButton;
 	private JButton cancel;
 	HomeScreenGUI home;
 	private JScrollPane scroll;
-	
+
 	DataStorage storage;
 	private boolean editing;
 
@@ -59,7 +59,6 @@ public class AddEditPersonGUI implements ActionListener {
 	private ArrayList<String> occupationChoices;
 
 	private Person personEdited;
-	private boolean isSearch;
 
 	/**
 	 * Creates the add/edit person GUI
@@ -69,11 +68,10 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new person
 	 */
-	public AddEditPersonGUI(HomeScreenGUI home, Person person, boolean isSearch) {
+	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
 		this.personEdited = person;
 		this.home = home;
-		this.isSearch = isSearch;
-		
+
 		try {
 			storage = DataStorage.getMainDataStorage();
 		} catch (IOException e) {
@@ -87,7 +85,7 @@ public class AddEditPersonGUI implements ActionListener {
 		cultureChoices = storage.getCultureChoices();
 		culture = new JComboBox<>(cultureChoices.toArray());
 		genderChoices = new Vector<String>(Arrays.asList("Unknown", "Male", "Female"));
-		gender = new JComboBox<>(new String[] { "Unknown", "Male", "Female"});
+		gender = new JComboBox<>(new String[] { "Unknown", "Male", "Female" });
 		occupationChoices = storage.getOccupationChoices();
 		occupation = new JComboBox<>(occupationChoices.toArray());
 		notes = new JTextArea(2, 15);
@@ -95,7 +93,7 @@ public class AddEditPersonGUI implements ActionListener {
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 		deleteButton = new JButton("Delete");
-		
+
 		nameLabel = new JLabel("Person Name:");
 		nodeNameLabel = new JLabel("Node Name:");
 		culturalLabel = new JLabel("Cultural ID:");
@@ -189,7 +187,7 @@ public class AddEditPersonGUI implements ActionListener {
 		southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
 		southPanel.add(cancel);
-		if(editing){
+		if (editing) {
 			southPanel.add(deleteButton);
 		}
 		return southPanel;
@@ -246,14 +244,14 @@ public class AddEditPersonGUI implements ActionListener {
 		frame.setSize(WIDTH, HEIGHT + 40);
 		makeVisible();
 	}
-	
+
 	/**
-	 * This method will add a delete button to the frame when the edit button
-	 * is clicked from within the home screen. It will only be displayed when
-	 * that button is clicked.
+	 * This method will add a delete button to the frame when the edit button is
+	 * clicked from within the home screen. It will only be displayed when that
+	 * button is clicked.
 	 */
-	
-	public void addDeleteButton(){
+
+	public void addDeleteButton() {
 		editing = true;
 		refreshPanel();
 	}
@@ -267,7 +265,7 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @throws IOException
 	 */
 	private void submitClicked() throws IOException {
-		if (personEdited != null && isSearch == false) {
+		if (personEdited != null) {
 			personEdited.setName(name.getText());
 			personEdited.setNodeName(nodeName.getText());
 			personEdited.setOccupation(occupation.getSelectedItem().toString());
@@ -277,22 +275,33 @@ public class AddEditPersonGUI implements ActionListener {
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			storage.savePeople();
 			frame.dispose();
-		} else if (personEdited == null && isSearch == false) {
+		} else {
 			int nextID = storage.incrementAndGetNextPersonIdNum();
-			if(name.getText().equals("") || nodeName.getText().equals("")){
+			if (name.getText().equals("") || nodeName.getText().equals("")) {
 				JOptionPane.showMessageDialog(frame, "Name and Node Name have to be filled in");
 			} else {
-			Person newPerson = new Person(nextID, name.getText(), nodeName.getText(), occupation.getSelectedItem().toString(),
-					gender.getSelectedItem().toString(), culture.getSelectedItem().toString(), notes.getText());
-
-			storage.addPerson(newPerson);
-			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-			storage.savePeople();
-			frame.dispose();
+				Person newPerson = new Person(nextID, name.getText(), nodeName.getText(),
+						occupation.getSelectedItem().toString(), gender.getSelectedItem().toString(),
+						culture.getSelectedItem().toString(), notes.getText());
+				if (personExists(newPerson)) {
+					JOptionPane.showMessageDialog(frame, "Person already exists in database!");
+				} else {
+					storage.addPerson(newPerson);
+					JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+					storage.savePeople();
+					frame.dispose();
+				}
 			}
-		} else{
-			//search functionality. 
 		}
+	}
+
+	public boolean personExists(Person newPerson) {
+		for (Person person : storage.getPeopleArrayList()) {
+			if (person.getName().equals(newPerson.getName()) || person.getNodeName().equals(newPerson.getNodeName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -307,14 +316,16 @@ public class AddEditPersonGUI implements ActionListener {
 			try {
 				submitClicked();
 				home.updateTable();
+				SearchResultsGUI searchGUI = new SearchResultsGUI();
+				searchGUI.updateTable();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
 			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			frame.dispose();
-		} else if (event.getSource() == deleteButton){
-			//delete this person...why tho?
+		} else if (event.getSource() == deleteButton) {
+			// delete this person...why tho?
 		}
 	}
 }

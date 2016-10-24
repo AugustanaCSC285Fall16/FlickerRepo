@@ -71,7 +71,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	HomeScreenGUI home;
 
 	private boolean editing;
-	private boolean isSearch;
 	DataStorage storage;
 
 	// class that relates to controlled vocabulary
@@ -90,7 +89,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new connection
 	 */
-	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection, boolean isSearch) {
+	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
 		try {
 			storage = DataStorage.getMainDataStorage();
 		} catch (IOException e) {
@@ -99,8 +98,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		this.connectionEdited = connection;
 		this.home = home;
-		this.isSearch = isSearch;
-
+		
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
 		editing = false;
@@ -376,7 +374,7 @@ public class AddEditConnectionGUI implements ActionListener {
 			personListForConn.add(storage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
 		}
 
-		if (connectionEdited != null && isSearch == false) {
+		if (connectionEdited != null) {
 			connectionEdited.setPeopleList(personListForConn);
 			connectionEdited.setTypeInteraction(type.getSelectedItem().toString());
 			connectionEdited.setLocation(location.getSelectedItem().toString());
@@ -390,7 +388,7 @@ public class AddEditConnectionGUI implements ActionListener {
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			home.updateTable();
-		} else if (connectionEdited == null && isSearch == false) {
+		} else {
 			int nextID = storage.incrementAndGetNextConnectionIdNum();
 
 			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(),
@@ -401,8 +399,6 @@ public class AddEditConnectionGUI implements ActionListener {
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			home.updateTable();
-		} else {
-			// search functionality
 		}
 	}
 
