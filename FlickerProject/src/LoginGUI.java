@@ -10,16 +10,16 @@ public class LoginGUI implements ActionListener {
 	private JPasswordField password;
 	private JButton add;
 	private JButton submit;
-	private JLabel label1;
-	private JLabel label2;
+	private JLabel usernameLabel;
+	private JLabel passwordLabel;
 
 	public LoginGUI() {
 		username = new JTextField(15);
 		password = new JPasswordField(15);
 		add = new JButton("Add User");
 		submit = new JButton("Submit");
-		label1 = new JLabel("Username:");
-		label2 = new JLabel("Password:");
+		usernameLabel = new JLabel("Username:");
+		passwordLabel = new JLabel("Password:");
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,9 +45,9 @@ public class LoginGUI implements ActionListener {
 
 	private JPanel createCenterPanel() {
 		JPanel centerPanel = new JPanel(new FlowLayout());
-		centerPanel.add(label1);
+		centerPanel.add(usernameLabel);
 		centerPanel.add(username);
-		centerPanel.add(label2);
+		centerPanel.add(passwordLabel);
 		centerPanel.add(password);
 		return centerPanel;
 	}
@@ -72,6 +72,7 @@ public class LoginGUI implements ActionListener {
 			NewUser newUser = new NewUser();
 		} else {
 			try {
+				//Need to check the UserData to see if the user is in the data. Might need to make a User Map like we did for persons. 
 				HomeScreenGUI launchProgram = new HomeScreenGUI();
 				frame.dispose();
 			} catch (IOException e) {

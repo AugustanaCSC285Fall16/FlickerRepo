@@ -1,16 +1,22 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.*;
+
+import com.opencsv.CSVWriter;
 
 public class NewUser implements ActionListener {
 
 	private JFrame frame;
 	private JTextField fullName;
 	private JTextField userName;
+	private JComboBox<String> permissions;
 	private JPasswordField password;
 	private JPasswordField confirm;
 	private JButton create;
@@ -27,23 +33,27 @@ public class NewUser implements ActionListener {
 		userName = new JTextField(15);
 		password = new JPasswordField(15);
 		confirm = new JPasswordField(15);
+		permissions = new JComboBox<>(new String[] { "Admin", "Student" });
 		create = new JButton("Create");
 		cancel = new JButton("Cancel");
 
-		JLabel label1 = new JLabel("Full Name:");
-		JLabel label2 = new JLabel("Username:");
-		JLabel label3 = new JLabel("Password:");
-		JLabel label4 = new JLabel("Confirm Password:");
+		JLabel fullNameLabel = new JLabel("Full Name:");
+		JLabel userNameLabel = new JLabel("Username:");
+		JLabel passwordLabel = new JLabel("Password:");
+		JLabel confirmLabel = new JLabel("Confirm Password:");
+		JLabel permissionLabel = new JLabel("Permission:");
 
-		JPanel centerPanel = new JPanel(new FlowLayout());
-		centerPanel.add(label1);
+		JPanel centerPanel = new JPanel(new GridLayout(5, 1));
+		centerPanel.add(fullNameLabel);
 		centerPanel.add(fullName);
-		centerPanel.add(label2);
+		centerPanel.add(userNameLabel);
 		centerPanel.add(userName);
-		centerPanel.add(label3);
+		centerPanel.add(passwordLabel);
 		centerPanel.add(password);
-		centerPanel.add(label4);
+		centerPanel.add(confirmLabel);
 		centerPanel.add(confirm);
+		centerPanel.add(permissionLabel);
+		centerPanel.add(permissions);
 
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(create);
@@ -60,17 +70,33 @@ public class NewUser implements ActionListener {
 
 	}
 
+	// move to datastorage
+	public void addUser() throws IOException {
+		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/UserData"));
+		writer.writeNext(new String[] { "Fullname", "Username", "Password", "Permissions" });
+		User newUser = new User(fullName.getText(), userName.getText(), password.getText(),
+				permissions.getSelectedItem().toString());
+		writer.writeNext(newUser.toCSVRowArray());
+		writer.close();
+	}
+
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == create) {
-			int option = JOptionPane.showConfirmDialog(frame, "Is this correct?");
-			if (option == 0) {
-				frame.dispose();
-				try {
-					HomeScreenGUI homeScreenGUI = new HomeScreenGUI();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			if (Arrays.equals(password.getPassword(), confirm.getPassword())) {
+				if (permissions.getSelectedIndex() == 0) {
+					JOptionPane.showMessageDialog(null, "Cannot Create a new Admin");
+					// make it so if making a new admin, will have
+				} else {
+					frame.dispose();
+					try {
+						addUser();
+					} catch (IOException e) {
+						JOptionPane.showMessageDialog(null, "Could not add user");
+					}
+					LoginGUI login = new LoginGUI();
 				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Passwords do not match");
 			}
 		} else if (event.getSource() == cancel) {
 			frame.dispose();

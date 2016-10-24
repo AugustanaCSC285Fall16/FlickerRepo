@@ -59,7 +59,7 @@ public class AddEditPersonGUI implements ActionListener {
 	private ArrayList<String> occupationChoices;
 
 	private Person personEdited;
-	private boolean isSearch;
+
 
 	/**
 	 * Creates the add/edit person GUI
@@ -69,10 +69,9 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new person
 	 */
-	public AddEditPersonGUI(HomeScreenGUI home, Person person, boolean isSearch) {
+	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
 		this.personEdited = person;
 		this.home = home;
-		this.isSearch = isSearch;
 		
 		try {
 			storage = DataStorage.getMainDataStorage();
@@ -267,7 +266,7 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @throws IOException
 	 */
 	private void submitClicked() throws IOException {
-		if (personEdited != null && isSearch == false) {
+		if (personEdited != null) {
 			personEdited.setName(name.getText());
 			personEdited.setNodeName(nodeName.getText());
 			personEdited.setOccupation(occupation.getSelectedItem().toString());
@@ -277,7 +276,7 @@ public class AddEditPersonGUI implements ActionListener {
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			storage.savePeople();
 			frame.dispose();
-		} else if (personEdited == null && isSearch == false) {
+		} else {
 			int nextID = storage.incrementAndGetNextPersonIdNum();
 			if(name.getText().equals("") || nodeName.getText().equals("")){
 				JOptionPane.showMessageDialog(frame, "Name and Node Name have to be filled in");
@@ -290,8 +289,6 @@ public class AddEditPersonGUI implements ActionListener {
 			storage.savePeople();
 			frame.dispose();
 			}
-		} else{
-			//search functionality. 
 		}
 	}
 
