@@ -17,8 +17,8 @@ import com.opencsv.CSVReader;
 public class HomeScreenGUI implements ActionListener {
 	DataStorage mainStorage = DataStorage.getMainDataStorage();
 
-	private static final String[] PERSON_FIELDS = new String[] {"Name", "Culteral ID", "Gender", "Occupation"};
-	private static final String[] CONNECTION_FIELDS = new String[] {"Name", "Date", "Location", "Type"};
+
+	private static final String[] FIELDS = new String[] {"Name", "Culteral ID", "Gender", "Occupation", "Base Name", "Date", "Location", "Type"};
 	private JFrame frame;
 	private JButton search;
 	private JButton add;
@@ -160,18 +160,19 @@ public class HomeScreenGUI implements ActionListener {
 		frame.revalidate();
 	}
 
-	/**
-	 * A search PopUp will open and the user will be able to fill it out to
-	 * search for their criteria.
-	 * @throws IOException 
-	 */
-	public void searchClicked() throws IOException {
-		if (databases.getSelectedComponent() == personTableDisplay) {
-			SearchGUI artistSearchGUI = new SearchGUI(this, PERSON_FIELDS);
-		} else { // is connectionTableDisplay
-			SearchGUI connectionSearchGUI = new SearchGUI(this, CONNECTION_FIELDS);
-		}
-	}
+
+//	/**
+//	 * A search PopUp will open and the user will be able to fill it out to
+//	 * search for their criteria.
+//	 * @throws IOException 
+//	 */
+//	public void searchClicked() throws IOException {
+//		if (databases.getSelectedComponent() == personTableDisplay) {
+//			SearchGUI artistSearchGUI = new SearchGUI(this, PERSON_FIELDS);
+//		} else { // is connectionTableDisplay
+//			SearchGUI connectionSearchGUI = new SearchGUI(this, CONNECTION_FIELDS);
+//		}
+//	}
 
 	/**
 	 * A message dialog will first pop up asking what the user would like to add
@@ -239,12 +240,10 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			try {
-				searchClicked();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			SearchGUIV2 artistSearchGUI = new SearchGUIV2(FIELDS);
+		} else if (source == searchGUI.search) {
+			//pop-up for data from search? 
+
 		} else if (source == add) {
 			addClicked();
 		} else if (source == edit) {
