@@ -68,10 +68,11 @@ public class Connection implements TableRowViewable {
 	 * @return String array of table row connection
 	 */
 	public String[] toTableRowArray() {
-		String date1 = day + "/" + month + "/" + year;
-		return new String[] { Integer.toString(edgeId), peopleList.toString(), date1, typeInteraction, location,
+		String date = day + "/" + month + "/" + year;
+		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location,
 				citation, socialNotes, direction };
 	}
+	
 
 	/**
 	 * Retrieves and returns the list of people involved in the connection
@@ -236,8 +237,8 @@ public class Connection implements TableRowViewable {
 		return new String [] {source.getNodeName(), target.getNodeName()};
 	}
 	
-	public String[] toGephiEdgeArray(Person source, Person target, int edgeId) {
-		return new String[] {Integer.toString(source.getID()),Integer.toString(target.getID()), Integer.toString(edgeId)};
+	public String[] toGephiEdgeArray(Person source, Person target, int edgeId, String day, String month, String year, String location, String typeInteraction) {
+		return new String[] {Integer.toString(source.getID()),Integer.toString(target.getID()), Integer.toString(edgeId), (day +  "/" + month + "/" + year), location, typeInteraction};
 	}
 
 }
