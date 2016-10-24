@@ -30,7 +30,7 @@ public class SearchGUIV2 implements ActionListener {
 
 		optionsLabel = new JLabel("Select a search option: ");
 		this.options = new JComboBox<>(fields);
-		newDataLabel = new JLabel("Vocab to add: ");
+		newDataLabel = new JLabel("Criteria to search: ");
 		newData = new JTextField(15);
 		submit = new JButton("Submit");
 		cancel = new JButton("Cancel");
