@@ -20,7 +20,10 @@ public class SearchGUIV2 implements ActionListener {
 	DataStorage storage;
 	HomeScreenGUI home;
 
-	public SearchGUIV2(String[] fields) {
+	public SearchGUIV2(HomeScreenGUI home,String[] fields) throws IOException {
+		
+		this.home = home;
+		storage = DataStorage.getMainDataStorage();
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
