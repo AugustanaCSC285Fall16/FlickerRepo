@@ -16,15 +16,18 @@ public class SearchGUIV2 implements ActionListener {
 	JTextField newData;
 	JButton submit;
 	JButton cancel;
-	
+	SearchBackend search;
+	DataStorage storage;
+	HomeScreenGUI home;
+
 	public SearchGUIV2(String[] fields) {
-		
+
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(600, 100);
 		frame.setTitle("Search");
 		frame.setLayout(new GridLayout(2, 1));
-		
+
 		panel = new JPanel(new FlowLayout());
 		buttonsPanel = new JPanel(new FlowLayout());
 
@@ -51,16 +54,31 @@ public class SearchGUIV2 implements ActionListener {
 
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-	}	
-	
+	}
+
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == submit) {
-			
-		} else {
-			// CLOSES THE WHOLE PROGRAM???
-			frame.dispose();
+			if (options.getSelectedIndex() == 0) {
+				try {
+					search = new SearchBackend();
+					search.searchByName(newData.getText());
+					System.out.println(search.getPersonCollection().toString());
+					for (Connection connection : search.getConnectionCollection()) {
+						System.out.println(connection.getPeopleList());
+					}
+					SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
+							search.getPersonCollection(), storage.getConnectionHeaderRow(),
+							search.getConnectionCollection());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				// CLOSES THE WHOLE PROGRAM???
+				frame.dispose();
+			}
+
 		}
-		
 	}
 }

@@ -71,7 +71,7 @@ public class SearchGUI implements ActionListener {
 				for(Connection connection: search.getConnectionCollection()) {
 					System.out.println(connection.getPeopleList());
 				}
-				SearchResultsGUI gui = new SearchResultsGUI(this ,home, storage.getPersonHeaderRow(),
+				SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
 						search.getPersonCollection(), storage.getConnectionHeaderRow(),
 						search.getConnectionCollection());
 				} catch (IOException e) {
