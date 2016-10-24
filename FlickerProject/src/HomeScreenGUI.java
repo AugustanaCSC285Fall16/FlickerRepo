@@ -35,8 +35,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JScrollPane personPane;
 	private JScrollPane connectionPane;
 	
-
-	private SearchGUI searchGUI;
 	private ExportGUI exportGUI;
 
 	public HomeScreenGUI() throws IOException {
@@ -246,9 +244,6 @@ public class HomeScreenGUI implements ActionListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//		} else if (source == searchGUI.search) {
-			//pop-up for data from search? 
-
 		} else if (source == add) {
 			addClicked();
 		} else if (source == edit) {
@@ -265,8 +260,7 @@ public class HomeScreenGUI implements ActionListener {
 				exportAll.exportToGephiNodes();
 				exportAll.exportToGephiEdges(mainStorage.getConnectionList());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Could not export the data.");
 		}
 			
 		}
