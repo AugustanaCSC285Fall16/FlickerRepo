@@ -35,10 +35,6 @@ public class SearchResultsGUI implements ActionListener{
 	SearchBackend search;
 	HomeScreenGUI home;
 	SearchGUI searchGUI;
-	
-	public SearchResultsGUI() {
-		
-	}
 
 	public SearchResultsGUI(HomeScreenGUI home, String[] personColumnNamesArray, Collection<? extends TableRowViewable> personResultsData,
 			String[] connectionColumnNamesArray, Collection<? extends TableRowViewable> connectionResultsData)
@@ -167,7 +163,7 @@ public class SearchResultsGUI implements ActionListener{
 				personResultsTable.getModel().getValueAt(selectedRow, 0);
 				String IDCellText = (String) personResultsTable.getModel().getValueAt(selectedRow, 0);
 				int personID = Integer.parseInt(IDCellText);
-				AddEditPersonGUI personGUI = new AddEditPersonGUI(home,storage.getPersonFromID(personID));
+				AddEditPersonGUI personGUI = new AddEditPersonGUI(this,home,storage.getPersonFromID(personID));
 				personGUI.addDeleteButton();
 				personGUI.makeVisible();
 			} else {
@@ -178,7 +174,7 @@ public class SearchResultsGUI implements ActionListener{
 			if (selectedRow > -1) {
 				String IDCellText = (String) connectionResultsTable.getModel().getValueAt(selectedRow, 0);
 				int connectionID = Integer.parseInt(IDCellText);
-				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(home,
+				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,home,
 						storage.getConnectionFromID(connectionID));
 				connectionGUI.addDeleteButton();
 				connectionGUI.makeVisible();
@@ -195,9 +191,12 @@ public class SearchResultsGUI implements ActionListener{
 	 * @throws IOException
 	 */
 	public void updateTable() throws IOException {
+		connectionTab.removeAll();
+		personTab.removeAll();
+		databases.removeAll();
 		mainPanel.removeAll();
 		frame.remove(mainPanel);
-		frame.add(createMainPanel(), BorderLayout.CENTER);
+		frame.add(createMainPanel());
 		frame.revalidate();
 	}
 
@@ -206,7 +205,6 @@ public class SearchResultsGUI implements ActionListener{
 		Object source = event.getSource();
 		if(source == edit) {
 			editClicked();
-
 		}
 		
 		

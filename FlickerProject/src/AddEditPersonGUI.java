@@ -51,6 +51,7 @@ public class AddEditPersonGUI implements ActionListener {
 	private JScrollPane scroll;
 
 	DataStorage storage;
+	SearchResultsGUI searchGUI;
 	private boolean editing;
 
 	// class that relates to controlled vocabulary
@@ -68,9 +69,10 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new person
 	 */
-	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
+	public AddEditPersonGUI(SearchResultsGUI searchGUI, HomeScreenGUI home, Person person) {
 		this.personEdited = person;
 		this.home = home;
+		this.searchGUI = searchGUI;
 
 		try {
 			storage = DataStorage.getMainDataStorage();
@@ -316,8 +318,9 @@ public class AddEditPersonGUI implements ActionListener {
 			try {
 				submitClicked();
 				home.updateTable();
-				SearchResultsGUI searchGUI = new SearchResultsGUI();
-				searchGUI.updateTable();
+				if(searchGUI != null) {
+					searchGUI.updateTable();
+				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
