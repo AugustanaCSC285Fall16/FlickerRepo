@@ -246,7 +246,7 @@ public class HomeScreenGUI implements ActionListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (source == searchGUI.search) {
+//		} else if (source == searchGUI.search) {
 			//pop-up for data from search? 
 
 		} else if (source == add) {

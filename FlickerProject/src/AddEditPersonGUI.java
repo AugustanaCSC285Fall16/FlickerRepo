@@ -316,8 +316,7 @@ public class AddEditPersonGUI implements ActionListener {
 			try {
 				submitClicked();
 				home.updateTable();
-				SearchResultsGUI searchGUI = new SearchResultsGUI();
-				searchGUI.updateTable();
+				
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}

@@ -71,6 +71,10 @@ public class ExportGUI implements ActionListener{
 			gephi.setSelected(true);
 			gephiSelect = true;
 			palladioSelect = false;
+		} else if (event.getSource() == export){
+			
+		} else {
+			frame.dispose();
 		}
 	}
 }

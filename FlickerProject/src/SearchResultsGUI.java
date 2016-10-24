@@ -72,6 +72,7 @@ public class SearchResultsGUI implements ActionListener{
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	
+	
 	public JPanel createMainPanel() throws IOException {
 		mainPanel = new JPanel(new BorderLayout());
 		personTab = createPersonResultsTab();
