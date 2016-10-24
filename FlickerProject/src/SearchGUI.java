@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -5,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.*;
 
-public class SearchGUIV2 implements ActionListener {
+public class SearchGUI implements ActionListener {
 
 	JFrame frame;
 	JPanel panel;
@@ -19,9 +20,9 @@ public class SearchGUIV2 implements ActionListener {
 	SearchBackend search;
 	DataStorage storage;
 	HomeScreenGUI home;
+	
 
-	public SearchGUIV2(HomeScreenGUI home,String[] fields) throws IOException {
-		
+	public SearchGUI(HomeScreenGUI home, String[] fields) throws IOException {
 		this.home = home;
 		storage = DataStorage.getMainDataStorage();
 
@@ -36,7 +37,7 @@ public class SearchGUIV2 implements ActionListener {
 
 		optionsLabel = new JLabel("Select a search option: ");
 		this.options = new JComboBox<>(fields);
-		newDataLabel = new JLabel("Criteria to search: ");
+		newDataLabel = new JLabel("Search for: ");
 		newData = new JTextField(15);
 		submit = new JButton("Submit");
 		cancel = new JButton("Cancel");
@@ -64,24 +65,24 @@ public class SearchGUIV2 implements ActionListener {
 		if (source == submit) {
 			if (options.getSelectedIndex() == 0) {
 				try {
-					search = new SearchBackend();
-					search.searchByName(newData.getText());
-					System.out.println(search.getPersonCollection().toString());
-					for (Connection connection : search.getConnectionCollection()) {
-						System.out.println(connection.getPeopleList());
-					}
-					SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
-							search.getPersonCollection(), storage.getConnectionHeaderRow(),
-							search.getConnectionCollection());
+				search = new SearchBackend();
+				search.searchByName(newData.getText());
+				System.out.println(search.getPersonCollection().toString());
+				for(Connection connection: search.getConnectionCollection()) {
+					System.out.println(connection.getPeopleList());
+				}
+				SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
+						search.getPersonCollection(), storage.getConnectionHeaderRow(),
+						search.getConnectionCollection());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			} else {
-				// CLOSES THE WHOLE PROGRAM???
-				frame.dispose();
 			}
-
+		} else {
+			// CLOSES THE WHOLE PROGRAM???
+			frame.dispose();
 		}
+
 	}
 }

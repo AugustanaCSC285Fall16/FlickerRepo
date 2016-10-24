@@ -238,7 +238,12 @@ public class HomeScreenGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == search) {
-			SearchGUIV2 artistSearchGUI = new SearchGUIV2(FIELDS);
+			try {
+				SearchGUIV2 artistSearchGUI = new SearchGUIV2(this,FIELDS);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (source == add) {
 			addClicked();
 		} else if (source == edit) {

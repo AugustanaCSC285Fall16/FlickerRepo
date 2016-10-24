@@ -40,7 +40,7 @@ public class SearchResultsGUI implements ActionListener{
 		
 	}
 
-	public SearchResultsGUI(SearchGUI searchGUI, HomeScreenGUI home, String[] personColumnNamesArray, Collection<? extends TableRowViewable> personResultsData,
+	public SearchResultsGUI(HomeScreenGUI home, String[] personColumnNamesArray, Collection<? extends TableRowViewable> personResultsData,
 			String[] connectionColumnNamesArray, Collection<? extends TableRowViewable> connectionResultsData)
 			throws IOException {
 		this.searchGUI = searchGUI;
