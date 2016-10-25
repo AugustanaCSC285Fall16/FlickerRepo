@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class SearchGUIV2 implements ActionListener {
+	
+	private static final String[] FIELDS = new String[] {"Name", "Node Name", "Culteral ID", "Gender", "Occupation", "Date", "Location", "Type"};
 
 	JFrame frame;
 	JPanel panel;
@@ -20,7 +22,7 @@ public class SearchGUIV2 implements ActionListener {
 	DataStorage storage;
 	HomeScreenGUI home;
 
-	public SearchGUIV2(HomeScreenGUI home,String[] fields) throws IOException {
+	public SearchGUIV2(HomeScreenGUI home) throws IOException {
 		
 		this.home = home;
 		storage = DataStorage.getMainDataStorage();
@@ -35,7 +37,7 @@ public class SearchGUIV2 implements ActionListener {
 		buttonsPanel = new JPanel(new FlowLayout());
 
 		optionsLabel = new JLabel("Select a search option: ");
-		this.options = new JComboBox<>(fields);
+		this.options = new JComboBox<>(FIELDS);
 		newDataLabel = new JLabel("Criteria to search: ");
 		newData = new JTextField(15);
 		submit = new JButton("Submit");

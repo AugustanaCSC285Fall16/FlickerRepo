@@ -17,8 +17,6 @@ import com.opencsv.CSVReader;
 public class HomeScreenGUI implements ActionListener {
 	DataStorage mainStorage = DataStorage.getMainDataStorage();
 
-
-	private static final String[] FIELDS = new String[] {"Name", "Culteral ID", "Gender", "Occupation", "Base Name", "Date", "Location", "Type"};
 	private JFrame frame;
 	private JButton search;
 	private JButton add;
@@ -239,7 +237,7 @@ public class HomeScreenGUI implements ActionListener {
 		Object source = event.getSource();
 		if (source == search) {
 			try {
-				SearchGUIV2 artistSearchGUI = new SearchGUIV2(this,FIELDS);
+				SearchGUIV2 artistSearchGUI = new SearchGUIV2(this);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
