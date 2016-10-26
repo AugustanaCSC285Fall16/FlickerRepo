@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class SearchGUIV2 implements ActionListener {
@@ -62,26 +64,40 @@ public class SearchGUIV2 implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == submit) {
-			if (options.getSelectedIndex() == 0) {
-				try {
-					search = new SearchBackend();
-					search.searchByName(newData.getText());
-					System.out.println(search.getPersonCollection().toString());
-					for (Connection connection : search.getConnectionCollection()) {
-						System.out.println(connection.getPeopleList());
-					}
-					SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
-							search.getPersonCollection(), storage.getConnectionHeaderRow(),
-							search.getConnectionCollection());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else {
-				// CLOSES THE WHOLE PROGRAM???
-				frame.dispose();
+			try {
+				search = new SearchBackend();
+				String criteria = newData.getText();
+				int index = options.getSelectedIndex();
+			if (index == 0) {
+				search.searchByName(criteria);
+			} else if (index == 1){
+				search.searchByCulturalID(criteria);
+			} else if (index == 2){
+				search.searchByGender(criteria);
+			} else if (index == 3){
+				search.searchByOccupation(criteria);
+			} else if (index == 4){
+				// do we NEED base name???
+			} else if (index == 5){
+				search.searchByDate(criteria);
+				 //need to make it so they know to put it in date format
+			} else if (index == 6){
+				search.searchByLocation(criteria);
+			} else if (index == 7){
+				search.searchByInteraction(criteria);
 			}
-
+				SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
+						search.getPersonCollection(), storage.getConnectionHeaderRow(),
+						search.getConnectionCollection());
+				if (search.getPersonCollection().isEmpty() && search.getConnectionCollection().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Could Not Find Search Criteria in Data");
+					gui.closeFrame();
+				}
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Could not load backend search");
+			}
+		} else {
+			frame.dispose();
 		}
 	}
 }

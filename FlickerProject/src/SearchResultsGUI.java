@@ -200,6 +200,15 @@ public class SearchResultsGUI implements ActionListener{
 		frame.add(createMainPanel(), BorderLayout.CENTER);
 		frame.revalidate();
 	}
+	
+	/**
+	 * Closes the frame for this GUI. Used in SearchGUIV2 for 
+	 * when the search criteria isn't found. 
+	 * 
+	 */
+	public void closeFrame(){
+		frame.dispose();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {

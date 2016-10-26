@@ -63,26 +63,33 @@ public class SearchGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == submit) {
-			if (options.getSelectedIndex() == 0) {
-				try {
+			try {
 				search = new SearchBackend();
+			if (options.getSelectedIndex() == 0) {
 				search.searchByName(newData.getText());
-				System.out.println(search.getPersonCollection().toString());
-				for(Connection connection: search.getConnectionCollection()) {
-					System.out.println(connection.getPeopleList());
-				}
-				SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
-						search.getPersonCollection(), storage.getConnectionHeaderRow(),
-						search.getConnectionCollection());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			} else if (options.getSelectedIndex() == 1){
+				search.searchByCulturalID(newData.getText());
+			} else if (options.getSelectedIndex() == 2){
+				//gender
+			} else if (options.getSelectedIndex() == 3){
+				//occupation
+			} else if (options.getSelectedIndex() == 4){
+				// do we NEED base name???
+			} else if (options.getSelectedIndex() == 5){
+				//date
+			} else if (options.getSelectedIndex() == 6){
+				//location
+			} else if (options.getSelectedIndex() == 7){
+				//type interaction
+			}
+			SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
+					search.getPersonCollection(), storage.getConnectionHeaderRow(),
+					search.getConnectionCollection());
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Could not load backend search");
 			}
 		} else {
-			// CLOSES THE WHOLE PROGRAM???
 			frame.dispose();
 		}
-
 	}
 }

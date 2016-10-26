@@ -7,6 +7,7 @@ public class Connection implements TableRowViewable {
 	private String day;
 	private String month;
 	private String year;
+	private String date;
 	private String typeInteraction;
 	private String location;
 	private String citation;
@@ -22,6 +23,7 @@ public class Connection implements TableRowViewable {
 		this.day = day;
 		this.month = month;
 		this.year = year;
+		this.date = day + "/" + month + "/" + year;
 		this.typeInteraction = typeInteraction;
 		this.location = location;
 		this.citation = citation;
@@ -68,7 +70,6 @@ public class Connection implements TableRowViewable {
 	 * @return String array of table row connection
 	 */
 	public String[] toTableRowArray() {
-		String date = day + "/" + month + "/" + year;
 		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location,
 				citation, socialNotes, direction };
 	}
@@ -118,6 +119,10 @@ public class Connection implements TableRowViewable {
 	public String getYear() {
 		return year;
 	}
+	
+	public String getDate(){
+		return date;
+	}
 
 	/**
 	 * Takes in a date of type String and sets the data field date, which is the
@@ -136,6 +141,7 @@ public class Connection implements TableRowViewable {
 	public void setYear(String year) {
 		this.year = year;
 	}
+
 
 	/**
 	 * Retrieves and returns the type of interaction as a String
