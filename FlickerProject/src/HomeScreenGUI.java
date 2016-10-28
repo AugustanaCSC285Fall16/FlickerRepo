@@ -17,6 +17,8 @@ import com.opencsv.CSVReader;
 public class HomeScreenGUI implements ActionListener {
 	DataStorage mainStorage = DataStorage.getMainDataStorage();
 
+	private static final String[] FIELDS = new String[] {"Name", "Node Name", "Culteral ID", "Gender", "Occupation", "Date", "Location", "Type"};
+
 	private JFrame frame;
 	private JButton search;
 	private JButton add;
@@ -130,6 +132,8 @@ public class HomeScreenGUI implements ActionListener {
 	 */
 	private JPanel createCenterPanel() throws IOException {
 		centerPanel = new JPanel(new BorderLayout());
+//		JPanel search = createSearchPanel();
+//		centerPanel.add(search, BorderLayout.NORTH);
 		personTableDisplay = createDisplayTable(mainStorage.getPersonHeaderRow(), mainStorage.getPeopleList());
 		connectionTableDisplay = createDisplayTable(mainStorage.getConnectionHeaderRow(),
 				mainStorage.getConnectionList());
@@ -139,9 +143,24 @@ public class HomeScreenGUI implements ActionListener {
 		connectionPane.getViewport().add(connectionTableDisplay);
 		databases.add("Persons Data", personPane);
 		databases.add("Connections Data", connectionPane);
-		centerPanel.add(databases);
+		centerPanel.add(databases, BorderLayout.CENTER);
 		return centerPanel;
 	}
+	
+//	private JPanel createSearchPanel() {
+//		JPanel searchPanel = new JPanel(new GridLayout(1,5));
+//		JLabel optionsLabel = new JLabel("Filter option: ");
+//		JComboBox<String> options = new JComboBox<>(FIELDS);
+//		JLabel newDataLabel = new JLabel("Criteria to search: ");
+//		JTextField newData = new JTextField(15);
+//		JButton submit = new JButton("Submit");
+//		searchPanel.add(optionsLabel);
+//		searchPanel.add(options);
+//		searchPanel.add(newDataLabel);
+//		searchPanel.add(newData);
+//		searchPanel.add(submit);
+//		return searchPanel;
+//	}
 
 	/**
 	 * Updates the table to see new data that was added.
