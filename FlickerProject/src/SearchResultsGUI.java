@@ -34,12 +34,11 @@ public class SearchResultsGUI implements ActionListener{
 	DataStorage storage;
 	SearchBackend search;
 	HomeScreenGUI home;
-	SearchGUI searchGUI;
+	
 
 	public SearchResultsGUI(HomeScreenGUI home, String[] personColumnNamesArray, Collection<? extends TableRowViewable> personResultsData,
 			String[] connectionColumnNamesArray, Collection<? extends TableRowViewable> connectionResultsData)
 			throws IOException {
-		this.searchGUI = searchGUI;
 		this.home = home;
 		personColumnNames = personColumnNamesArray;
 		connectionColumnNames = connectionColumnNamesArray;

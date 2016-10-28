@@ -85,13 +85,13 @@ public class SearchGUIV2 implements ActionListener {
 					search.searchByLocation(criteria);
 				} else if (index == 7) {
 					search.searchByInteraction(criteria);
-					SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
-							search.getPersonCollection(), storage.getConnectionHeaderRow(),
-							search.getConnectionCollection());
-					if (search.getPersonCollection().isEmpty() && search.getConnectionCollection().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Could Not Find Search Criteria in Data");
-						gui.closeFrame();
 					}
+				SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
+						search.getPersonCollection(), storage.getConnectionHeaderRow(),
+						search.getConnectionCollection());
+				if (search.getPersonCollection().isEmpty() && search.getConnectionCollection().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Could Not Find Search Criteria in Data");
+					gui.closeFrame();
 				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Could not load backend search");
