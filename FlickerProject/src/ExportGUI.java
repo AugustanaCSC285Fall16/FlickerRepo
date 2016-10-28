@@ -15,6 +15,8 @@ public class ExportGUI implements ActionListener{
 	private JButton export;
 	private JButton cancel;
 	
+	private JFileChooser chooser;
+	
 	private boolean palladioSelect;
 	private boolean gephiSelect;
 	
@@ -46,7 +48,7 @@ public class ExportGUI implements ActionListener{
 		palladio.addActionListener(this);
 		gephi.addActionListener(this);
 		export.addActionListener(this);
-		cancel.addActionListener(this);		
+		cancel.addActionListener(this);	
 		
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -58,6 +60,24 @@ public class ExportGUI implements ActionListener{
 	
 	void makeVisible(){
 		frame.setVisible(true);
+	}
+	
+	/**
+	 * Makes the browse gui
+	 */
+	
+	public void makeChooser(){
+		chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setDialogTitle("choosertitle");
+		chooser.showSaveDialog(frame);
+		try{
+			System.out.println(chooser.getSelectedFile().getAbsolutePath()); //the string of the file path
+		} catch (NullPointerException e){
+			//they clicked cancel
+		}
+		System.out.println("what is happening");
+		
 	}
 	
 	public void actionPerformed(ActionEvent event) {
@@ -72,7 +92,7 @@ public class ExportGUI implements ActionListener{
 			gephiSelect = true;
 			palladioSelect = false;
 		} else if (event.getSource() == export){
-			
+			makeChooser();
 		} else {
 			frame.dispose();
 		}
