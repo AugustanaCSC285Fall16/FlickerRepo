@@ -72,9 +72,10 @@ public class NewUser implements ActionListener {
 
 	// move to datastorage
 	public void addUser() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/UserData"));
-		writer.writeNext(new String[] { "Fullname", "Username", "Password", "Permissions" });
-		User newUser = new User(fullName.getText(), userName.getText(), password.getText(),
+		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/UserData.csv"));
+		DataStorage storage = DataStorage.getMainDataStorage();
+		writer.writeNext(new String[] {"Id","Fullname", "Username", "Password", "Permissions" });
+		User newUser = new User(storage.incrementAndGetNextUserIdNum(), fullName.getText(), userName.getText(), password.getText(),
 				permissions.getSelectedItem().toString());
 		writer.writeNext(newUser.toCSVRowArray());
 		writer.close();

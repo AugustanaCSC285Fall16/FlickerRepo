@@ -34,12 +34,11 @@ public class SearchResultsGUI implements ActionListener{
 	DataStorage storage;
 	SearchBackend search;
 	HomeScreenGUI home;
-	SearchGUI searchGUI;
+	
 
 	public SearchResultsGUI(HomeScreenGUI home, String[] personColumnNamesArray, Collection<? extends TableRowViewable> personResultsData,
 			String[] connectionColumnNamesArray, Collection<? extends TableRowViewable> connectionResultsData)
 			throws IOException {
-		this.searchGUI = searchGUI;
 		this.home = home;
 		personColumnNames = personColumnNamesArray;
 		connectionColumnNames = connectionColumnNamesArray;
@@ -199,6 +198,15 @@ public class SearchResultsGUI implements ActionListener{
 		frame.remove(mainPanel);
 		frame.add(createMainPanel());
 		frame.revalidate();
+	}
+	
+	/**
+	 * Closes the frame for this GUI. Used in SearchGUIV2 for 
+	 * when the search criteria isn't found. 
+	 * 
+	 */
+	public void closeFrame(){
+		frame.dispose();
 	}
 
 	@Override
