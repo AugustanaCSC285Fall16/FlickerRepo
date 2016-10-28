@@ -77,12 +77,11 @@ public class SearchGUIV2 implements ActionListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				frame.dispose();
-			} else {
-				// CLOSES THE WHOLE PROGRAM???
-				frame.dispose();
 			}
 
-		}
+		} else if(source == cancel) {
+			frame.dispose();
+		} 
+
 	}
 }
