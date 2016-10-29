@@ -6,10 +6,12 @@ import com.opencsv.CSVWriter;
 
 public class DataStorage {
 	// data fields
+	public Map<Integer, User> userMap;
 	public Map<Integer, Person> personMap;
 	private Map<Integer, Connection> connectionsMap;
 	private String[] personHeaderRow = {"Id","Name","Node Name","Occupation","Gender","Cultural ID","Biographical Notes"};
 	private String[] connectionHeaderRow = {"Edge","Connecting Name List","Date","Type of Interaction","Location","Citation","Social Notes","Direction"};
+	private String[] userHeaderRow;
 	private ArrayList<String> interactionChoices;
 	private ArrayList<String> locationChoices;
 	private ArrayList<String> cultureChoices;
@@ -18,8 +20,10 @@ public class DataStorage {
 
 	private int nextIdNum;
 	private int nextConnNum;
+	private int nextUserNum;
 
 	private static final String DATA_FOLDER = "DataFiles";
+	private static final String USER_DATA_FILE_NAME = "UserData.csv";
 	private static final String PERSON_FILE_NAME = "PersonData.csv";
 	private static final String CONNECTION_FILE_NAME = "ConnectionData.csv";
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
@@ -61,6 +65,30 @@ public class DataStorage {
 		loadDataTypes(OCCUPATION_CHOICES_FILE_NAME, occupationChoices);
 	}
 
+	private void loadUsers() throws IOException {
+		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + USER_DATA_FILE_NAME));
+
+		List<String[]> myRows = reader.readAll();
+		userHeaderRow = myRows.remove(0); // remove header row
+
+		for (String[] row : myRows) {
+			addUser(new User(row));
+		}
+	}
+	
+	public void saveUsers() throws IOException {
+		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + USER_DATA_FILE_NAME));
+		writer.writeNext(userHeaderRow);
+		for (User user : userMap.values()) {
+			writer.writeNext(user.toCSVRowArray());
+		}
+		writer.close();
+	}
+	
+	public void addUser(User user) {
+		userMap.put(user.getId(), user);
+	}
+	
 	/**
 	 * 
 	 * @throws IOException
@@ -310,6 +338,7 @@ public class DataStorage {
 			// nextLine[] is an array of values from the line
 			nextIdNum = Integer.parseInt(nextLine[0]);
 			nextConnNum = Integer.parseInt(nextLine[1]);
+			nextUserNum = Integer.parseInt(nextLine[2]);
 		}
 	}
 
@@ -344,5 +373,18 @@ public class DataStorage {
 		saveIdAndConnNum();
 
 		return nextConnNum;
+	}
+	
+	/**
+	 * .... also updates the CSV file that stores these ID numbers
+	 * persistently...
+	 * 
+	 * @return the incremented User Id Number to be used.
+	 */
+	public int incrementAndGetNextUserIdNum() throws IOException {
+		nextUserNum++;
+		saveIdAndConnNum();
+
+		return nextUserNum;
 	}
 }

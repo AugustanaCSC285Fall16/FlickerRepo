@@ -10,6 +10,7 @@ public class LoginGUI implements ActionListener {
 	private JPasswordField password;
 	private JButton add;
 	private JButton submit;
+	private JButton about;
 	private JLabel usernameLabel;
 	private JLabel passwordLabel;
 
@@ -18,6 +19,7 @@ public class LoginGUI implements ActionListener {
 		password = new JPasswordField(15);
 		add = new JButton("Add User");
 		submit = new JButton("Submit");
+		about = new JButton("About");
 		usernameLabel = new JLabel("Username:");
 		passwordLabel = new JLabel("Password:");
 
@@ -31,6 +33,7 @@ public class LoginGUI implements ActionListener {
 
 		add.addActionListener(this);
 		submit.addActionListener(this);
+		about.addActionListener(this);
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -63,13 +66,19 @@ public class LoginGUI implements ActionListener {
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submit);
 		southPanel.add(add);
+		southPanel.add(about);
 		return southPanel;
 	}
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == add) {
-			frame.dispose();
 			NewUser newUser = new NewUser();
+		} else if (event.getSource() == about){
+			try {
+				AboutScreen aboutScreen = new AboutScreen();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(null, "Error with About Screen!");
+			}
 		} else {
 			try {
 				//Need to check the UserData to see if the user is in the data. Might need to make a User Map like we did for persons. 

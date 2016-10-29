@@ -85,8 +85,7 @@ public class SearchGUIV2 implements ActionListener {
 				} else if (index == 6) {
 					search.searchByLocation(criteria);
 				} else if (index == 7) {
-					search.searchByInteraction(criteria);
-					
+					search.searchByInteraction(criteria);	
 				}
 				SearchResultsGUI gui = new SearchResultsGUI(home, storage.getPersonHeaderRow(),
 							search.getPersonCollection(), storage.getConnectionHeaderRow(),
