@@ -8,12 +8,13 @@ public class DataStorage {
 	// data fields
 	public Map<Integer, Person> personMap;
 	private Map<Integer, Connection> connectionsMap;
-	private String[] personHeaderRow;
-	private String[] connectionHeaderRow;
+	private String[] personHeaderRow = {"Id","Name","Node Name","Occupation","Gender","Cultural ID","Biographical Notes"};
+	private String[] connectionHeaderRow = {"Edge","Connecting Name List","Date","Type of Interaction","Location","Citation","Social Notes","Direction"};
 	private ArrayList<String> interactionChoices;
 	private ArrayList<String> locationChoices;
 	private ArrayList<String> cultureChoices;
 	private ArrayList<String> occupationChoices;
+	private boolean isFiltered = false;
 
 	private int nextIdNum;
 	private int nextConnNum;
@@ -39,6 +40,9 @@ public class DataStorage {
 	public static DataStorage getMainDataStorage() throws IOException {
 		if (primaryDataStorage == null) {
 			primaryDataStorage = new DataStorage();
+			primaryDataStorage.loadPeople();
+			primaryDataStorage.loadConnections();
+			primaryDataStorage.loadIdAndConnNum();
 		}
 		return primaryDataStorage;
 	}
@@ -51,9 +55,6 @@ public class DataStorage {
 		locationChoices = new ArrayList<>();
 		cultureChoices = new ArrayList<>();
 		occupationChoices = new ArrayList<>();
-		loadPeople();
-		loadConnections();
-		loadIdAndConnNum();
 		loadDataTypes(INTERACTION_CHOICES_FILE_NAME, interactionChoices);
 		loadDataTypes(LOCATION_CHOICES_FILE_NAME, locationChoices);
 		loadDataTypes(CULTURE_CHOICES_FILE_NAME, cultureChoices);
@@ -64,7 +65,7 @@ public class DataStorage {
 	 * 
 	 * @throws IOException
 	 */
-	private void loadPeople() throws IOException {
+	void loadPeople() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + PERSON_FILE_NAME));
 
 		List<String[]> myRows = reader.readAll();
@@ -73,6 +74,37 @@ public class DataStorage {
 		for (String[] row : myRows) {
 			addPerson(new Person(row));
 		}
+	}
+	
+	public DataStorage personFilter(PersonQuery query) throws IOException {
+		DataStorage filteredData = new DataStorage();
+		for(Person person: primaryDataStorage.getPeopleList()) {
+			if(query.accepts(person)) {
+				filteredData.addPerson(person);
+			}
+		}
+		return filteredData;
+	}
+	
+	public DataStorage connectionFilter(ConnectionQuery query) throws IOException {
+		DataStorage filteredData = new DataStorage();
+		for(Connection connection: primaryDataStorage.getConnectionList()) {
+			if(query.accepts(connection)) {
+				for(Person person: connection.getPeopleList()) {
+					filteredData.addPerson(person);
+				}
+				filteredData.addConnection(connection);
+			}
+		}
+		return filteredData;
+	}
+	
+	public void setFiltered(boolean operator) {
+		isFiltered = operator;
+	}
+	
+	public boolean isFiltered() {
+		return isFiltered;
 	}
 
 	public String[] getPersonHeaderRow() {
@@ -105,7 +137,7 @@ public class DataStorage {
 		writer.close();
 	}
 
-	private void loadConnections() throws IOException {
+	void loadConnections() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + CONNECTION_FILE_NAME));
 		List<String[]> myRows = reader.readAll();
 		connectionHeaderRow = myRows.remove(0);
@@ -271,7 +303,7 @@ public class DataStorage {
 		return occupationChoices;
 	}
 
-	private void loadIdAndConnNum() throws IOException {
+	void loadIdAndConnNum() throws IOException {
 		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + NEXT_ID_FILE_NAME));
 		String[] nextLine;
 		while ((nextLine = reader.readNext()) != null) {

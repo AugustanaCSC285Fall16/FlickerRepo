@@ -317,9 +317,10 @@ public class AddEditPersonGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
-				home.updateTable();
-				if(searchGUI != null) {
-					searchGUI.updateTable();
+				if(storage.isFiltered()) {
+					home.updateTable(home.getFilteredStorage());
+				} else {
+					home.updateTable(storage);
 				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");

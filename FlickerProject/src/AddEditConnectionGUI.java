@@ -389,10 +389,6 @@ public class AddEditConnectionGUI implements ActionListener {
 			storage.saveConnections();
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-			home.updateTable();
-			if(searchGUI != null) {
-				searchGUI.updateTable();
-			}
 		} else {
 			int nextID = storage.incrementAndGetNextConnectionIdNum();
 
@@ -403,7 +399,6 @@ public class AddEditConnectionGUI implements ActionListener {
 			storage.saveConnections();
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-			home.updateTable();
 		}
 	}
 
@@ -418,11 +413,14 @@ public class AddEditConnectionGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
+				if(storage.isFiltered()) {
+					home.updateTable(home.getFilteredStorage());
+				} else {
+					home.updateTable(storage);
+				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
-			// adding or editing
-			home.actionPerformed(event);
 		} else if (event.getSource() == cancel) {
 			// reset fields
 			frame.dispose();
