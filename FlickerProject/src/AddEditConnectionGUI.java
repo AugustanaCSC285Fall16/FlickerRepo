@@ -57,6 +57,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	JButton submitButton;
 	private JButton cancel;
 	private JButton moreNames;
+	private JButton reset;
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
 	HomeScreenGUI home;
@@ -92,7 +93,12 @@ public class AddEditConnectionGUI implements ActionListener {
 
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
-		editing = false;
+		if(connection == null){
+			editing = false;
+		} else {
+			editing = true;
+		}
+
 
 		baseNameChoices = storage.getPeopleArrayList();
 		baseName = new JComboBox<>(baseNameChoices.toArray());
@@ -112,6 +118,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 		moreNames = new JButton("+");
+		reset = new JButton("Reset");
 
 		baseNameLabel = new JLabel("Base Name:");
 		dateLabel = new JLabel("Date:");
@@ -169,6 +176,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		submitButton.addActionListener(this);
 		cancel.addActionListener(this);
 		moreNames.addActionListener(this);
+		reset.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -219,7 +227,9 @@ public class AddEditConnectionGUI implements ActionListener {
 	 */
 	private JPanel createWestPanel(int numNames) {
 		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
-		westPanel.add(baseNameLabel);
+		JPanel baseNamePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		baseNamePanel.add(baseNameLabel);
+		westPanel.add(baseNamePanel);
 		if (numNames > 0) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -231,11 +241,21 @@ public class AddEditConnectionGUI implements ActionListener {
 			JPanel tempPanel = new JPanel();
 			westPanel.add(tempPanel);
 		}
-		westPanel.add(dateLabel);
-		westPanel.add(typeLabel);
-		westPanel.add(locationLabel);
-		westPanel.add(socialLabel);
-		westPanel.add(bibLabel);
+		JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		datePanel.add(dateLabel);
+		westPanel.add(datePanel);
+		JPanel typePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		typePanel.add(typeLabel);
+		westPanel.add(typePanel);
+		JPanel locationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		locationPanel.add(locationLabel);
+		westPanel.add(locationPanel);
+		JPanel socialPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		socialPanel.add(socialLabel);
+		westPanel.add(socialPanel);
+		JPanel bibPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		bibPanel.add(bibLabel);
+		westPanel.add(bibPanel);
 		return westPanel;
 	}
 
@@ -248,6 +268,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
 		southPanel.add(cancel);
+		southPanel.add(reset);
 		return southPanel;
 	}
 
@@ -263,17 +284,23 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * the refreshPanel() method.
 	 */
 	void setDefault() {
-		additionalNames = 1;
-		targetNames.clear();
-		month.setText("");
-		day.setText("");
-		year.setText("");
-		baseName.setSelectedIndex(0);
-		type.setSelectedIndex(0);
-		location.setSelectedIndex(0);
-		socialNotes.setText("");
-		citation.setText("");
-
+		if(editing){
+			additionalNames = connectionEdited.getPeopleList().size() - 1;
+			targetNames.clear();
+			refreshPanel();
+			setConnectionData(connectionEdited);
+		} else {
+			additionalNames = 1;
+			targetNames.clear();
+			month.setText("");
+			day.setText("");
+			year.setText("");
+			baseName.setSelectedIndex(0);
+			type.setSelectedIndex(0);
+			location.setSelectedIndex(0);
+			socialNotes.setText("");
+			citation.setText("");
+		}
 		refreshPanel();
 	}
 
@@ -398,7 +425,9 @@ public class AddEditConnectionGUI implements ActionListener {
 		} else if (event.getSource() == moreNames) {
 			additionalNames++;
 			refreshPanel();
-		} 
+		} else if (event.getSource() == reset){
+			setDefault();
+		}
 	}
 
 }

@@ -44,7 +44,7 @@ public class AddEditPersonGUI implements ActionListener {
 	private JLabel biographyLabel;
 
 	JButton submitButton;
-	JButton deleteButton;
+	JButton resetButton;
 	private JButton cancel;
 	HomeScreenGUI home;
 	private JScrollPane scroll;
@@ -77,7 +77,11 @@ public class AddEditPersonGUI implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		editing = false;
+		if(person == null){
+			editing = false;
+		} else {
+			editing = true;
+		}
 
 		name = new JTextField(15);
 		nodeName = new JTextField(15);
@@ -91,7 +95,7 @@ public class AddEditPersonGUI implements ActionListener {
 		notes.setLineWrap(true);
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
-		deleteButton = new JButton("Delete");
+		resetButton = new JButton("Reset");
 
 		nameLabel = new JLabel("Person Name:");
 		nodeNameLabel = new JLabel("Node Name:");
@@ -128,7 +132,7 @@ public class AddEditPersonGUI implements ActionListener {
 
 		submitButton.addActionListener(this);
 		cancel.addActionListener(this);
-		deleteButton.addActionListener(this);
+		resetButton.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -167,22 +171,22 @@ public class AddEditPersonGUI implements ActionListener {
 	 */
 	private JPanel createWestPanel() {
 		westPanel = new JPanel(new GridLayout(6, 1));
-		JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		namePanel.add(nameLabel);
 		westPanel.add(namePanel);
-		JPanel nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JPanel nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		nodeNamePanel.add(nodeNameLabel);
 		westPanel.add(nodeNamePanel);
-		JPanel culturalPanel = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		JPanel culturalPanel = new JPanel (new FlowLayout(FlowLayout.RIGHT));
 		culturalPanel.add(culturalLabel);
 		westPanel.add(culturalPanel);
-		JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		genderPanel.add(genderLabel);
 		westPanel.add(genderPanel);
-		JPanel occupationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JPanel occupationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		occupationPanel.add(occupationLabel);
 		westPanel.add(occupationPanel);
-		JPanel biographyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JPanel biographyPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		biographyPanel.add(biographyLabel);
 		westPanel.add(biographyPanel);
 		return westPanel;
@@ -198,9 +202,7 @@ public class AddEditPersonGUI implements ActionListener {
 		southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
 		southPanel.add(cancel);
-		if (editing) {
-			southPanel.add(deleteButton);
-		}
+		southPanel.add(resetButton);
 		return southPanel;
 	}
 
@@ -215,13 +217,16 @@ public class AddEditPersonGUI implements ActionListener {
 	 * Sets the edit GUI all back to blanks to fill in
 	 */
 	void setDefault() {
-		name.setText("");
-		nodeName.setText("");
-		culture.setSelectedIndex(0);
-		gender.setSelectedIndex(0);
-		occupation.setSelectedIndex(0);
-		notes.setText("");
-		editing = false;
+		if(editing){
+			setPersonData(personEdited);
+		} else {
+			name.setText("");
+			nodeName.setText("");
+			culture.setSelectedIndex(0);
+			gender.setSelectedIndex(0);
+			occupation.setSelectedIndex(0);
+			notes.setText("");
+		}
 		refreshPanel();
 	}
 
@@ -330,7 +335,9 @@ public class AddEditPersonGUI implements ActionListener {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
 			home.actionPerformed(event);
-		} else { // cancel
+		} else if (event.getSource() == resetButton){
+			setDefault();
+		} else {			 // cancel
 			frame.dispose();
 		}
 	}

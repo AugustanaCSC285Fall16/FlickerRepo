@@ -66,13 +66,12 @@ public class ExportGUI implements ActionListener {
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setDialogTitle("Save");
-		chooser.showSaveDialog(frame);
-		try {
-			return chooser.getSelectedFile().getAbsolutePath(); // the string of
-																// the file path
-		} catch (NullPointerException e) {
+		int option = chooser.showSaveDialog(frame);
+		if(option == JFileChooser.APPROVE_OPTION){
+			return chooser.getSelectedFile().getAbsolutePath(); // the string of the file path
+		} else {
 			// they clicked cancel
-			return null;
+			return "cancel";
 		}
 	}
 
@@ -83,13 +82,12 @@ public class ExportGUI implements ActionListener {
 		}
 		Exporter export;
 		String pathName = makeChooser();
-		if (!pathName.substring(2).contains(":")) { // skip the drive semicolon
-													// i.e. "H: ..."
-			if (palladio.isSelected() && pathName != null) {
+		if (!pathName.substring(2).contains(":")) { // skip the drive semicolon i.e. "H: ..."
+			if (palladio.isSelected() && pathName != "cancel") {
 				export = new PalladioExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
-			} else if (gephi.isSelected() && pathName != null) {
+			} else if (gephi.isSelected() && pathName != "cancel") {
 				export = new GephiExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
@@ -113,8 +111,8 @@ public class ExportGUI implements ActionListener {
 			gephi.setSelected(true);
 		} else if (event.getSource() == export) {
 			if (export()) {
-				JOptionPane.showMessageDialog(null, "Successfully Saved!");
 				frame.dispose();
+				JOptionPane.showMessageDialog(null, "Successfully Saved!");
 			}
 		} else {
 			frame.dispose();
