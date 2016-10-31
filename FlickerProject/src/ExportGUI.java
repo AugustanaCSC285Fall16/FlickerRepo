@@ -91,7 +91,7 @@ public class ExportGUI implements ActionListener {
 				export = new PalladioExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
-			} else if (gephi.isSelected()) {
+			} else if (gephi.isSelected() && pathName != null) {
 				export = new GephiExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
@@ -99,7 +99,7 @@ public class ExportGUI implements ActionListener {
 				return false;
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location." + "\n\n" + pathName
+			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location.\n\n" + pathName
 					+ "\n\nNot a valid Windows directory (cannot have semicolons).");
 			return false;
 		}

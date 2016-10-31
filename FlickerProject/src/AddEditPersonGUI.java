@@ -101,7 +101,7 @@ public class AddEditPersonGUI implements ActionListener {
 		occupationLabel = new JLabel("Occupation:");
 		biographyLabel = new JLabel("Biography:");
 
-		namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		culturePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		genderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -168,12 +168,24 @@ public class AddEditPersonGUI implements ActionListener {
 	 */
 	private JPanel createWestPanel() {
 		westPanel = new JPanel(new GridLayout(6, 1));
-		westPanel.add(nameLabel);
-		westPanel.add(nodeNameLabel);
-		westPanel.add(culturalLabel);
-		westPanel.add(genderLabel);
-		westPanel.add(occupationLabel);
-		westPanel.add(biographyLabel);
+		JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		namePanel.add(nameLabel);
+		westPanel.add(namePanel);
+		JPanel nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		nodeNamePanel.add(nodeNameLabel);
+		westPanel.add(nodeNamePanel);
+		JPanel culturalPanel = new JPanel (new FlowLayout(FlowLayout.CENTER));
+		culturalPanel.add(culturalLabel);
+		westPanel.add(culturalPanel);
+		JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		genderPanel.add(genderLabel);
+		westPanel.add(genderPanel);
+		JPanel occupationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		occupationPanel.add(occupationLabel);
+		westPanel.add(occupationPanel);
+		JPanel biographyPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		biographyPanel.add(biographyLabel);
+		westPanel.add(biographyPanel);
 		return westPanel;
 	}
 
