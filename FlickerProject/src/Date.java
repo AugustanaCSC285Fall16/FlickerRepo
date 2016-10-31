@@ -18,9 +18,9 @@ public class Date {
 	public static final int DECEMBER = 12;
 
 	// fields
-	private final int year;
-	private final int month;
-	private final int day;
+	private int year;
+	private int month;
+	private int day;
 
 	// constructor
 	public Date(int year, int month, int day) {
@@ -65,6 +65,12 @@ public class Date {
 	// return day
 	public int getDay() {
 		return day;
+	}
+	
+	public void setDate(int year, int month, int day) {
+		this.year = year;
+		this.month = month;
+		this.day = day;
 	}
 
 	// other instance methods
