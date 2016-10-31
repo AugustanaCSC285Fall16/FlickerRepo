@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.*;
 
@@ -77,23 +78,31 @@ public class ExportGUI implements ActionListener{
 	}
 	
 	public boolean export(){
-		Exporter export;
 		if(!palladio.isSelected() && !gephi.isSelected()){
 			JOptionPane.showMessageDialog(null, "Pick a file type!");
 			return false;
 		}
+		Exporter export;
 		String pathName = makeChooser();
-		if(palladio.isSelected() && pathName != null){
-			export = new PalladioExport();
-			export.export(home.getFilteredStorage(), pathName);
-			return true;
-		} else if (gephi.isSelected()){
-			export = new GephiExport();
-			export.export(home.getFilteredStorage(), pathName);
-			return true;
+		if(!pathName.substring(2).contains(":")){ //skip the drive semicolon i.e. "H: ..."
+			if(palladio.isSelected() && pathName != null){
+				export = new PalladioExport();
+				export.export(home.getFilteredStorage(), pathName);
+				return true;
+			} else if (gephi.isSelected()){
+				export = new GephiExport();
+				export.export(home.getFilteredStorage(), pathName);
+				return true;
+			} else {
+				return false;
+			}
 		} else {
+			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location."+
+					"\n\n"+pathName+"\n\nNot a valid Windows directory (cannot have semicolons)");
 			return false;
 		}
+		
+		
 	}
 	
 	public void actionPerformed(ActionEvent event) {
