@@ -29,10 +29,14 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton resetFilter;
 	private JButton export;
 	private JPanel searchPanel;
+	private JPanel criteriaPanel;
 	private JLabel filterOptionsLabel;
 	private JComboBox<String> filterOptions;
 	private JLabel newDataLabel;
 	private JTextField newData;
+	private JTextField searchDay;
+	private JTextField searchMonth;
+	private JTextField searchYear;
 	private JButton submit;
 	private JTabbedPane databases;
 	private JPanel centerPanel;
@@ -71,6 +75,7 @@ public class HomeScreenGUI implements ActionListener {
 		save.addActionListener(this);
 		submit.addActionListener(this);
 		resetFilter.addActionListener(this);
+		filterOptions.addActionListener(this);
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -146,8 +151,7 @@ public class HomeScreenGUI implements ActionListener {
 		centerPanel = new JPanel(new BorderLayout());
 		System.out.println(storage.getPeopleArrayList());
 		personTableDisplay = createDisplayTable(storage.getPersonHeaderRow(), storage.getPeopleList());
-		connectionTableDisplay = createDisplayTable(storage.getConnectionHeaderRow(),
-				storage.getConnectionList());
+		connectionTableDisplay = createDisplayTable(storage.getConnectionHeaderRow(), storage.getConnectionList());
 		personPane = new JScrollPane();
 		connectionPane = new JScrollPane();
 		personPane.getViewport().add(personTableDisplay);
@@ -160,20 +164,48 @@ public class HomeScreenGUI implements ActionListener {
 
 	private JPanel createSearchPanel() {
 		searchPanel = new JPanel(new FlowLayout());
+		submit = new JButton("Submit");
+		resetFilter = new JButton("Reset");
+		resetFilter.setEnabled(false);
+		searchPanel.add(createCriteriaPanel());
+		searchPanel.add(submit);
+		searchPanel.add(resetFilter);
+		return searchPanel;
+	}
+
+	public JPanel createCriteriaPanel() {
+		criteriaPanel = new JPanel();
 		filterOptionsLabel = new JLabel("Filter option: ");
 		filterOptions = new JComboBox<>(FIELDS);
 		newDataLabel = new JLabel("Criteria: ");
 		newData = new JTextField(15);
-		submit = new JButton("Submit");
-		resetFilter = new JButton("Reset");
-		resetFilter.setEnabled(false);
-		searchPanel.add(filterOptionsLabel);
-		searchPanel.add(filterOptions);
-		searchPanel.add(newDataLabel);
-		searchPanel.add(newData);
-		searchPanel.add(submit);
-		searchPanel.add(resetFilter);
-		return searchPanel;
+		criteriaPanel.add(filterOptionsLabel);
+		criteriaPanel.add(filterOptions);
+		criteriaPanel.add(newDataLabel);
+		criteriaPanel.add(newData);
+		return criteriaPanel;
+	}
+
+	private void changeSearchPanel() {
+		int option = filterOptions.getSelectedIndex();
+		if (option == 5) {
+			criteriaPanel.remove(newData);
+			searchDay = new JTextField(2);
+			searchMonth = new JTextField(2);
+			searchYear = new JTextField(4);
+			criteriaPanel.add(searchMonth);
+			criteriaPanel.add(searchDay);
+			criteriaPanel.add(searchYear);
+			frame.revalidate();
+		} else {
+			criteriaPanel.removeAll();
+			criteriaPanel.add(filterOptionsLabel);
+			criteriaPanel.add(filterOptions);
+			criteriaPanel.add(newDataLabel);
+			criteriaPanel.add(newData);
+			filterOptions.setSelectedIndex(option);
+			frame.revalidate();
+		}
 	}
 
 	/**
@@ -190,7 +222,11 @@ public class HomeScreenGUI implements ActionListener {
 	}
 
 	public DataStorage getFilteredStorage() {
-		return filtered;
+		if(mainStorage.isFiltered()){
+			return filtered;
+		} else {
+			return mainStorage;
+		}
 	}
 
 	/**
@@ -250,24 +286,54 @@ public class HomeScreenGUI implements ActionListener {
 	public void submitSearch() throws IOException {
 		int option = filterOptions.getSelectedIndex();
 		if (databases.getSelectedComponent() == personPane) {
-			export.setEnabled(false);
-			System.out.println(newData.getText());
-			System.out.println(filterOptions.getSelectedItem().toString());
-			PersonQuery personQuery = new ContainsQuery(newData.getText(), filterOptions.getSelectedItem().toString());
-			filtered = mainStorage.personFilter(personQuery);
-			System.out.println("update");
-			updateTable(filtered);
+			if (option == 5 || option == 6 || option == 7) {
+				JOptionPane.showMessageDialog(null, "Invalid query option");
+			} else {
+				if (newData.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter search criteria");
+				}
+				export.setEnabled(false);
+				PersonQuery personQuery = new ContainsQuery(newData.getText(),
+						filterOptions.getSelectedItem().toString());
+				filtered = mainStorage.personFilter(personQuery);
+				System.out.println("update");
+				updateTable(filtered);
+			}
+
 		} else { // is connectionTableDisplay
+			export.setEnabled(true);
 			if (option == 5) {
-				// ConnectionQuery connectionQuery = new DateQuery();
+				if (searchDay.getText().equals("") || searchMonth.getText().equals("")
+						|| searchYear.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter a full date");
+				} else {
+					Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
+							Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
+					if (!targetDate.isValidDate()) {
+						JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
+					} else {
+						ConnectionQuery connectionQuery = new DateQuery(targetDate);
+						filtered = mainStorage.connectionFilter(connectionQuery);
+						if (!filtered.getConnectionArrayList().isEmpty()) {
+							updateTable(filtered);
+						} else {
+							JOptionPane.showMessageDialog(null, "No results found");
+						}
+					}
+				}
 			} else {
 				ConnectionQuery connectionQuery = new ContainsQuery(newData.getText(),
 						filterOptions.getSelectedItem().toString());
 				filtered = mainStorage.connectionFilter(connectionQuery);
-				updateTable(filtered);
+				if (!filtered.getConnectionArrayList().isEmpty()) {
+					updateTable(filtered);
+				} else {
+					JOptionPane.showMessageDialog(null, "No results found");
+				}
 			}
+
 		}
-		
+
 	}
 
 	/**
@@ -289,12 +355,13 @@ public class HomeScreenGUI implements ActionListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if(source == resetFilter) {
+		} else if (source == resetFilter) {
 			try {
 				updateTable(mainStorage);
 				newData.setText("");
 				resetFilter.setEnabled(false);
 				mainStorage.setFiltered(false);
+				export.setEnabled(true);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -306,15 +373,9 @@ public class HomeScreenGUI implements ActionListener {
 		} else if (source == export) {
 			ExportGUI exportGui = new ExportGUI(this);
 			exportGUI.makeVisible();
-			Export exportAll = new Export();
-			try {
-				exportAll.exportToPalladio(mainStorage.getConnectionList());
-				exportAll.exportToGephiNodes();
-				exportAll.exportToGephiEdges(mainStorage.getConnectionList());
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Could not export the data.");
-			}
 
+		} else if (source == filterOptions) {
+			changeSearchPanel();
 		}
 	}
 }

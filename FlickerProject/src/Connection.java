@@ -7,7 +7,7 @@ public class Connection implements TableRowViewable {
 	private String day;
 	private String month;
 	private String year;
-	private String date;
+	private Date date;
 	private String typeInteraction;
 	private String location;
 	private String citation;
@@ -23,7 +23,7 @@ public class Connection implements TableRowViewable {
 		this.day = day;
 		this.month = month;
 		this.year = year;
-		this.date = day + "/" + month + "/" + year;
+		this.date = new Date(Integer.parseInt(this.year), Integer.parseInt(this.month), Integer.parseInt(this.day));
 		this.typeInteraction = typeInteraction;
 		this.location = location;
 		this.citation = citation;
@@ -45,7 +45,7 @@ public class Connection implements TableRowViewable {
 	}
 	
 	public String dateToCSVText() {
-		String result = day + ":" + month + ":" +  year;
+		String result = month + ":" + day + ":" +  year;
 		return result;
 	}
 
@@ -70,7 +70,7 @@ public class Connection implements TableRowViewable {
 	 * @return String array of table row connection
 	 */
 	public String[] toTableRowArray() {
-		return new String[] { Integer.toString(edgeId), peopleList.toString(), date, typeInteraction, location,
+		return new String[] { Integer.toString(edgeId), peopleList.toString(), date.toString(), typeInteraction, location,
 				citation, socialNotes, direction };
 	}
 	
@@ -120,7 +120,7 @@ public class Connection implements TableRowViewable {
 		return year;
 	}
 	
-	public String getDate(){
+	public Date getDate(){
 		return date;
 	}
 
@@ -140,6 +140,10 @@ public class Connection implements TableRowViewable {
 	
 	public void setYear(String year) {
 		this.year = year;
+	}
+	
+	public void setDate() {
+		date.setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
 	}
 
 

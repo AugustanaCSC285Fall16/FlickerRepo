@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.*;
 
@@ -16,9 +17,6 @@ public class ExportGUI implements ActionListener{
 	private JButton cancel;
 	
 	private JFileChooser chooser;
-	
-	private boolean palladioSelect;
-	private boolean gephiSelect;
 	
 	HomeScreenGUI home;
 	
@@ -66,17 +64,44 @@ public class ExportGUI implements ActionListener{
 	 * Makes the browse gui
 	 */
 	
-	public void makeChooser(){
+	public String makeChooser(){
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setDialogTitle("Save");
 		chooser.showSaveDialog(frame);
 		try{
-			System.out.println(chooser.getSelectedFile().getAbsolutePath()); //the string of the file path
+			return chooser.getSelectedFile().getAbsolutePath(); //the string of the file path
 		} catch (NullPointerException e){
 			//they clicked cancel
+			return null;
 		}
-		System.out.println("what is happening");
+	}
+	
+	public boolean export(){
+		if(!palladio.isSelected() && !gephi.isSelected()){
+			JOptionPane.showMessageDialog(null, "Pick a file type!");
+			return false;
+		}
+		Exporter export;
+		String pathName = makeChooser();
+		if(!pathName.substring(2).contains(":")){ //skip the drive semicolon i.e. "H: ..."
+			if(palladio.isSelected() && pathName != null){
+				export = new PalladioExport();
+				export.export(home.getFilteredStorage(), pathName);
+				return true;
+			} else if (gephi.isSelected()){
+				export = new GephiExport();
+				export.export(home.getFilteredStorage(), pathName);
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location."+
+					"\n\n"+pathName+"\n\nNot a valid Windows directory (cannot have semicolons)");
+			return false;
+		}
+		
 		
 	}
 	
@@ -84,15 +109,14 @@ public class ExportGUI implements ActionListener{
 		if (event.getSource() == palladio) {
 			palladio.setSelected(true);
 			gephi.setSelected(false);
-			palladioSelect = true;
-			gephiSelect = false;
 		}else if (event.getSource() == gephi) {
 			palladio.setSelected(false);
 			gephi.setSelected(true);
-			gephiSelect = true;
-			palladioSelect = false;
 		} else if (event.getSource() == export){
-			makeChooser();
+			if(export()){
+				JOptionPane.showMessageDialog(null, "Successfully Saved! (I think?)");
+				frame.dispose();
+			}
 		} else {
 			frame.dispose();
 		}

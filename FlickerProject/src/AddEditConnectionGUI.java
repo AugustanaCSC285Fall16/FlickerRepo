@@ -29,8 +29,8 @@ public class AddEditConnectionGUI implements ActionListener {
 	private JFrame frame;
 	private JComboBox<Object> baseName;
 	// private JFormattedTextField date;
-	private JTextField day;
 	private JTextField month;
+	private JTextField day;
 	private JTextField year;
 	private JComboBox<Object> type;
 	private JComboBox<Object> location;
@@ -108,8 +108,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		// date = new JFormattedTextField(DATE_FORMAT);
 		// date.setColumns(7);
 		// date.setFocusLostBehavior(JFormattedTextField.PERSIST);
-		day = new JTextField(2);
 		month = new JTextField(2);
+		day = new JTextField(2);
 		year = new JTextField(4);
 		typeChoices = storage.getInteractionTypes();
 		type = new JComboBox<>(typeChoices.toArray());
@@ -152,8 +152,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		baseNamePanel.add(namePanel, BorderLayout.CENTER);
 		baseNamePanel.add(moreNamesPanel, BorderLayout.EAST);
 		// datePanel.add(date);
-		datePanel.add(day);
 		datePanel.add(month);
+		datePanel.add(day);
 		datePanel.add(year);
 		typePanel.add(type);
 		locationPanel.add(location);
@@ -290,8 +290,8 @@ public class AddEditConnectionGUI implements ActionListener {
 	void setDefault() {
 		additionalNames = 1;
 		targetNames.clear();
-		day.setText("");
 		month.setText("");
+		day.setText("");
 		year.setText("");
 		baseName.setSelectedIndex(0);
 		type.setSelectedIndex(0);
@@ -323,8 +323,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		direction.setSelectedIndex(directionChoices.indexOf(connectionToEdit.getDirection()));
 		socialNotes.setText(connectionToEdit.getSocialNotes());
 		citation.setText(connectionToEdit.getCitation());
-		day.setText(connectionToEdit.getDay());
 		month.setText(connectionToEdit.getMonth());
+		day.setText(connectionToEdit.getDay());
 		year.setText(connectionToEdit.getYear());
 		refreshPanel();
 	}
@@ -381,22 +381,26 @@ public class AddEditConnectionGUI implements ActionListener {
 			connectionEdited.setDirection(direction.getSelectedItem().toString());
 			connectionEdited.setCitation(citation.getText());
 			connectionEdited.setSocialNotes(socialNotes.getText());
-			connectionEdited.setDay(day.getText());
 			connectionEdited.setMonth(month.getText());
+			connectionEdited.setDay(day.getText());
 			connectionEdited.setYear(year.getText());
+			connectionEdited.setDate();
 			storage.saveConnections();
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 		} else {
 			int nextID = storage.incrementAndGetNextConnectionIdNum();
-
 			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(),
 					type.getSelectedItem().toString(), location.getSelectedItem().toString(), citation.getText(),
 					socialNotes.getText(), personListForConn, direction.getSelectedItem().toString());
+			if(!newConnection.getDate().isValidDate()) {
+				JOptionPane.showMessageDialog(null, "Invalid Date");
+			} else {
 			storage.addConnection(newConnection);
 			storage.saveConnections();
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+			}
 		}
 	}
 
@@ -410,11 +414,15 @@ public class AddEditConnectionGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {
-				submitClicked();
-				if(storage.isFiltered()) {
-					home.updateTable(home.getFilteredStorage());
+				if(month.getText().equals("") || day.getText().equals("") || year.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter a full date");
 				} else {
-					home.updateTable(storage);
+					submitClicked();
+					if(storage.isFiltered()) {
+						home.updateTable(home.getFilteredStorage());
+					} else {
+						home.updateTable(storage);
+					}
 				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
