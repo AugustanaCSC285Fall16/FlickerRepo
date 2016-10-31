@@ -100,7 +100,7 @@ public class ExportGUI implements ActionListener {
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location." + "\n\n" + pathName
-					+ "\n\nNot a valid Windows directory (cannot have semicolons)");
+					+ "\n\nNot a valid Windows directory (cannot have semicolons).");
 			return false;
 		}
 
@@ -115,7 +115,7 @@ public class ExportGUI implements ActionListener {
 			gephi.setSelected(true);
 		} else if (event.getSource() == export) {
 			if (export()) {
-				JOptionPane.showMessageDialog(null, "Successfully Saved! (I think?)");
+				JOptionPane.showMessageDialog(null, "Successfully Saved!");
 				frame.dispose();
 			}
 		} else {

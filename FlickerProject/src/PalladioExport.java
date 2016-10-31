@@ -12,7 +12,7 @@ public class PalladioExport implements Exporter {
 		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer;
 		try {
-			writer = new CSVWriter(new FileWriter(pathName));
+			writer = new CSVWriter(new FileWriter(pathName+".csv"));
 			writer.writeNext(new String[] { "Source", "Target" });
 		for (Connection connection : list) {
 			String direction = connection.getDirection();
