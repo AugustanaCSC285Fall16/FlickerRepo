@@ -11,8 +11,9 @@ import javax.swing.*;
 
 import com.opencsv.CSVWriter;
 
-public class NewUser implements ActionListener {
+public class NewUserGUI implements ActionListener {
 
+	private DataStorage storage;
 	private JFrame frame;
 	private JTextField fullName;
 	private JTextField userName;
@@ -21,12 +22,15 @@ public class NewUser implements ActionListener {
 	private JPasswordField confirm;
 	private JButton create;
 	private JButton cancel;
+	private boolean adminApproved;
 
-	public NewUser() {
-		frame = new JFrame("New User");
+	public NewUserGUI() throws IOException {
+		adminApproved = LoginGUI.getAdminApproved();
+		storage = DataStorage.getMainDataStorage();
+		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(300, 200);
-		frame.setTitle("Frame");
+		frame.setTitle("New User");
 		frame.setLayout(new BorderLayout());
 
 		fullName = new JTextField(15);
@@ -70,40 +74,56 @@ public class NewUser implements ActionListener {
 
 	}
 
-	// move to datastorage
-	public void addUser() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/UserData.csv"));
+	public boolean userExists(User newUser) throws IOException {
 		DataStorage storage = DataStorage.getMainDataStorage();
-		writer.writeNext(new String[] {"Id","Fullname", "Username", "Password", "Permissions" });
-		User newUser = new User(storage.incrementAndGetNextUserIdNum(), fullName.getText(), userName.getText(), password.getText(),
+		for (User user : storage.getUserArrayList()) {
+			if (user.getUsername().equals(newUser.getUsername()) || user.getFullName().equals(newUser.getFullName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void addAndSaveUser() throws IOException {
+		int nextID = storage.incrementAndGetNextUserIdNum();
+		User newUser = new User(nextID, fullName.getText(), userName.getText(), password.getText(),
 				permissions.getSelectedItem().toString());
-		writer.writeNext(newUser.toCSVRowArray());
-		writer.close();
+		if (userExists(newUser)) {
+			JOptionPane.showMessageDialog(frame, "User already exists in database!");
+		} else {
+			storage.addUser(newUser);
+			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+			storage.saveUsers();
+			frame.dispose();
+		}
 	}
 
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == create) {
-			if (Arrays.equals(password.getPassword(), confirm.getPassword())) {
-				if (permissions.getSelectedIndex() == 0) {
-					JOptionPane.showMessageDialog(null, "Cannot Create a new Admin");
-					// make it so if making a new admin, will have
-				} else {
-					frame.dispose();
-					try {
-						addUser();
-					} catch (IOException e) {
-						JOptionPane.showMessageDialog(null, "Could not add user");
-					}
-					LoginGUI login = new LoginGUI();
-				}
+			if (fullName.getText().equals("") || userName.getText().equals("") || password.getPassword().equals(null)
+					|| confirm.getPassword().equals(null)) {
+				JOptionPane.showMessageDialog(null, "Please fill out all of the fields!");
 			} else {
-				JOptionPane.showMessageDialog(null, "Passwords do not match");
+				if (!Arrays.equals(password.getPassword(), confirm.getPassword())) {
+					JOptionPane.showMessageDialog(null, "Passwords do not match");
+				} else {
+					adminApproved = LoginGUI.getAdminApproved();
+					if (permissions.getSelectedIndex() == 0 && adminApproved == false) {
+						LoginGUI adminLogin = new LoginGUI(true);
+					} else {
+						frame.dispose();
+						try {
+							addAndSaveUser();
+						} catch (IOException e) {
+							JOptionPane.showMessageDialog(null, "Could not add user");
+						}
+						LoginGUI login = new LoginGUI(false);
+					}
+				}
 			}
 		} else if (event.getSource() == cancel) {
 			frame.dispose();
-			LoginGUI login = new LoginGUI();
-
+			LoginGUI login = new LoginGUI(false);
 		}
 	}
-
 }

@@ -1,5 +1,5 @@
 
-public class ContainsQuery implements PersonQuery, ConnectionQuery {
+public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 	private String target;
 	private String fieldName;
 
@@ -39,6 +39,17 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery {
 			return connection.getTypeInteraction().contains(target);
 		} else {
 			throw new UnsupportedOperationException("Invalid query field");
+		}
+	}
+
+	@Override
+	public boolean accepts(User user){
+		if (fieldName.equals("Username")) {
+			return user.getUsername().equalsIgnoreCase(target);
+		} else if (fieldName.equals("Password")) {
+			return user.getPassword().equalsIgnoreCase(target);
+		} else {
+			throw new UnsupportedOperationException("Invalid Username or password");
 		}
 	}
 }

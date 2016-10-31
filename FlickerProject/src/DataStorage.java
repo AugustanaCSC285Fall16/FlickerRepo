@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+import javax.swing.JOptionPane;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -46,6 +48,7 @@ public class DataStorage {
 			primaryDataStorage = new DataStorage();
 			primaryDataStorage.loadPeople();
 			primaryDataStorage.loadConnections();
+			primaryDataStorage.loadUsers();
 			primaryDataStorage.loadIdAndConnNum();
 		}
 		return primaryDataStorage;
@@ -55,6 +58,7 @@ public class DataStorage {
 	private DataStorage() throws IOException {
 		personMap = new TreeMap<>();
 		connectionsMap = new TreeMap<>();
+		userMap = new TreeMap<>();
 		interactionChoices = new ArrayList<>();
 		locationChoices = new ArrayList<>();
 		cultureChoices = new ArrayList<>();
@@ -89,19 +93,39 @@ public class DataStorage {
 		userMap.put(user.getId(), user);
 	}
 	
+	public ArrayList<User> getUserArrayList() {
+		ArrayList<User> userList = new ArrayList<>(userMap.values());
+		return userList;
+	}
+	
+	public Collection<User> getUserList() {
+		return userMap.values();
+	}
+	
+	
 	/**
 	 * 
+	 * 
+	 * @param query
+	 * @return
 	 * @throws IOException
 	 */
-	void loadPeople() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + PERSON_FILE_NAME));
-
-		List<String[]> myRows = reader.readAll();
-		personHeaderRow = myRows.remove(0); // remove header row
-
-		for (String[] row : myRows) {
-			addPerson(new Person(row));
+	public User getUserFromFiltered(UserQuery query) throws IOException {
+		for(User user: primaryDataStorage.getUserList()) {
+			if(query.accepts(user)) {
+				return user;
+			}
 		}
+		return null;
+	}
+	
+	public boolean userFilter(UserQuery query) throws IOException {
+		for(User user: primaryDataStorage.getUserList()) {
+			if(query.accepts(user)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public DataStorage personFilter(PersonQuery query) throws IOException {
@@ -154,6 +178,21 @@ public class DataStorage {
 
 	public void addPerson(Person person) {
 		personMap.put(person.getID(), person);
+	}
+	
+	/**
+	 * 
+	 * @throws IOException
+	 */
+	void loadPeople() throws IOException {
+		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + PERSON_FILE_NAME));
+
+		List<String[]> myRows = reader.readAll();
+		personHeaderRow = myRows.remove(0); // remove header row
+
+		for (String[] row : myRows) {
+			addPerson(new Person(row));
+		}
 	}
 
 	public void savePeople() throws IOException {
@@ -344,7 +383,7 @@ public class DataStorage {
 
 	private void saveIdAndConnNum() throws IOException {
 		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + NEXT_ID_FILE_NAME));
-		String[] entries = { Integer.toString(nextIdNum), Integer.toString(nextConnNum) };
+		String[] entries = { Integer.toString(nextIdNum), Integer.toString(nextConnNum), Integer.toString(nextUserNum) };
 		writer.writeNext(entries);
 		writer.close();
 	}

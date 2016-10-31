@@ -51,7 +51,6 @@ public class AddEditPersonGUI implements ActionListener {
 	private JScrollPane scroll;
 
 	DataStorage storage;
-	SearchResultsGUI searchGUI;
 	private boolean editing;
 
 	// class that relates to controlled vocabulary
@@ -69,10 +68,9 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new person
 	 */
-	public AddEditPersonGUI(SearchResultsGUI searchGUI, HomeScreenGUI home, Person person) {
+	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
 		this.personEdited = person;
 		this.home = home;
-		this.searchGUI = searchGUI;
 
 		try {
 			storage = DataStorage.getMainDataStorage();
@@ -248,17 +246,6 @@ public class AddEditPersonGUI implements ActionListener {
 	}
 
 	/**
-	 * This method will add a delete button to the frame when the edit button is
-	 * clicked from within the home screen. It will only be displayed when that
-	 * button is clicked.
-	 */
-
-	public void addDeleteButton() {
-		editing = true;
-		refreshPanel();
-	}
-
-	/**
 	 * Will set the edited person's data to whatever was put into the GUI if it
 	 * is already a person filled in. Will Add a new person with all of the data
 	 * filled in the GUI if there was not a person already selected. Saves the
@@ -297,6 +284,12 @@ public class AddEditPersonGUI implements ActionListener {
 		}
 	}
 
+	/**
+	 * Checks to see if a person exists in our data. Either Name or node name.
+	 * 
+	 * @param newPerson
+	 * @return true if the person already exists in our data
+	 */
 	public boolean personExists(Person newPerson) {
 		for (Person person : storage.getPeopleArrayList()) {
 			if (person.getName().equals(newPerson.getName()) || person.getNodeName().equals(newPerson.getNodeName())) {
@@ -326,10 +319,8 @@ public class AddEditPersonGUI implements ActionListener {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
 			home.actionPerformed(event);
-		} else if (event.getSource() == cancel) {
+		} else { //cancel
 			frame.dispose();
-		} else if (event.getSource() == deleteButton) {
-			// delete this person...why tho?
 		}
 	}
 }

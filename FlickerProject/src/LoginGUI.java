@@ -13,8 +13,13 @@ public class LoginGUI implements ActionListener {
 	private JButton about;
 	private JLabel usernameLabel;
 	private JLabel passwordLabel;
+	private boolean isAdmin;
+	private static boolean adminApproved;
 
-	public LoginGUI() {
+
+	public LoginGUI(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+		this.adminApproved = false;
 		username = new JTextField(15);
 		password = new JPasswordField(15);
 		add = new JButton("Add User");
@@ -37,6 +42,11 @@ public class LoginGUI implements ActionListener {
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
+		
+		if (isAdmin){
+			add.setEnabled(false);
+			about.setEnabled(false);
+		}
 	}
 
 	/**
@@ -69,24 +79,44 @@ public class LoginGUI implements ActionListener {
 		southPanel.add(about);
 		return southPanel;
 	}
-
-	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == add) {
-			NewUser newUser = new NewUser();
-		} else if (event.getSource() == about){
-			try {
-				AboutScreen aboutScreen = new AboutScreen();
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Error with About Screen!");
+	
+	private void isCorrectUsernamePassword() throws IOException{
+		DataStorage storage = DataStorage.getMainDataStorage();
+		UserQuery usernameQuery = new ContainsQuery(username.getText(), "Username");
+		UserQuery passwordQuery = new ContainsQuery(password.getText(), "Password");
+		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)){
+			if (isAdmin){
+				setAdminApproved(true);
+				frame.dispose();
+			} else {
+			User loginUser = storage.getUserFromFiltered(usernameQuery);
+			HomeScreenGUI launchProgram = new HomeScreenGUI(loginUser.getPermissions());
+			frame.dispose();
 			}
 		} else {
-			try {
-				//Need to check the UserData to see if the user is in the data. Might need to make a User Map like we did for persons. 
-				HomeScreenGUI launchProgram = new HomeScreenGUI();
-				frame.dispose();
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Not a valid username or password!");
+			JOptionPane.showMessageDialog(null, "Not a valid username or password!");
+		}
+	}
+	
+	public static boolean getAdminApproved() {
+		return adminApproved;
+	}
+
+	public static void setAdminApproved(boolean adminApproved) {
+		LoginGUI.adminApproved = adminApproved;
+	}
+
+	public void actionPerformed(ActionEvent event) {
+		try {
+			if (event.getSource() == add) {
+				NewUserGUI newUserGUI = new NewUserGUI();
+			} else if (event.getSource() == about) {
+				AboutScreen aboutScreen = new AboutScreen();
+			} else {
+				isCorrectUsernamePassword();
 			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "An Error Occured!");
 		}
 	}
 }

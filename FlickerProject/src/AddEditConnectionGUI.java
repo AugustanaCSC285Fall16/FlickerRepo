@@ -69,7 +69,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
 	HomeScreenGUI home;
-	SearchResultsGUI searchGUI;
 
 	private boolean editing;
 	DataStorage storage;
@@ -90,7 +89,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new connection
 	 */
-	public AddEditConnectionGUI(SearchResultsGUI searchGUI,HomeScreenGUI home, Connection connection) {
+	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
 		try {
 			storage = DataStorage.getMainDataStorage();
 		} catch (IOException e) {
@@ -99,7 +98,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		this.connectionEdited = connection;
 		this.home = home;
-		this.searchGUI = searchGUI;
 		
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
