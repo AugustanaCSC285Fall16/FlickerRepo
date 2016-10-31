@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+import javax.swing.JOptionPane;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -9,8 +11,10 @@ public class DataStorage {
 	public Map<Integer, User> userMap;
 	public Map<Integer, Person> personMap;
 	private Map<Integer, Connection> connectionsMap;
-	private String[] personHeaderRow = {"Id","Name","Node Name","Occupation","Gender","Cultural ID","Biographical Notes"};
-	private String[] connectionHeaderRow = {"Edge","Connecting Name List","Date","Type of Interaction","Location","Citation","Social Notes","Direction"};
+	private String[] personHeaderRow = { "Id", "Name", "Node Name", "Occupation", "Gender", "Cultural ID",
+			"Biographical Notes" };
+	private String[] connectionHeaderRow = { "Edge", "Connecting Name List", "Date", "Type of Interaction", "Location",
+			"Citation", "Social Notes", "Direction" };
 	private String[] userHeaderRow;
 	private ArrayList<String> interactionChoices;
 	private ArrayList<String> locationChoices;
@@ -75,7 +79,7 @@ public class DataStorage {
 			addUser(new User(row));
 		}
 	}
-	
+
 	public void saveUsers() throws IOException {
 		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + USER_DATA_FILE_NAME));
 		writer.writeNext(userHeaderRow);
@@ -84,11 +88,11 @@ public class DataStorage {
 		}
 		writer.close();
 	}
-	
+
 	public void addUser(User user) {
 		userMap.put(user.getId(), user);
 	}
-	
+
 	/**
 	 * 
 	 * @throws IOException
@@ -103,22 +107,22 @@ public class DataStorage {
 			addPerson(new Person(row));
 		}
 	}
-	
+
 	public DataStorage personFilter(PersonQuery query) throws IOException {
 		DataStorage filteredData = new DataStorage();
-		for(Person person: primaryDataStorage.getPeopleList()) {
-			if(query.accepts(person)) {
+		for (Person person : primaryDataStorage.getPeopleList()) {
+			if (query.accepts(person)) {
 				filteredData.addPerson(person);
 			}
 		}
 		return filteredData;
 	}
-	
+
 	public DataStorage connectionFilter(ConnectionQuery query) throws IOException {
 		DataStorage filteredData = new DataStorage();
-		for(Connection connection: primaryDataStorage.getConnectionList()) {
-			if(query.accepts(connection)) {
-				for(Person person: connection.getPeopleList()) {
+		for (Connection connection : primaryDataStorage.getConnectionList()) {
+			if (query.accepts(connection)) {
+				for (Person person : connection.getPeopleList()) {
 					filteredData.addPerson(person);
 				}
 				filteredData.addConnection(connection);
@@ -126,11 +130,11 @@ public class DataStorage {
 		}
 		return filteredData;
 	}
-	
+
 	public void setFiltered(boolean operator) {
 		isFiltered = operator;
 	}
-	
+
 	public boolean isFiltered() {
 		return isFiltered;
 	}
@@ -185,8 +189,8 @@ public class DataStorage {
 
 			String[] dateArray = dateText.split(":");
 			// System.out.println(dateArray.toString());
-			String day = dateArray[0];
-			String month = dateArray[1];
+			String month = dateArray[0];
+			String day = dateArray[1];
 			String year = dateArray[2];
 
 			for (String idStr : idArray) {
@@ -217,7 +221,7 @@ public class DataStorage {
 	public Collection<Connection> getConnectionList() {
 		return connectionsMap.values();
 	}
-	
+
 	public ArrayList<Connection> getConnectionArrayList() {
 		ArrayList<Connection> connectionList = new ArrayList<>(connectionsMap.values());
 		return connectionList;
@@ -298,20 +302,20 @@ public class DataStorage {
 	public String[] toCSVControlledVocabArray(String item) {
 		return new String[] { item };
 	}
-	
-	public void addOccupationChoice(String item){
+
+	public void addOccupationChoice(String item) {
 		occupationChoices.add(item.toLowerCase());
 	}
-	
-	public void addCulteralIdChoice(String item){
+
+	public void addCulteralIdChoice(String item) {
 		cultureChoices.add(item.toLowerCase());
 	}
-	
-	public void addLocationChoice(String item){
+
+	public void addLocationChoice(String item) {
 		locationChoices.add(item.toLowerCase());
 	}
-	
-	public void addInteractionChoice(String item){
+
+	public void addInteractionChoice(String item) {
 		interactionChoices.add(item.toLowerCase());
 	}
 
@@ -374,7 +378,7 @@ public class DataStorage {
 
 		return nextConnNum;
 	}
-	
+
 	/**
 	 * .... also updates the CSV file that stores these ID numbers
 	 * persistently...

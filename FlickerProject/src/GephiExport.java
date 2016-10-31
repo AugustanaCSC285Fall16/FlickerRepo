@@ -1,55 +1,41 @@
-import java.io.*;
-import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.opencsv.CSVWriter;
 
-public class Export {
-	// Data fields
-	DataStorage storage;
+public class GephiExport implements Exporter{
 
-	public Export() {
+	@Override
+	public void export(DataStorage storage, String fileName) {
+		
 		try {
-			storage = DataStorage.getMainDataStorage();
+			exportToGephiEdges(storage, fileName);
+			exportToGephiNodes(storage, fileName);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
-
-	public void exportToPalladio(Collection<Connection> list) throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/palladioData.csv"));
-		writer.writeNext(new String[] { "Source", "Target" });
-		for (Connection connection : list) {
-			String direction = connection.getDirection();
-			List<Person> personList = connection.getPeopleList();
-			if (direction.equals("One-to-One")) {
-				writer.writeNext(connection.toPalladioArray(personList.get(0), personList.get(1)));
-			} else if (direction.equals("One-to-Many")) {
-				for (int i = 1; i < personList.size(); i++) {
-					writer.writeNext(connection.toPalladioArray(personList.get(0), personList.get(i)));
-				}
-			} else if (direction.equals("Many-to-Many")) {
-				for (int i = 0; i < personList.size() - 1; i++) {
-					for (int j = i + 1; j < personList.size(); j++) {
-						writer.writeNext(connection.toPalladioArray(personList.get(i), personList.get(j)));
-					}
-				}
+	
+	public void exportToGephiNodes(DataStorage storage, String fileName) throws IOException {
+		Collection<Connection> list = storage.getConnectionList();
+		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/gephiNodes.csv"));
+		writer.writeNext(new String[] { "Node ID", "Label" });
+		ArrayList<Person> personList = new ArrayList<>();
+		for(Connection connection: list) {
+			for (Person person : personList) {
+				writer.writeNext(person.toGephiNodeArray());
 			}
 		}
 		writer.close();
 	}
 
-	public void exportToGephiNodes() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/gephiNodes.csv"));
-		writer.writeNext(new String[] { "Node ID", "Label" });
-		Collection<Person> personList = storage.getPeopleList();
-		for (Person person : personList) {
-			writer.writeNext(person.toGephiNodeArray());
-		}
-		writer.close();
-	}
-
-	public void exportToGephiEdges(Collection<Connection> list) throws IOException {
+	public void exportToGephiEdges(DataStorage storage, String fileName) throws IOException {
+		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/gephiEdges.csv"));
 		writer.writeNext(new String[] { "Source", "Target", "Id", "Date", "Location", "Source type" });
 		int edgeId = 1;
@@ -81,4 +67,5 @@ public class Export {
 		}
 		writer.close();
 	}
+
 }

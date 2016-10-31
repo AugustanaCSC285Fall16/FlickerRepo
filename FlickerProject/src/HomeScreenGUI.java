@@ -29,10 +29,14 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton resetFilter;
 	private JButton export;
 	private JPanel searchPanel;
+	private JPanel criteriaPanel;
 	private JLabel filterOptionsLabel;
 	private JComboBox<String> filterOptions;
 	private JLabel newDataLabel;
 	private JTextField newData;
+	private JTextField searchDay;
+	private JTextField searchMonth;
+	private JTextField searchYear;
 	private JButton submit;
 	private JTabbedPane databases;
 	private JPanel centerPanel;
@@ -70,6 +74,7 @@ public class HomeScreenGUI implements ActionListener {
 		save.addActionListener(this);
 		submit.addActionListener(this);
 		resetFilter.addActionListener(this);
+		filterOptions.addActionListener(this);
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
@@ -140,8 +145,7 @@ public class HomeScreenGUI implements ActionListener {
 		centerPanel = new JPanel(new BorderLayout());
 		System.out.println(storage.getPeopleArrayList());
 		personTableDisplay = createDisplayTable(storage.getPersonHeaderRow(), storage.getPeopleList());
-		connectionTableDisplay = createDisplayTable(storage.getConnectionHeaderRow(),
-				storage.getConnectionList());
+		connectionTableDisplay = createDisplayTable(storage.getConnectionHeaderRow(), storage.getConnectionList());
 		personPane = new JScrollPane();
 		connectionPane = new JScrollPane();
 		personPane.getViewport().add(personTableDisplay);
@@ -154,20 +158,47 @@ public class HomeScreenGUI implements ActionListener {
 
 	private JPanel createSearchPanel() {
 		searchPanel = new JPanel(new FlowLayout());
+		submit = new JButton("Submit");
+		resetFilter = new JButton("Reset");
+		resetFilter.setEnabled(false);
+		searchPanel.add(createCriteriaPanel());
+		searchPanel.add(submit);
+		searchPanel.add(resetFilter);
+		return searchPanel;
+	}
+	
+	public JPanel createCriteriaPanel() {
+		criteriaPanel = new JPanel();
 		filterOptionsLabel = new JLabel("Filter option: ");
 		filterOptions = new JComboBox<>(FIELDS);
 		newDataLabel = new JLabel("Criteria: ");
 		newData = new JTextField(15);
-		submit = new JButton("Submit");
-		resetFilter = new JButton("Reset");
-		resetFilter.setEnabled(false);
-		searchPanel.add(filterOptionsLabel);
-		searchPanel.add(filterOptions);
-		searchPanel.add(newDataLabel);
-		searchPanel.add(newData);
-		searchPanel.add(submit);
-		searchPanel.add(resetFilter);
-		return searchPanel;
+		criteriaPanel.add(filterOptionsLabel);
+		criteriaPanel.add(filterOptions);
+		criteriaPanel.add(newDataLabel);
+		criteriaPanel.add(newData);
+		return criteriaPanel;
+	}
+
+	private void changeSearchPanel() {
+		int option = filterOptions.getSelectedIndex();
+		if (option == 5) {
+			criteriaPanel.remove(newData);
+			searchDay = new JTextField(2);
+			searchMonth = new JTextField(2);
+			searchYear = new JTextField(4);
+			criteriaPanel.add(searchMonth);
+			criteriaPanel.add(searchDay);
+			criteriaPanel.add(searchYear);
+			frame.revalidate();
+		} else {
+			criteriaPanel.remove(searchMonth);
+			criteriaPanel.remove(searchDay);
+			criteriaPanel.remove(searchYear);
+			criteriaPanel.add(newData);
+			filterOptions.setSelectedIndex(option);
+			frame.revalidate();
+		}
 	}
 
 	/**
@@ -196,10 +227,10 @@ public class HomeScreenGUI implements ActionListener {
 		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		if (val == 0) { // if artist
-			AddEditPersonGUI personGUI = new AddEditPersonGUI(null, this, null);
+			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
 			personGUI.makeVisible();
 		} else if (val == 1) { // if connection
-			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(null, this, null);
+			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null);
 			connectionGUI.makeVisible();
 		} else if (val == 2) { // if controlled vocabulary
 			AddData vocabGUI = new AddData();
@@ -220,7 +251,7 @@ public class HomeScreenGUI implements ActionListener {
 				personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				String IDCellText = (String) personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int personID = Integer.parseInt(IDCellText);
-				AddEditPersonGUI personGUI = new AddEditPersonGUI(null, this, mainStorage.getPersonFromID(personID));
+				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID));
 				personGUI.addDeleteButton();
 				personGUI.makeVisible();
 			} else {
@@ -231,7 +262,7 @@ public class HomeScreenGUI implements ActionListener {
 			if (selectedRow > -1) {
 				String IDCellText = (String) connectionTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int connectionID = Integer.parseInt(IDCellText);
-				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(null, this,
+				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,
 						mainStorage.getConnectionFromID(connectionID));
 				connectionGUI.addDeleteButton();
 				connectionGUI.makeVisible();
@@ -245,24 +276,41 @@ public class HomeScreenGUI implements ActionListener {
 	public void submitSearch() throws IOException {
 		int option = filterOptions.getSelectedIndex();
 		if (databases.getSelectedComponent() == personPane) {
-			export.setEnabled(false);
-			System.out.println(newData.getText());
-			System.out.println(filterOptions.getSelectedItem().toString());
-			PersonQuery personQuery = new ContainsQuery(newData.getText(), filterOptions.getSelectedItem().toString());
-			filtered = mainStorage.personFilter(personQuery);
-			System.out.println("update");
-			updateTable(filtered);
+			if (option == 5 || option == 6 || option == 7) {
+				JOptionPane.showMessageDialog(null, "Invalid query option");
+			} else {
+				if(newData.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter search criteria");
+				}
+				export.setEnabled(false);
+				PersonQuery personQuery = new ContainsQuery(newData.getText(),
+						filterOptions.getSelectedItem().toString());
+				filtered = mainStorage.personFilter(personQuery);
+				System.out.println("update");
+				updateTable(filtered);
+			}
+
 		} else { // is connectionTableDisplay
 			if (option == 5) {
-				// ConnectionQuery connectionQuery = new DateQuery();
+				if (searchDay.getText().equals("") || searchMonth.getText().equals("")
+						|| searchYear.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter a full date");
+				}
+				ConnectionQuery connectionQuery = new DateQuery(searchDay.getText(), searchMonth.getText(), searchYear.getText());
+				filtered = mainStorage.connectionFilter(connectionQuery);
 			} else {
 				ConnectionQuery connectionQuery = new ContainsQuery(newData.getText(),
 						filterOptions.getSelectedItem().toString());
 				filtered = mainStorage.connectionFilter(connectionQuery);
-				updateTable(filtered);
 			}
+			if(!filtered.getConnectionArrayList().isEmpty()) {
+				updateTable(filtered);
+			} else {
+				JOptionPane.showMessageDialog(null, "No results found");
+			}
+			
 		}
-		
+
 	}
 
 	/**
@@ -284,7 +332,7 @@ public class HomeScreenGUI implements ActionListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if(source == resetFilter) {
+		} else if (source == resetFilter) {
 			try {
 				updateTable(mainStorage);
 				newData.setText("");
@@ -301,15 +349,9 @@ public class HomeScreenGUI implements ActionListener {
 		} else if (source == export) {
 			ExportGUI exportGui = new ExportGUI(this);
 			exportGUI.makeVisible();
-			Export exportAll = new Export();
-			try {
-				exportAll.exportToPalladio(mainStorage.getConnectionList());
-				exportAll.exportToGephiNodes();
-				exportAll.exportToGephiEdges(mainStorage.getConnectionList());
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Could not export the data.");
-			}
 
+		} else if(source == filterOptions){
+			changeSearchPanel();
 		}
 	}
 }

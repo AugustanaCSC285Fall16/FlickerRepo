@@ -69,7 +69,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
 	HomeScreenGUI home;
-	SearchResultsGUI searchGUI;
 
 	private boolean editing;
 	DataStorage storage;
@@ -90,7 +89,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @param person
 	 *            - to be edited or null if we are adding a new connection
 	 */
-	public AddEditConnectionGUI(SearchResultsGUI searchGUI,HomeScreenGUI home, Connection connection) {
+	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
 		try {
 			storage = DataStorage.getMainDataStorage();
 		} catch (IOException e) {
@@ -99,7 +98,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		this.connectionEdited = connection;
 		this.home = home;
-		this.searchGUI = searchGUI;
 		
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
@@ -391,14 +389,17 @@ public class AddEditConnectionGUI implements ActionListener {
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 		} else {
 			int nextID = storage.incrementAndGetNextConnectionIdNum();
-
 			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(),
 					type.getSelectedItem().toString(), location.getSelectedItem().toString(), citation.getText(),
 					socialNotes.getText(), personListForConn, direction.getSelectedItem().toString());
+			if(!newConnection.getDate().isValidDate()) {
+				JOptionPane.showMessageDialog(null, "Invalid Date");
+			} else {
 			storage.addConnection(newConnection);
 			storage.saveConnections();
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+			}
 		}
 	}
 
@@ -412,11 +413,15 @@ public class AddEditConnectionGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {
-				submitClicked();
-				if(storage.isFiltered()) {
-					home.updateTable(home.getFilteredStorage());
+				if(day.getText().equals("") || month.getText().equals("") || year.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter a full date");
 				} else {
-					home.updateTable(storage);
+					submitClicked();
+					if(storage.isFiltered()) {
+						home.updateTable(home.getFilteredStorage());
+					} else {
+						home.updateTable(storage);
+					}
 				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
