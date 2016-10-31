@@ -9,11 +9,11 @@ import com.opencsv.CSVWriter;
 public class GephiExport implements Exporter{
 
 	@Override
-	public void export(DataStorage storage, String fileName) {
+	public void export(DataStorage storage, String pathName) {
 		
 		try {
-			exportToGephiEdges(storage, fileName);
-			exportToGephiNodes(storage, fileName);
+			exportToGephiEdges(storage, pathName);
+			exportToGephiNodes(storage, pathName);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

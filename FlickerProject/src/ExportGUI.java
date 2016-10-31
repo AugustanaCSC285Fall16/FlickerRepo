@@ -17,9 +17,6 @@ public class ExportGUI implements ActionListener{
 	
 	private JFileChooser chooser;
 	
-	private boolean palladioSelect;
-	private boolean gephiSelect;
-	
 	HomeScreenGUI home;
 	
 	public ExportGUI(HomeScreenGUI home) {
@@ -66,33 +63,42 @@ public class ExportGUI implements ActionListener{
 	 * Makes the browse gui
 	 */
 	
-	public void makeChooser(){
+	public String makeChooser(){
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setDialogTitle("choosertitle");
 		chooser.showSaveDialog(frame);
 		try{
-			System.out.println(chooser.getSelectedFile().getAbsolutePath()); //the string of the file path
+			return chooser.getSelectedFile().getAbsolutePath(); //the string of the file path
 		} catch (NullPointerException e){
 			//they clicked cancel
+			return null;
 		}
-		System.out.println("what is happening");
-		
+	}
+	
+	public void export(String pathName){
+		Exporter export;
+		if(palladio.isSelected()){
+			export = new PalladioExport();
+			export.export(home.getFilteredStorage(), pathName);
+		} else {
+			export = new GephiExport();
+			export.export(home.getFilteredStorage(), pathName);
+		}
 	}
 	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == palladio) {
 			palladio.setSelected(true);
 			gephi.setSelected(false);
-			palladioSelect = true;
-			gephiSelect = false;
 		}else if (event.getSource() == gephi) {
 			palladio.setSelected(false);
 			gephi.setSelected(true);
-			gephiSelect = true;
-			palladioSelect = false;
 		} else if (event.getSource() == export){
-			makeChooser();
+			String pathName = makeChooser();
+			export(pathName);
+			JOptionPane.showMessageDialog(null, "Successfully Saved! (I think?)");
+			frame.dispose();
 		} else {
 			frame.dispose();
 		}

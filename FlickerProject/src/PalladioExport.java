@@ -8,7 +8,7 @@ import com.opencsv.CSVWriter;
 public class PalladioExport implements Exporter {
 
 	@Override
-	public void export(DataStorage storage, String fileName) {
+	public void export(DataStorage storage, String pathName) {
 		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer;
 		try {
