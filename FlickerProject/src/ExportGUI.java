@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 public class ExportGUI implements ActionListener {
@@ -90,7 +89,7 @@ public class ExportGUI implements ActionListener {
 				export = new PalladioExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
-			} else if (gephi.isSelected()) {
+			} else if (gephi.isSelected() && pathName != null) {
 				export = new GephiExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
@@ -114,7 +113,7 @@ public class ExportGUI implements ActionListener {
 			gephi.setSelected(true);
 		} else if (event.getSource() == export) {
 			if (export()) {
-				JOptionPane.showMessageDialog(null, "Successfully Saved! (I think?)");
+				JOptionPane.showMessageDialog(null, "Successfully Saved!");
 				frame.dispose();
 			}
 		} else {

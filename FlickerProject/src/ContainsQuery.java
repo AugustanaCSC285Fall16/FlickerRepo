@@ -10,7 +10,7 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 
 	public boolean accepts(Person person) {
 		if (fieldName.equals("Name")) {
-			return person.getName().contains(target);
+			return person.getName().toLowerCase().contains(target.toLowerCase());
 		} else if (fieldName.equals("CulturalID")) {
 			return person.getCulturalId().equalsIgnoreCase(target);
 		} else if (fieldName.equals("Node Name")) {

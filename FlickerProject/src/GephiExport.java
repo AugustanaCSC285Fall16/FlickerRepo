@@ -23,12 +23,18 @@ public class GephiExport implements Exporter {
 
 	public void exportToGephiNodes(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName), "UTF-8"));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName+"_nodes.csv"), "UTF-8"));
 		writer.writeNext(new String[] { "Node ID", "Label" });
-		ArrayList<Person> personList = new ArrayList<>();
-		for (Connection connection : list) {
+		List<Person> personList = new ArrayList<>();
+		List<Person> gephiNodeList = new ArrayList<>();
+		for(Connection connection: list) {
+			personList = connection.getPeopleList();
 			for (Person person : personList) {
-				writer.writeNext(person.toGephiNodeArray());
+				if(!gephiNodeList.contains(person)) {
+					gephiNodeList.add(person);
+					System.out.println(person);
+					writer.writeNext(person.toGephiNodeArray());
+				}
 			}
 		}
 		writer.close();
@@ -36,7 +42,7 @@ public class GephiExport implements Exporter {
 
 	public void exportToGephiEdges(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName), "UTF-8"));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName+"_edges.csv"), "UTF-8"));
 		writer.writeNext(new String[] { "Source", "Target", "Id", "Date", "Location", "Source type" });
 		int edgeId = 1;
 		for (Connection connection : list) {
