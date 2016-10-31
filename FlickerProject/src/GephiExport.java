@@ -21,9 +21,9 @@ public class GephiExport implements Exporter{
 		
 	}
 	
-	public void exportToGephiNodes(DataStorage storage, String fileName) throws IOException {
+	public void exportToGephiNodes(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
-		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/gephiNodes.csv"));
+		CSVWriter writer = new CSVWriter(new FileWriter(pathName));
 		writer.writeNext(new String[] { "Node ID", "Label" });
 		ArrayList<Person> personList = new ArrayList<>();
 		for(Connection connection: list) {
@@ -34,9 +34,9 @@ public class GephiExport implements Exporter{
 		writer.close();
 	}
 
-	public void exportToGephiEdges(DataStorage storage, String fileName) throws IOException {
+	public void exportToGephiEdges(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
-		CSVWriter writer = new CSVWriter(new FileWriter("DataFiles/gephiEdges.csv"));
+		CSVWriter writer = new CSVWriter(new FileWriter(pathName));
 		writer.writeNext(new String[] { "Source", "Target", "Id", "Date", "Location", "Source type" });
 		int edgeId = 1;
 		for (Connection connection : list) {

@@ -76,14 +76,24 @@ public class ExportGUI implements ActionListener{
 		}
 	}
 	
-	public void export(String pathName){
+	public boolean export(){
 		Exporter export;
-		if(palladio.isSelected()){
+		if(!palladio.isSelected() && !gephi.isSelected()){
+			JOptionPane.showMessageDialog(null, "Pick a file type!");
+			return false;
+		}
+		String pathName = makeChooser();
+		if(palladio.isSelected() && pathName != null){
 			export = new PalladioExport();
 			export.export(home.getFilteredStorage(), pathName);
-		} else {
+			return true;
+		} else if (gephi.isSelected()){
 			export = new GephiExport();
-			export.export(home.getFilteredStorage(), pathName);
+			export.export(home.getFilteredStorage(), makeChooser());
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(null, "Pick a file type!");
+			return false;
 		}
 	}
 	
@@ -95,10 +105,10 @@ public class ExportGUI implements ActionListener{
 			palladio.setSelected(false);
 			gephi.setSelected(true);
 		} else if (event.getSource() == export){
-			String pathName = makeChooser();
-			export(pathName);
-			JOptionPane.showMessageDialog(null, "Successfully Saved! (I think?)");
-			frame.dispose();
+			if(export()){
+				JOptionPane.showMessageDialog(null, "Successfully Saved! (I think?)");
+				frame.dispose();
+			}
 		} else {
 			frame.dispose();
 		}

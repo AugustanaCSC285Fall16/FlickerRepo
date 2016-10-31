@@ -216,7 +216,11 @@ public class HomeScreenGUI implements ActionListener {
 	}
 
 	public DataStorage getFilteredStorage() {
-		return filtered;
+		if(mainStorage.isFiltered()){
+			return filtered;
+		} else {
+			return mainStorage;
+		}
 	}
 
 	/**
