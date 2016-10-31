@@ -48,7 +48,8 @@ public class HomeScreenGUI implements ActionListener {
 
 	private ExportGUI exportGUI;
 
-	public HomeScreenGUI() throws IOException {
+	public HomeScreenGUI(String permission) throws IOException {
+		
 		save = new JButton("Save Changes");
 		add = new JButton("Add");
 		edit = new JButton("Edit");
@@ -78,6 +79,11 @@ public class HomeScreenGUI implements ActionListener {
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
+		
+		if (permission.equals("Student")){
+			add.setEnabled(false);
+			edit.setEnabled(false);
+		}
 	}
 
 	/**
@@ -257,7 +263,6 @@ public class HomeScreenGUI implements ActionListener {
 				String IDCellText = (String) personTableDisplay.getModel().getValueAt(selectedRow, 0);
 				int personID = Integer.parseInt(IDCellText);
 				AddEditPersonGUI personGUI = new AddEditPersonGUI(this, mainStorage.getPersonFromID(personID));
-				personGUI.addDeleteButton();
 				personGUI.makeVisible();
 			} else {
 				JOptionPane.showMessageDialog(frame, "Click a row first!");

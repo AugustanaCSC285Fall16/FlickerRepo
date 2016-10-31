@@ -1,3 +1,4 @@
+import java.io.IOException;
 
 public class User {
 	// data fields
@@ -56,7 +57,7 @@ public class User {
 		this.fullName = fullName;
 	}
 
-	public String isPermissions() {
+	public String getPermissions() {
 		return permissions;
 	}
 
@@ -67,6 +68,8 @@ public class User {
 	public String[] toCSVRowArray(){
 		return new String[] {"" + id, fullName, username, password, permissions};
 	}
+	
+	
 	
 	
 }

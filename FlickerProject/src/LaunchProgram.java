@@ -11,7 +11,7 @@ public class LaunchProgram {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		LoginGUI start = new LoginGUI();
+		LoginGUI start = new LoginGUI(false);
 
 	}
 }

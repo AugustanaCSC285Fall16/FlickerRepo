@@ -69,7 +69,7 @@ public class ExportGUI implements ActionListener{
 	public String makeChooser(){
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
-		chooser.setDialogTitle("choosertitle");
+		chooser.setDialogTitle("Save");
 		chooser.showSaveDialog(frame);
 		try{
 			return chooser.getSelectedFile().getAbsolutePath(); //the string of the file path
