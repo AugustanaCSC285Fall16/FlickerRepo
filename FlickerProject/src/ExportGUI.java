@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.FileNotFoundException;
+
 
 import javax.swing.*;
 
@@ -78,11 +80,11 @@ public class ExportGUI implements ActionListener{
 	}
 	
 	public boolean export(){
-		Exporter export;
 		if(!palladio.isSelected() && !gephi.isSelected()){
 			JOptionPane.showMessageDialog(null, "Pick a file type!");
 			return false;
 		}
+		Exporter export;
 		String pathName = makeChooser();
 		if(palladio.isSelected() && pathName != null){
 			export = new PalladioExport();
@@ -93,9 +95,12 @@ public class ExportGUI implements ActionListener{
 			export.export(home.getStorage(), makeChooser());
 			return true;
 		} else {
-			JOptionPane.showMessageDialog(null, "Pick a file type!");
+			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location."+
+					"\n\n"+pathName+"\n\nNot a valid Windows directory (cannot have semicolons)");
 			return false;
 		}
+		
+		
 	}
 	
 	public void actionPerformed(ActionEvent event) {
