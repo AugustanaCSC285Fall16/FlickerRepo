@@ -92,7 +92,6 @@ public class ExportGUI implements ActionListener{
 			export.export(home.getFilteredStorage(), pathName);
 			return true;
 		} else {
-			JOptionPane.showMessageDialog(null, "Pick a file type!");
 			return false;
 		}
 	}
