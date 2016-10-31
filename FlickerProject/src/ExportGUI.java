@@ -89,7 +89,7 @@ public class ExportGUI implements ActionListener{
 			return true;
 		} else if (gephi.isSelected()){
 			export = new GephiExport();
-			export.export(home.getFilteredStorage(), makeChooser());
+			export.export(home.getFilteredStorage(), pathName);
 			return true;
 		} else {
 			JOptionPane.showMessageDialog(null, "Pick a file type!");
