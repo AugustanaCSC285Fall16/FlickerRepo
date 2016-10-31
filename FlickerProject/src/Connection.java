@@ -141,6 +141,10 @@ public class Connection implements TableRowViewable {
 	public void setYear(String year) {
 		this.year = year;
 	}
+	
+	public void setDate() {
+		date.setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+	}
 
 
 	/**
