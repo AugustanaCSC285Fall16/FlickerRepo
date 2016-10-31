@@ -32,10 +32,9 @@ public class GephiExport implements Exporter{
 			for (Person person : personList) {
 				if(!gephiNodeList.contains(person)) {
 					gephiNodeList.add(person);
+					System.out.println(person);
+					writer.writeNext(person.toGephiNodeArray());
 				}
-			}
-			for(Person person : gephiNodeList) {
-				writer.writeNext(person.toGephiNodeArray());
 			}
 		}
 		writer.close();
