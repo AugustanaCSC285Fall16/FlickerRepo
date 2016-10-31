@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -85,11 +86,11 @@ public class ExportGUI implements ActionListener{
 		String pathName = makeChooser();
 		if(palladio.isSelected() && pathName != null){
 			export = new PalladioExport();
-			export.export(home.getFilteredStorage(), pathName);
+			export.export(home.getStorage(), pathName);
 			return true;
 		} else if (gephi.isSelected()){
 			export = new GephiExport();
-			export.export(home.getFilteredStorage(), makeChooser());
+			export.export(home.getStorage(), makeChooser());
 			return true;
 		} else {
 			JOptionPane.showMessageDialog(null, "Pick a file type!");

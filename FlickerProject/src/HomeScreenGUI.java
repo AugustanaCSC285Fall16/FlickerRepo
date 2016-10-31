@@ -215,7 +215,7 @@ public class HomeScreenGUI implements ActionListener {
 		frame.revalidate();
 	}
 
-	public DataStorage getFilteredStorage() {
+	public DataStorage getStorage() {
 		if(mainStorage.isFiltered()){
 			return filtered;
 		} else {
