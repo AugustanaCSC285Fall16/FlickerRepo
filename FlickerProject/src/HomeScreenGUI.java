@@ -166,7 +166,7 @@ public class HomeScreenGUI implements ActionListener {
 		searchPanel.add(resetFilter);
 		return searchPanel;
 	}
-	
+
 	public JPanel createCriteriaPanel() {
 		criteriaPanel = new JPanel();
 		filterOptionsLabel = new JLabel("Filter option: ");
@@ -192,9 +192,10 @@ public class HomeScreenGUI implements ActionListener {
 			criteriaPanel.add(searchYear);
 			frame.revalidate();
 		} else {
-			criteriaPanel.remove(searchMonth);
-			criteriaPanel.remove(searchDay);
-			criteriaPanel.remove(searchYear);
+			criteriaPanel.removeAll();
+			criteriaPanel.add(filterOptionsLabel);
+			criteriaPanel.add(filterOptions);
+			criteriaPanel.add(newDataLabel);
 			criteriaPanel.add(newData);
 			filterOptions.setSelectedIndex(option);
 			frame.revalidate();
@@ -279,7 +280,7 @@ public class HomeScreenGUI implements ActionListener {
 			if (option == 5 || option == 6 || option == 7) {
 				JOptionPane.showMessageDialog(null, "Invalid query option");
 			} else {
-				if(newData.getText().equals("")) {
+				if (newData.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Please enter search criteria");
 				}
 				export.setEnabled(false);
@@ -291,24 +292,37 @@ public class HomeScreenGUI implements ActionListener {
 			}
 
 		} else { // is connectionTableDisplay
+			export.setEnabled(true);
 			if (option == 5) {
 				if (searchDay.getText().equals("") || searchMonth.getText().equals("")
 						|| searchYear.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Please enter a full date");
+				} else {
+					Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
+							Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
+					if (!targetDate.isValidDate()) {
+						JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
+					} else {
+						ConnectionQuery connectionQuery = new DateQuery(targetDate);
+						filtered = mainStorage.connectionFilter(connectionQuery);
+						if (!filtered.getConnectionArrayList().isEmpty()) {
+							updateTable(filtered);
+						} else {
+							JOptionPane.showMessageDialog(null, "No results found");
+						}
+					}
 				}
-				ConnectionQuery connectionQuery = new DateQuery(searchDay.getText(), searchMonth.getText(), searchYear.getText());
-				filtered = mainStorage.connectionFilter(connectionQuery);
 			} else {
 				ConnectionQuery connectionQuery = new ContainsQuery(newData.getText(),
 						filterOptions.getSelectedItem().toString());
 				filtered = mainStorage.connectionFilter(connectionQuery);
+				if (!filtered.getConnectionArrayList().isEmpty()) {
+					updateTable(filtered);
+				} else {
+					JOptionPane.showMessageDialog(null, "No results found");
+				}
 			}
-			if(!filtered.getConnectionArrayList().isEmpty()) {
-				updateTable(filtered);
-			} else {
-				JOptionPane.showMessageDialog(null, "No results found");
-			}
-			
+
 		}
 
 	}
@@ -338,6 +352,7 @@ public class HomeScreenGUI implements ActionListener {
 				newData.setText("");
 				resetFilter.setEnabled(false);
 				mainStorage.setFiltered(false);
+				export.setEnabled(true);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -350,7 +365,7 @@ public class HomeScreenGUI implements ActionListener {
 			ExportGUI exportGui = new ExportGUI(this);
 			exportGUI.makeVisible();
 
-		} else if(source == filterOptions){
+		} else if (source == filterOptions) {
 			changeSearchPanel();
 		}
 	}
