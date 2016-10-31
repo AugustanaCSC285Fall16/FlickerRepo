@@ -418,11 +418,7 @@ public class AddEditConnectionGUI implements ActionListener {
 					JOptionPane.showMessageDialog(null, "Please enter a full date");
 				} else {
 					submitClicked();
-					if(storage.isFiltered()) {
-						home.updateTable(home.getFilteredStorage());
-					} else {
-						home.updateTable(storage);
-					}
+					home.updateTable(home.getStorage());
 				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");

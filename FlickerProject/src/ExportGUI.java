@@ -1,7 +1,9 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.FileNotFoundException;
+
 
 import javax.swing.*;
 
@@ -89,11 +91,11 @@ public class ExportGUI implements ActionListener {
 													// i.e. "H: ..."
 			if (palladio.isSelected() && pathName != null) {
 				export = new PalladioExport();
-				export.export(home.getFilteredStorage(), pathName);
+				export.export(home.getStorage(), pathName);
 				return true;
 			} else if (gephi.isSelected() && pathName != null) {
 				export = new GephiExport();
-				export.export(home.getFilteredStorage(), pathName);
+				export.export(home.getStorage(), pathName);
 				return true;
 			} else {
 				return false;
