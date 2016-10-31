@@ -25,9 +25,16 @@ public class GephiExport implements Exporter{
 		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer = new CSVWriter(new FileWriter(pathName));
 		writer.writeNext(new String[] { "Node ID", "Label" });
-		ArrayList<Person> personList = new ArrayList<>();
+		List<Person> personList = new ArrayList<>();
+		List<Person> gephiNodeList = new ArrayList<>();
 		for(Connection connection: list) {
+			personList = connection.getPeopleList();
 			for (Person person : personList) {
+				if(!gephiNodeList.contains(person)) {
+					gephiNodeList.add(person);
+				}
+			}
+			for(Person person : gephiNodeList) {
 				writer.writeNext(person.toGephiNodeArray());
 			}
 		}
