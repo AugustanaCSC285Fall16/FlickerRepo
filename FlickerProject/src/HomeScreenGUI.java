@@ -292,6 +292,7 @@ public class HomeScreenGUI implements ActionListener {
 			}
 
 		} else { // is connectionTableDisplay
+			export.setEnabled(true);
 			if (option == 5) {
 				if (searchDay.getText().equals("") || searchMonth.getText().equals("")
 						|| searchYear.getText().equals("")) {
@@ -351,6 +352,7 @@ public class HomeScreenGUI implements ActionListener {
 				newData.setText("");
 				resetFilter.setEnabled(false);
 				mainStorage.setFiltered(false);
+				export.setEnabled(true);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
