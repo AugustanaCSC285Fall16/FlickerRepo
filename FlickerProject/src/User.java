@@ -1,4 +1,3 @@
-import java.io.IOException;
 
 public class User {
 	// data fields
@@ -7,7 +6,7 @@ public class User {
 	private String username;
 	private String password;
 	private String permissions;
-	
+
 	// constructor
 	public User(int id, String fullName, String username, String password, String permissions) {
 		this.id = id;
@@ -16,7 +15,7 @@ public class User {
 		this.password = password;
 		this.permissions = permissions;
 	}
-	
+
 	public User(String[] csvRowData) {
 		this.id = Integer.parseInt(csvRowData[0]);
 		this.fullName = csvRowData[1];
@@ -24,7 +23,7 @@ public class User {
 		this.password = csvRowData[3];
 		this.permissions = csvRowData[4];
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -64,12 +63,9 @@ public class User {
 	public void setPermissions(String permissions) {
 		this.permissions = permissions;
 	}
-	
-	public String[] toCSVRowArray(){
-		return new String[] {"" + id, fullName, username, password, permissions};
+
+	public String[] toCSVRowArray() {
+		return new String[] { "" + id, fullName, username, password, permissions };
 	}
-	
-	
-	
-	
+
 }

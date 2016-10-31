@@ -11,8 +11,8 @@ public class Person implements TableRowViewable {
 	private String biographicalNotes;
 
 	// default constructor
-	public Person(int id, String name, String nodeName, String occupation, String gender, String culturalId, String biographicalNotes)
-			throws IOException {
+	public Person(int id, String name, String nodeName, String occupation, String gender, String culturalId,
+			String biographicalNotes) throws IOException {
 		this.id = id;
 		this.name = name;
 		this.nodeName = nodeName;
@@ -56,11 +56,11 @@ public class Person implements TableRowViewable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getNodeName() {
 		return nodeName;
 	}
-	
+
 	public void setNodeName(String nodeName) {
 		this.nodeName = nodeName;
 	}
@@ -101,10 +101,9 @@ public class Person implements TableRowViewable {
 	public String toString() {
 		return name;
 	}
-	
-	public String [] toGephiNodeArray() {
-		return new String [] {Integer.toString(this.getID()),this.getNodeName()};
+
+	public String[] toGephiNodeArray() {
+		return new String[] { Integer.toString(this.getID()), this.getNodeName() };
 	}
-	
 
 }

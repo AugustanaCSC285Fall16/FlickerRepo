@@ -1,11 +1,10 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 
 import javax.swing.*;
 
-public class ExportGUI implements ActionListener{
+public class ExportGUI implements ActionListener {
 
 	private JFrame frame;
 
@@ -15,26 +14,26 @@ public class ExportGUI implements ActionListener{
 	private JRadioButton gephi;
 	private JButton export;
 	private JButton cancel;
-	
+
 	private JFileChooser chooser;
-	
+
 	HomeScreenGUI home;
-	
+
 	public ExportGUI(HomeScreenGUI home) {
 		this.home = home;
-		
+
 		northPanel = new JPanel(new FlowLayout());
 		southPanel = new JPanel(new FlowLayout());
 		palladio = new JRadioButton("Palladio");
 		gephi = new JRadioButton("Gephi");
 		export = new JButton("Export");
 		cancel = new JButton("Cancel");
-	
+
 		northPanel.add(palladio);
 		northPanel.add(gephi);
 		southPanel.add(export);
 		southPanel.add(cancel);
-		
+
 		frame = new JFrame("Export As:");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(200, 100);
@@ -42,12 +41,12 @@ public class ExportGUI implements ActionListener{
 		frame.setLayout(new BorderLayout());
 		frame.add(northPanel, BorderLayout.NORTH);
 		frame.add(southPanel, BorderLayout.SOUTH);
-		
+
 		palladio.addActionListener(this);
 		gephi.addActionListener(this);
 		export.addActionListener(this);
-		cancel.addActionListener(this);	
-		
+		cancel.addActionListener(this);
+
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
@@ -55,41 +54,43 @@ public class ExportGUI implements ActionListener{
 	/**
 	 * Makes the frame visible.
 	 */
-	
-	void makeVisible(){
+
+	void makeVisible() {
 		frame.setVisible(true);
 	}
-	
+
 	/**
 	 * Makes the browse gui
 	 */
-	
-	public String makeChooser(){
+
+	public String makeChooser() {
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setDialogTitle("Save");
 		chooser.showSaveDialog(frame);
-		try{
-			return chooser.getSelectedFile().getAbsolutePath(); //the string of the file path
-		} catch (NullPointerException e){
-			//they clicked cancel
+		try {
+			return chooser.getSelectedFile().getAbsolutePath(); // the string of
+																// the file path
+		} catch (NullPointerException e) {
+			// they clicked cancel
 			return null;
 		}
 	}
-	
-	public boolean export(){
-		if(!palladio.isSelected() && !gephi.isSelected()){
+
+	public boolean export() {
+		if (!palladio.isSelected() && !gephi.isSelected()) {
 			JOptionPane.showMessageDialog(null, "Pick a file type!");
 			return false;
 		}
 		Exporter export;
 		String pathName = makeChooser();
-		if(!pathName.substring(2).contains(":")){ //skip the drive semicolon i.e. "H: ..."
-			if(palladio.isSelected() && pathName != null){
+		if (!pathName.substring(2).contains(":")) { // skip the drive semicolon
+													// i.e. "H: ..."
+			if (palladio.isSelected() && pathName != null) {
 				export = new PalladioExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
-			} else if (gephi.isSelected()){
+			} else if (gephi.isSelected()) {
 				export = new GephiExport();
 				export.export(home.getFilteredStorage(), pathName);
 				return true;
@@ -97,23 +98,22 @@ public class ExportGUI implements ActionListener{
 				return false;
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location."+
-					"\n\n"+pathName+"\n\nNot a valid Windows directory (cannot have semicolons)");
+			JOptionPane.showMessageDialog(null, "Error: Could not save to this file location." + "\n\n" + pathName
+					+ "\n\nNot a valid Windows directory (cannot have semicolons)");
 			return false;
 		}
-		
-		
+
 	}
-	
+
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == palladio) {
 			palladio.setSelected(true);
 			gephi.setSelected(false);
-		}else if (event.getSource() == gephi) {
+		} else if (event.getSource() == gephi) {
 			palladio.setSelected(false);
 			gephi.setSelected(true);
-		} else if (event.getSource() == export){
-			if(export()){
+		} else if (event.getSource() == export) {
+			if (export()) {
 				JOptionPane.showMessageDialog(null, "Successfully Saved! (I think?)");
 				frame.dispose();
 			}

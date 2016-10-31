@@ -43,7 +43,7 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 	}
 
 	@Override
-	public boolean accepts(User user){
+	public boolean accepts(User user) {
 		if (fieldName.equals("Username")) {
 			return user.getUsername().equalsIgnoreCase(target);
 		} else if (fieldName.equals("Password")) {

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
-
 import javax.swing.*;
 
 public class AddEditPersonGUI implements ActionListener {
@@ -310,7 +309,7 @@ public class AddEditPersonGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
-				if(storage.isFiltered()) {
+				if (storage.isFiltered()) {
 					home.updateTable(home.getFilteredStorage());
 				} else {
 					home.updateTable(storage);
@@ -319,7 +318,7 @@ public class AddEditPersonGUI implements ActionListener {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
 			home.actionPerformed(event);
-		} else { //cancel
+		} else { // cancel
 			frame.dispose();
 		}
 	}

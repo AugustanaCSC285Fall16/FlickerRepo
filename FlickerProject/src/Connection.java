@@ -1,9 +1,8 @@
-import java.io.IOException;
 import java.util.*;
 
 public class Connection implements TableRowViewable {
 	// data fields
-	//private String date;
+	// private String date;
 	private String day;
 	private String month;
 	private String year;
@@ -17,8 +16,8 @@ public class Connection implements TableRowViewable {
 	private int edgeId;
 
 	// default constructor
-	public Connection(int edgeID, String day, String month, String year, String typeInteraction, String location, String citation,
-			String socialNotes, List<Person> people, String direction) {
+	public Connection(int edgeID, String day, String month, String year, String typeInteraction, String location,
+			String citation, String socialNotes, List<Person> people, String direction) {
 		this.edgeId = edgeID;
 		this.day = day;
 		this.month = month;
@@ -43,9 +42,9 @@ public class Connection implements TableRowViewable {
 		return new String[] { Integer.toString(edgeId), idListText, dateText, typeInteraction, location, citation,
 				socialNotes, direction };
 	}
-	
+
 	public String dateToCSVText() {
-		String result = month + ":" + day + ":" +  year;
+		String result = month + ":" + day + ":" + year;
 		return result;
 	}
 
@@ -70,10 +69,9 @@ public class Connection implements TableRowViewable {
 	 * @return String array of table row connection
 	 */
 	public String[] toTableRowArray() {
-		return new String[] { Integer.toString(edgeId), peopleList.toString(), date.toString(), typeInteraction, location,
-				citation, socialNotes, direction };
+		return new String[] { Integer.toString(edgeId), peopleList.toString(), date.toString(), typeInteraction,
+				location, citation, socialNotes, direction };
 	}
-	
 
 	/**
 	 * Retrieves and returns the list of people involved in the connection
@@ -111,16 +109,16 @@ public class Connection implements TableRowViewable {
 	public String getDay() {
 		return day;
 	}
-	
+
 	public String getMonth() {
 		return month;
 	}
-	
+
 	public String getYear() {
 		return year;
 	}
-	
-	public Date getDate(){
+
+	public Date getDate() {
 		return date;
 	}
 
@@ -133,19 +131,18 @@ public class Connection implements TableRowViewable {
 	public void setDay(String day) {
 		this.day = day;
 	}
-	
+
 	public void setMonth(String month) {
 		this.month = month;
 	}
-	
+
 	public void setYear(String year) {
 		this.year = year;
 	}
-	
+
 	public void setDate() {
 		date.setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
 	}
-
 
 	/**
 	 * Retrieves and returns the type of interaction as a String
@@ -242,13 +239,15 @@ public class Connection implements TableRowViewable {
 	public void setSocialNotes(String socialNotes) {
 		this.socialNotes = socialNotes;
 	}
-	
+
 	public String[] toPalladioArray(Person source, Person target) {
-		return new String [] {source.getNodeName(), target.getNodeName()};
+		return new String[] { source.getNodeName(), target.getNodeName() };
 	}
-	
-	public String[] toGephiEdgeArray(Person source, Person target, int edgeId, String day, String month, String year, String location, String typeInteraction) {
-		return new String[] {Integer.toString(source.getID()),Integer.toString(target.getID()), Integer.toString(edgeId), (day +  "/" + month + "/" + year), location, typeInteraction};
+
+	public String[] toGephiEdgeArray(Person source, Person target, int edgeId, String day, String month, String year,
+			String location, String typeInteraction) {
+		return new String[] { Integer.toString(source.getID()), Integer.toString(target.getID()),
+				Integer.toString(edgeId), (day + "/" + month + "/" + year), location, typeInteraction };
 	}
 
 }

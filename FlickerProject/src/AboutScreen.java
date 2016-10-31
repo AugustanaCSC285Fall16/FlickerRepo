@@ -1,14 +1,8 @@
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-public class AboutScreen{
+public class AboutScreen {
 	private JFrame frame;
 	private JLabel title;
 	private JLabel version;
@@ -22,7 +16,7 @@ public class AboutScreen{
 		body = new JLabel("Created by: Lauren Johnson, Andrew Bainter, Megan Janssen, and Tony Learmann");
 		supervisor = new JLabel("Supervised by Forrest Stonedahl.");
 		specialThanks = new JLabel("Acknowledgements: openCSV");
-		
+
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(500, 100);
@@ -33,12 +27,9 @@ public class AboutScreen{
 		frame.add(body);
 		frame.add(supervisor);
 		frame.add(specialThanks);
-		
-		
+
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 	}
-
-
 
 }

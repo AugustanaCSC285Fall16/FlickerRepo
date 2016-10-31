@@ -1,16 +1,16 @@
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import com.opencsv.CSVWriter;
 
-public class GephiExport implements Exporter{
+public class GephiExport implements Exporter {
 
 	@Override
 	public void export(DataStorage storage, String pathName) {
-		
+
 		try {
 			exportToGephiEdges(storage, pathName);
 			exportToGephiNodes(storage, pathName);
@@ -18,15 +18,15 @@ public class GephiExport implements Exporter{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void exportToGephiNodes(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
-		CSVWriter writer = new CSVWriter(new FileWriter(pathName));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName), "UTF-8"));
 		writer.writeNext(new String[] { "Node ID", "Label" });
 		ArrayList<Person> personList = new ArrayList<>();
-		for(Connection connection: list) {
+		for (Connection connection : list) {
 			for (Person person : personList) {
 				writer.writeNext(person.toGephiNodeArray());
 			}
@@ -36,7 +36,7 @@ public class GephiExport implements Exporter{
 
 	public void exportToGephiEdges(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
-		CSVWriter writer = new CSVWriter(new FileWriter(pathName));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName), "UTF-8"));
 		writer.writeNext(new String[] { "Source", "Target", "Id", "Date", "Location", "Source type" });
 		int edgeId = 1;
 		for (Connection connection : list) {

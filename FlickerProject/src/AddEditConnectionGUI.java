@@ -2,25 +2,18 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.*;
-import javax.swing.text.MaskFormatter;
 
 public class AddEditConnectionGUI implements ActionListener {
 
-	// private static final DateFormat DATE_FORMAT = new
-	// SimpleDateFormat("yyyy.mm.dd");
+
 	private static final String[] FIELDS = new String[] { "", "Type of Interaction", "Location" };
 	private static final int WIDTH = 350;
 	private static final int HEIGHT = 300;
@@ -28,7 +21,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	// data fields
 	private JFrame frame;
 	private JComboBox<Object> baseName;
-	// private JFormattedTextField date;
 	private JTextField month;
 	private JTextField day;
 	private JTextField year;
@@ -65,7 +57,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	JButton submitButton;
 	private JButton cancel;
 	private JButton moreNames;
-	private JButton deleteButton;
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
 	HomeScreenGUI home;
@@ -98,16 +89,13 @@ public class AddEditConnectionGUI implements ActionListener {
 		}
 		this.connectionEdited = connection;
 		this.home = home;
-		
+
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
 		editing = false;
 
 		baseNameChoices = storage.getPeopleArrayList();
 		baseName = new JComboBox<>(baseNameChoices.toArray());
-		// date = new JFormattedTextField(DATE_FORMAT);
-		// date.setColumns(7);
-		// date.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		month = new JTextField(2);
 		day = new JTextField(2);
 		year = new JTextField(4);
@@ -124,7 +112,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 		moreNames = new JButton("+");
-		deleteButton = new JButton("Delete");
 
 		baseNameLabel = new JLabel("Base Name:");
 		dateLabel = new JLabel("Date:");
@@ -151,7 +138,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		namePanel.add(baseName);
 		baseNamePanel.add(namePanel, BorderLayout.CENTER);
 		baseNamePanel.add(moreNamesPanel, BorderLayout.EAST);
-		// datePanel.add(date);
 		datePanel.add(month);
 		datePanel.add(day);
 		datePanel.add(year);
@@ -159,13 +145,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		locationPanel.add(location);
 		socialPanel.add(socialScroll);
 		bibPanel.add(bibScroll);
-
-		/*
-		 * try { MaskFormatter dateMask = new MaskFormatter("##/##/####");
-		 * dateMask.install(date); } catch (ParseException ex) {
-		 * Logger.getLogger(SearchGUI.class.getName()).log(Level.SEVERE, null,
-		 * ex); }
-		 */
 
 		frame = new JFrame("Search");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -190,7 +169,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		submitButton.addActionListener(this);
 		cancel.addActionListener(this);
 		moreNames.addActionListener(this);
-		deleteButton.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -270,9 +248,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submitButton);
 		southPanel.add(cancel);
-		if (editing) {
-			southPanel.add(deleteButton);
-		}
 		return southPanel;
 	}
 
@@ -346,16 +321,6 @@ public class AddEditConnectionGUI implements ActionListener {
 		makeVisible();
 	}
 
-	/**
-	 * This method will add a delete button to the frame when the edit button is
-	 * clicked from within the home screen. It will only be displayed when that
-	 * button is clicked.
-	 */
-
-	public void addDeleteButton() {
-		editing = true;
-		refreshPanel();
-	}
 
 	/**
 	 * Will set the edited connection's data to whatever was put into the GUI if
@@ -393,13 +358,13 @@ public class AddEditConnectionGUI implements ActionListener {
 			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(),
 					type.getSelectedItem().toString(), location.getSelectedItem().toString(), citation.getText(),
 					socialNotes.getText(), personListForConn, direction.getSelectedItem().toString());
-			if(!newConnection.getDate().isValidDate()) {
+			if (!newConnection.getDate().isValidDate()) {
 				JOptionPane.showMessageDialog(null, "Invalid Date");
 			} else {
-			storage.addConnection(newConnection);
-			storage.saveConnections();
-			frame.dispose();
-			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+				storage.addConnection(newConnection);
+				storage.saveConnections();
+				frame.dispose();
+				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			}
 		}
 	}
@@ -414,11 +379,11 @@ public class AddEditConnectionGUI implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {
-				if(month.getText().equals("") || day.getText().equals("") || year.getText().equals("")) {
+				if (month.getText().equals("") || day.getText().equals("") || year.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Please enter a full date");
 				} else {
 					submitClicked();
-					if(storage.isFiltered()) {
+					if (storage.isFiltered()) {
 						home.updateTable(home.getFilteredStorage());
 					} else {
 						home.updateTable(storage);
@@ -433,9 +398,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		} else if (event.getSource() == moreNames) {
 			additionalNames++;
 			refreshPanel();
-		} else if (event.getSource() == deleteButton) {
-			// delete this connection!
-		}
+		} 
 	}
 
 }

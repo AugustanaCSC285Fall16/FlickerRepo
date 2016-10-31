@@ -1,8 +1,6 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.IOException;
-
 import javax.swing.*;
 
 public class AddData implements ActionListener {
@@ -25,7 +23,7 @@ public class AddData implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(600, 100);
@@ -60,7 +58,7 @@ public class AddData implements ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
-	
+
 	public void submitClicked() throws IOException {
 		if (options.getSelectedIndex() == 0) {
 			if (!storage.getCultureChoices().contains(newData.getText().toLowerCase())) {
@@ -104,17 +102,17 @@ public class AddData implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
-			if (source == submit) {
-				try {
-					submitClicked();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else {
-				// CLOSES THE WHOLE PROGRAM???
-				frame.dispose();
+		if (source == submit) {
+			try {
+				submitClicked();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+		} else {
+			// CLOSES THE WHOLE PROGRAM???
+			frame.dispose();
+		}
 	}
 
 }

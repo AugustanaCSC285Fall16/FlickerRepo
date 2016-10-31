@@ -16,7 +16,6 @@ public class LoginGUI implements ActionListener {
 	private boolean isAdmin;
 	private static boolean adminApproved;
 
-
 	public LoginGUI(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 		this.adminApproved = false;
@@ -42,8 +41,8 @@ public class LoginGUI implements ActionListener {
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-		
-		if (isAdmin){
+
+		if (isAdmin) {
 			add.setEnabled(false);
 			about.setEnabled(false);
 		}
@@ -79,25 +78,25 @@ public class LoginGUI implements ActionListener {
 		southPanel.add(about);
 		return southPanel;
 	}
-	
-	private void isCorrectUsernamePassword() throws IOException{
+
+	private void isCorrectUsernamePassword() throws IOException {
 		DataStorage storage = DataStorage.getMainDataStorage();
 		UserQuery usernameQuery = new ContainsQuery(username.getText(), "Username");
 		UserQuery passwordQuery = new ContainsQuery(password.getText(), "Password");
-		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)){
-			if (isAdmin){
+		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) {
+			if (isAdmin) {
 				setAdminApproved(true);
 				frame.dispose();
 			} else {
-			User loginUser = storage.getUserFromFiltered(usernameQuery);
-			HomeScreenGUI launchProgram = new HomeScreenGUI(loginUser.getPermissions());
-			frame.dispose();
+				User loginUser = storage.getUserFromFiltered(usernameQuery);
+				HomeScreenGUI launchProgram = new HomeScreenGUI(loginUser.getPermissions());
+				frame.dispose();
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Not a valid username or password!");
 		}
 	}
-	
+
 	public static boolean getAdminApproved() {
 		return adminApproved;
 	}

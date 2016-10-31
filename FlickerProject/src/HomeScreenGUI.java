@@ -12,7 +12,6 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
-import com.opencsv.CSVReader;
 
 public class HomeScreenGUI implements ActionListener {
 	DataStorage mainStorage = DataStorage.getMainDataStorage();
@@ -25,7 +24,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton add;
 	private JButton edit;
 	private JButton save;
-	private JButton clear;
 	private JButton resetFilter;
 	private JButton export;
 	private JPanel searchPanel;
@@ -40,7 +38,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton submit;
 	private JTabbedPane databases;
 	private JPanel centerPanel;
-	private JPanel southPanel;
 	private JTable personTableDisplay;
 	private JTable connectionTableDisplay;
 	private JScrollPane personPane;
@@ -49,7 +46,7 @@ public class HomeScreenGUI implements ActionListener {
 	private ExportGUI exportGUI;
 
 	public HomeScreenGUI(String permission) throws IOException {
-		
+
 		save = new JButton("Save Changes");
 		add = new JButton("Add");
 		edit = new JButton("Edit");
@@ -57,7 +54,6 @@ public class HomeScreenGUI implements ActionListener {
 		export = new JButton("Export");
 
 		exportGUI = new ExportGUI(this);
-		southPanel = new JPanel();
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,8 +75,8 @@ public class HomeScreenGUI implements ActionListener {
 
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-		
-		if (permission.equals("Student")){
+
+		if (permission.equals("Student")) {
 			add.setEnabled(false);
 			edit.setEnabled(false);
 		}
@@ -222,7 +218,7 @@ public class HomeScreenGUI implements ActionListener {
 	}
 
 	public DataStorage getFilteredStorage() {
-		if(mainStorage.isFiltered()){
+		if (mainStorage.isFiltered()) {
 			return filtered;
 		} else {
 			return mainStorage;
@@ -245,7 +241,6 @@ public class HomeScreenGUI implements ActionListener {
 			connectionGUI.makeVisible();
 		} else if (val == 2) { // if controlled vocabulary
 			AddData vocabGUI = new AddData();
-			// vocabGUI.makeVisible();
 		}
 	}
 
@@ -274,7 +269,6 @@ public class HomeScreenGUI implements ActionListener {
 				int connectionID = Integer.parseInt(IDCellText);
 				AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this,
 						mainStorage.getConnectionFromID(connectionID));
-				connectionGUI.addDeleteButton();
 				connectionGUI.makeVisible();
 			} else {
 				JOptionPane.showMessageDialog(frame, "Click a row first!");
@@ -344,38 +338,31 @@ public class HomeScreenGUI implements ActionListener {
 	 *            - event from the HomeScreenGUI
 	 */
 	public void actionPerformed(ActionEvent event) {
-		Object source = event.getSource();
-		if (source == submit) {
-			try {
+		try {
+			Object source = event.getSource();
+			if (source == submit) {
 				System.out.println("Submit");
 				resetFilter.setEnabled(true);
 				submitSearch();
 				mainStorage.setFiltered(true);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else if (source == resetFilter) {
-			try {
+			} else if (source == resetFilter) {
 				updateTable(mainStorage);
 				newData.setText("");
 				resetFilter.setEnabled(false);
 				mainStorage.setFiltered(false);
 				export.setEnabled(true);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else if (source == add) {
+				addClicked();
+			} else if (source == edit) {
+				editClicked();
+			} else if (source == export) {
+				ExportGUI exportGui = new ExportGUI(this);
+				exportGUI.makeVisible();
+			} else if (source == filterOptions) {
+				changeSearchPanel();
 			}
-		} else if (source == add) {
-			addClicked();
-		} else if (source == edit) {
-			editClicked();
-		} else if (source == export) {
-			ExportGUI exportGui = new ExportGUI(this);
-			exportGUI.makeVisible();
-
-		} else if (source == filterOptions) {
-			changeSearchPanel();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "An Error has occured!");
 		}
 	}
 }

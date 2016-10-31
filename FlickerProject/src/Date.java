@@ -1,7 +1,6 @@
 public class Date {
 	// constants
-	private static final int[] DAYS_IN_MONTH = { 31, 28, 31, 30, 31, 30, 31,
-			31, 30, 31, 30, 31 };
+	private static final int[] DAYS_IN_MONTH = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	private static final int FEB_DAYS_LEAP_YEAR = 29;
 
 	public static final int JANUARY = 1;
@@ -28,7 +27,7 @@ public class Date {
 		this.month = month;
 		this.day = day;
 	}
-	
+
 	public boolean isValidDate() {
 		boolean leapYear = isLeapYear(year);
 		if (day < 1) {
@@ -66,7 +65,7 @@ public class Date {
 	public int getDay() {
 		return day;
 	}
-	
+
 	public void setDate(int year, int month, int day) {
 		this.year = year;
 		this.month = month;
@@ -130,21 +129,21 @@ public class Date {
 	}
 
 	// returns string representation of date
-		public String toString() {
-			String returnValue = month + "/" + day + "/" + year;
-			return returnValue;
-		}
+	public String toString() {
+		String returnValue = month + "/" + day + "/" + year;
+		return returnValue;
+	}
 
-		// returns true if leap year based on criteria, false otherwise
-		private boolean isLeapYear(int year) {
-			if (year % 400 == 0) {
-				return true;
-			} else if (year % 100 == 0) {
-				return false;
-			} else if (year % 4 == 0) {
-				return true;
-			} else {
-				return false;
-			}
+	// returns true if leap year based on criteria, false otherwise
+	private boolean isLeapYear(int year) {
+		if (year % 400 == 0) {
+			return true;
+		} else if (year % 100 == 0) {
+			return false;
+		} else if (year % 4 == 0) {
+			return true;
+		} else {
+			return false;
 		}
+	}
 }

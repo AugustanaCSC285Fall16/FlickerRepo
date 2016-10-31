@@ -1,8 +1,5 @@
 import java.io.*;
 import java.util.*;
-
-import javax.swing.JOptionPane;
-
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -72,7 +69,8 @@ public class DataStorage {
 	}
 
 	private void loadUsers() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + USER_DATA_FILE_NAME));
+		CSVReader reader = new CSVReader(
+				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
 
 		List<String[]> myRows = reader.readAll();
 		userHeaderRow = myRows.remove(0); // remove header row
@@ -83,7 +81,8 @@ public class DataStorage {
 	}
 
 	public void saveUsers() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + USER_DATA_FILE_NAME));
+		CSVWriter writer = new CSVWriter(
+				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
 		writer.writeNext(userHeaderRow);
 		for (User user : userMap.values()) {
 			writer.writeNext(user.toCSVRowArray());
@@ -94,16 +93,16 @@ public class DataStorage {
 	public void addUser(User user) {
 		userMap.put(user.getId(), user);
 	}
-	
+
 	public ArrayList<User> getUserArrayList() {
 		ArrayList<User> userList = new ArrayList<>(userMap.values());
 		return userList;
 	}
-	
+
 	public Collection<User> getUserList() {
 		return userMap.values();
 	}
-	
+
 	/**
 	 * 
 	 * 
@@ -112,17 +111,17 @@ public class DataStorage {
 	 * @throws IOException
 	 */
 	public User getUserFromFiltered(UserQuery query) throws IOException {
-		for(User user: primaryDataStorage.getUserList()) {
-			if(query.accepts(user)) {
+		for (User user : primaryDataStorage.getUserList()) {
+			if (query.accepts(user)) {
 				return user;
 			}
 		}
 		return null;
 	}
-	
+
 	public boolean userFilter(UserQuery query) throws IOException {
-		for(User user: primaryDataStorage.getUserList()) {
-			if(query.accepts(user)) {
+		for (User user : primaryDataStorage.getUserList()) {
+			if (query.accepts(user)) {
 				return true;
 			}
 		}
@@ -180,13 +179,14 @@ public class DataStorage {
 	public void addPerson(Person person) {
 		personMap.put(person.getID(), person);
 	}
-	
+
 	/**
 	 * 
 	 * @throws IOException
 	 */
 	void loadPeople() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + PERSON_FILE_NAME));
+		CSVReader reader = new CSVReader(
+				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + PERSON_FILE_NAME)), "UTF-8"));
 
 		List<String[]> myRows = reader.readAll();
 		personHeaderRow = myRows.remove(0); // remove header row
@@ -197,7 +197,8 @@ public class DataStorage {
 	}
 
 	public void savePeople() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + PERSON_FILE_NAME));
+		CSVWriter writer = new CSVWriter(
+				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + PERSON_FILE_NAME)), "UTF-8"));
 		writer.writeNext(personHeaderRow);
 		for (Person person : personMap.values()) {
 			writer.writeNext(person.toCSVRowArray());
@@ -206,7 +207,8 @@ public class DataStorage {
 	}
 
 	void loadConnections() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + CONNECTION_FILE_NAME));
+		CSVReader reader = new CSVReader(
+				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + CONNECTION_FILE_NAME)), "UTF-8"));
 		List<String[]> myRows = reader.readAll();
 		connectionHeaderRow = myRows.remove(0);
 
@@ -274,7 +276,8 @@ public class DataStorage {
 	}
 
 	public void saveConnections() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + CONNECTION_FILE_NAME));
+		CSVWriter writer = new CSVWriter(
+				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + CONNECTION_FILE_NAME)), "UTF-8"));
 		writer.writeNext(connectionHeaderRow);
 		for (Connection connection : connectionsMap.values()) {
 			writer.writeNext(connection.toCSVRowArray());
@@ -283,7 +286,8 @@ public class DataStorage {
 	}
 
 	private void loadDataTypes(String fileName, ArrayList<String> list) throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + fileName));
+		CSVReader reader = new CSVReader(
+				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + fileName)), "UTF-8"));
 		String[] nextLine;
 		while ((nextLine = reader.readNext()) != null) {
 			// nextLine[] is an array of values from the line
@@ -296,7 +300,8 @@ public class DataStorage {
 	// the file name
 	// and the ArrayList<String> that is being saved???
 	public void saveOccupationControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + OCCUPATION_CHOICES_FILE_NAME));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
+				new FileOutputStream((DATA_FOLDER + "/" + OCCUPATION_CHOICES_FILE_NAME)), "UTF-8"));
 		List<String[]> choicesArray = new ArrayList<>();
 		for (int i = 0; i < occupationChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(occupationChoices.get(i).toLowerCase()));
@@ -306,7 +311,8 @@ public class DataStorage {
 	}
 
 	public void saveCulturalIDControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + CULTURE_CHOICES_FILE_NAME));
+		CSVWriter writer = new CSVWriter(
+				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + CULTURE_CHOICES_FILE_NAME)), "UTF-8"));
 		List<String[]> choicesArray = new ArrayList<>();
 		for (int i = 0; i < cultureChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(cultureChoices.get(i).toLowerCase()));
@@ -316,7 +322,8 @@ public class DataStorage {
 	}
 
 	public void saveLocationControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + LOCATION_CHOICES_FILE_NAME));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
+				new FileOutputStream((DATA_FOLDER + "/" + LOCATION_CHOICES_FILE_NAME)), "UTF-8"));
 		List<String[]> choicesArray = new ArrayList<>();
 		for (int i = 0; i < locationChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(locationChoices.get(i).toLowerCase()));
@@ -326,7 +333,8 @@ public class DataStorage {
 	}
 
 	public void saveInteractionControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + INTERACTION_CHOICES_FILE_NAME));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
+				new FileOutputStream((DATA_FOLDER + "/" + INTERACTION_CHOICES_FILE_NAME)), "UTF-8"));
 		List<String[]> choicesArray = new ArrayList<>();
 		for (int i = 0; i < interactionChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(interactionChoices.get(i).toLowerCase()));
@@ -372,7 +380,8 @@ public class DataStorage {
 	}
 
 	void loadIdAndConnNum() throws IOException {
-		CSVReader reader = new CSVReader(new FileReader(DATA_FOLDER + "/" + NEXT_ID_FILE_NAME));
+		CSVReader reader = new CSVReader(
+				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + NEXT_ID_FILE_NAME)), "UTF-8"));
 		String[] nextLine;
 		while ((nextLine = reader.readNext()) != null) {
 			// nextLine[] is an array of values from the line
@@ -383,8 +392,10 @@ public class DataStorage {
 	}
 
 	private void saveIdAndConnNum() throws IOException {
-		CSVWriter writer = new CSVWriter(new FileWriter(DATA_FOLDER + "/" + NEXT_ID_FILE_NAME));
-		String[] entries = { Integer.toString(nextIdNum), Integer.toString(nextConnNum), Integer.toString(nextUserNum) };
+		CSVWriter writer = new CSVWriter(
+				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + NEXT_ID_FILE_NAME)), "UTF-8"));
+		String[] entries = { Integer.toString(nextIdNum), Integer.toString(nextConnNum),
+				Integer.toString(nextUserNum) };
 		writer.writeNext(entries);
 		writer.close();
 	}
