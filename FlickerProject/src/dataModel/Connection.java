@@ -331,5 +331,9 @@ public class Connection implements TableRowViewable {
 		return new String[] { Integer.toString(source.getID()), Integer.toString(target.getID()),
 				Integer.toString(edgeId), (day + "/" + month + "/" + year), location, typeInteraction };
 	}
+	
+	public String toString() {
+		return getPeopleList().toString() + ", " + date.toString() + ", " + location + ", " + typeInteraction;
+	}
 
 }
