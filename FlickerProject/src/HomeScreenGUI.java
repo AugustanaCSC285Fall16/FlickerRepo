@@ -168,7 +168,6 @@ public class HomeScreenGUI implements ActionListener {
 	 */
 	private JPanel createCenterPanel(DataStorage storage) throws IOException {
 		centerPanel = new JPanel(new BorderLayout());
-		System.out.println(storage.getPeopleArrayList());
 		personTableDisplay = createDisplayTable(storage.getPersonHeaderRow(), storage.getPeopleList());
 		connectionTableDisplay = createDisplayTable(storage.getConnectionHeaderRow(), storage.getConnectionList());
 		personPane = new JScrollPane();
