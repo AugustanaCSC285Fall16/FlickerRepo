@@ -82,12 +82,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 *            - to be edited or null if we are adding a new connection
 	 */
 	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
-		try {
-			storage = DataStorage.getMainDataStorage();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		storage = DataStorage.getMainDataStorage();
 		this.connectionEdited = connection;
 		this.home = home;
 

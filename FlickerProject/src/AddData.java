@@ -17,12 +17,7 @@ public class AddData implements ActionListener {
 	DataStorage storage;
 
 	public AddData() {
-		try {
-			storage = DataStorage.getMainDataStorage();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		storage = DataStorage.getMainDataStorage();
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

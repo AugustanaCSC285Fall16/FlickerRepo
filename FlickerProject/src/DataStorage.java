@@ -42,13 +42,19 @@ public class DataStorage {
 	 * @return Data Storage object that will be our singleton
 	 * @throws IOException
 	 */
-	public static DataStorage getMainDataStorage() throws IOException {
+	public static DataStorage getMainDataStorage() {
 		if (primaryDataStorage == null) {
-			primaryDataStorage = new DataStorage();
-			primaryDataStorage.loadPeople();
-			primaryDataStorage.loadConnections();
-			primaryDataStorage.loadUsers();
-			primaryDataStorage.loadIdAndConnNum();
+			try {
+				primaryDataStorage = new DataStorage();
+				primaryDataStorage.loadPeople();
+				primaryDataStorage.loadConnections();
+				primaryDataStorage.loadUsers();
+				primaryDataStorage.loadIdAndConnNum();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		return primaryDataStorage;
 	}
@@ -243,6 +249,7 @@ public class DataStorage {
 		}
 
 	}
+	
 
 	public void addConnection(Connection connection) {
 		connectionsMap.put(connection.getEdgeId(), connection);

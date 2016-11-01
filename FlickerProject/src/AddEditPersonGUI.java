@@ -71,12 +71,7 @@ public class AddEditPersonGUI implements ActionListener {
 		this.personEdited = person;
 		this.home = home;
 
-		try {
-			storage = DataStorage.getMainDataStorage();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		storage = DataStorage.getMainDataStorage();
 		if(person == null){
 			editing = false;
 		} else {
