@@ -18,7 +18,7 @@ public class HomeScreenGUI implements ActionListener {
 	DataStorage filtered;
 
 	private static final String[] FIELDS = new String[] { "Name", "Node Name", "Cultural ID", "Gender", "Occupation",
-			"Date", "Location", "Type" };
+			"Date", "Location", "Interaction Type" };
 
 	private JFrame frame;
 	private JButton add;
@@ -357,7 +357,6 @@ public class HomeScreenGUI implements ActionListener {
 				PersonQuery personQuery = new ContainsQuery(newData.getText(),
 						filterOptions.getSelectedItem().toString());
 				filtered = mainStorage.personFilter(personQuery);
-				System.out.println("update");
 				updateTable(filtered);
 			}
 
@@ -380,15 +379,6 @@ public class HomeScreenGUI implements ActionListener {
 
 	}
 	
-	public void setSearchDefaultText() {
-		newData.setText("");
-		searchDay.setText("");
-		searchMonth.setText("");
-		searchYear.setText("");
-		searchDay2.setText("");
-		searchMonth2.setText("");
-		searchYear2.setText("");
-	}
 
 	/**
 	 * Based on the source of the event, the method will choose what the GUI
@@ -406,7 +396,6 @@ public class HomeScreenGUI implements ActionListener {
 				mainStorage.setFiltered(true);
 			} else if (source == resetFilter) {
 				updateTable(mainStorage);
-				setSearchDefaultText();
 				resetFilter.setEnabled(false);
 				mainStorage.setFiltered(false);
 				export.setEnabled(true);
