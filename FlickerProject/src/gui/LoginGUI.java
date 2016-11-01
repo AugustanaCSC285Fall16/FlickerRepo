@@ -103,23 +103,18 @@ public class LoginGUI implements ActionListener {
 		UserStorage storage = UserStorage.getMainUserStorage();
 		UserQuery usernameQuery = new ContainsQuery(username.getText(), "Username");
 		UserQuery passwordQuery = new ContainsQuery(password.getText(), "Password");
-		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) { // NEED
-																						// TO
-																						// CHECK
-																						// IF
-																						// USERNAME
-																						// MATCHES
-																						// TO
-																						// PASSWORD.
-			// RIGHT NOW YOU CAN PUT IN A USER NAME AND SOMEONE ELSE's PASSWORD
-			// AND IT WORKS
-			if (isAdmin) {
-				setAdminApproved(true);
-				frame.dispose();
+		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) { 
+			User loginUser = storage.getUserFromFiltered(usernameQuery);
+			if (loginUser.getPassword().equals(password.getText())){
+				if (isAdmin) {
+					setAdminApproved(true);
+					frame.dispose();
+				} else {
+					HomeScreenGUI launchProgram = new HomeScreenGUI(loginUser.getPermissions());
+					frame.dispose();
+				}
 			} else {
-				User loginUser = storage.getUserFromFiltered(usernameQuery);
-				HomeScreenGUI launchProgram = new HomeScreenGUI(loginUser.getPermissions());
-				frame.dispose();
+				JOptionPane.showMessageDialog(null, "Username and Password do not match up!");
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Not a valid username or password!");

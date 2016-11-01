@@ -75,7 +75,6 @@ public class Connection implements TableRowViewable {
 		String result = "";
 		for (Person person : peopleList) {
 			result += person.getID() + ":";
-			// FIXME: Make it so there is not an extra colon at the end.
 		}
 		return result;
 	}

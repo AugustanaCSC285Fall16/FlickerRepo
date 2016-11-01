@@ -1,4 +1,4 @@
 "Edge","Connecting Name List","Date","Type of Interaction","Location","Citation","Social Notes","Direction"
-"5","4:6:","11:12:2016","AIM","paris","Stuff","Social	","One-to-One"
-"6","3:17:1:6:18:7:","6:20:1995","AIM","unknown","citation","notes","One-to-Many"
-"7","2:3:1:7:","5:12:2015","Email","paris","saldfjk","sesf","Many-to-Many"
+"1","1:2:","5:5:1995","Letter","germany","Bib","Social","One-to-One"
+"2","4:6:2:5:","6:22:1800","Email","augustana","Citation","Notes","One-to-Many"
+"3","2:1:6:","3:12:2016","Text","quad cities","Print out of Text","Setting up a party","Many-to-Many"
