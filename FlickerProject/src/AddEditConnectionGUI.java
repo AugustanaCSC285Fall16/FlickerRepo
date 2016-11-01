@@ -407,11 +407,11 @@ public class AddEditConnectionGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				if (month.getText().equals("") || day.getText().equals("") || year.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Please enter a full date");
+					JOptionPane.showMessageDialog(null, "Please enter a full date. \nOr for an unknown date enter 0/0/0000");
 				} else {
 					submitClicked();
 					if (storage.isFiltered()) {
-						home.updateTable(home.getFilteredStorage());
+						home.updateTable(home.getStorage());
 					} else {
 						home.updateTable(storage);
 					}
