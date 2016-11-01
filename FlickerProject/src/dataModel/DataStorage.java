@@ -42,9 +42,8 @@ public class DataStorage {
 	 * program to call methods related to the data of connections and persons
 	 * 
 	 * @return Data Storage object that will be a singleton
-	 * @throws IOException
 	 */
-	public static DataStorage getMainDataStorage() throws IOException {
+	public static DataStorage getMainDataStorage() {
 		if (primaryDataStorage == null) {
 			try {
 				primaryDataStorage = new DataStorage();
@@ -58,7 +57,13 @@ public class DataStorage {
 		}
 		return primaryDataStorage;
 	}
-
+	
+	/**
+	 * Creates a test DataStorage object that will be used in the JUnit test to test
+	 * our query interface
+	 * 
+	 * @return DataStorage object that will be a singleton for testing our query interface
+	 */
 	public static DataStorage getTestDataStorage() {
 		if (testDataStorage == null) {
 			try {

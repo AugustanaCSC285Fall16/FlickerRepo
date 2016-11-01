@@ -257,6 +257,7 @@ public class HomeScreenGUI implements ActionListener {
 			frame.revalidate();
 		} else {
 			criteriaPanel.add(newData);
+			newData.setText("");
 			filterOptions.setSelectedIndex(option);
 			frame.revalidate();
 		}
@@ -444,7 +445,12 @@ public class HomeScreenGUI implements ActionListener {
 					PersonQuery personQuery = new ContainsQuery(newData.getText(),
 							filterOptions.getSelectedItem().toString());
 					filtered = mainStorage.personFilter(personQuery);
-					updateTable(filtered);
+					if(!filtered.getPeopleArrayList().isEmpty()) {
+						updateTable(filtered);
+					} else {
+						JOptionPane.showMessageDialog(null, "No results found");
+					}
+					
 				}
 			}
 		} else { // is connectionTableDisplay
@@ -460,7 +466,6 @@ public class HomeScreenGUI implements ActionListener {
 							filterOptions.getSelectedItem().toString());
 					filtered = mainStorage.connectionFilter(connectionQuery);
 					if (!filtered.getConnectionArrayList().isEmpty()) {
-						System.out.println(filtered.getConnectionArrayList().toString());
 						updateTable(filtered);
 					} else {
 						JOptionPane.showMessageDialog(null, "No results found");

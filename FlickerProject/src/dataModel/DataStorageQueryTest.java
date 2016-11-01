@@ -11,6 +11,10 @@ public class DataStorageQueryTest {
 
 	private static DataStorage storage = DataStorage.getTestDataStorage();
 
+	/**
+	 * This method tests our query when searching for a name in both the 
+	 * person data and connection data.
+	 */
 	@Test
 	public void testNameQuery() {
 		PersonQuery nameQuery = new ContainsQuery("Lauren", "Name");
@@ -39,6 +43,10 @@ public class DataStorageQueryTest {
 
 	}
 
+	/**
+	 * This method tests our query when searching for a node name in both the 
+	 * person data and connection data.
+	 */
 	@Test
 	public void testNodeNameQuery() {
 		PersonQuery nodeNameQuery = new ContainsQuery("LJ", "Node Name");
@@ -68,6 +76,10 @@ public class DataStorageQueryTest {
 		}
 	}
 
+	/**
+	 * This method tests our query when searching for gender in both the 
+	 * person data and connection data.
+	 */
 	@Test
 	public void testGenderQuery() {
 		PersonQuery genderQuery = new ContainsQuery("female", "Gender");
@@ -94,6 +106,10 @@ public class DataStorageQueryTest {
 		}
 	}
 
+	/**
+	 * This method tests our query when searching for a date or date range
+	 *  in both the person data and connection data.
+	 */
 	@Test
 	public void testDateQuery() {
 		Date date1 = new Date(1995, 6, 20);

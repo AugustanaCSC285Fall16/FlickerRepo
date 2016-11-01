@@ -1,14 +1,24 @@
 package dataModel;
 
 public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
+	// data fields
 	private String target;
 	private String fieldName;
 
+	// constructor
 	public ContainsQuery(String target, String fieldName) {
 		this.target = target;
 		this.fieldName = fieldName;
 	}
 
+	/**
+	 * Overrides the accepts method in the PersonQuery interface.
+	 * 
+	 * @return true if the person contains the target String in the specified
+	 * field
+	 * 
+	 * @throws UnsupportedOperationException if the field is invalid
+	 */
 	@Override
 	public boolean accepts(Person person) {
 		if (fieldName.equals("Name")) {
@@ -26,6 +36,14 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 		}
 	}
 
+	/**
+	 * Overrides the accepts method in the ConnectionQuery interface.
+	 * 
+	 * @return true if the connection contains the target String in the specified
+	 * field
+	 * 
+	 * @throws UnsupportedOperationException if the field is invalid
+	 */
 	@Override
 	public boolean accepts(Connection connection) {
 		if (fieldName.equals("Name") || fieldName.equals("Node Name") || fieldName.equals("CulturalID")
@@ -45,6 +63,14 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 		}
 	}
 
+	/**
+	 * Overrides the accepts method in the UserQuery interface.
+	 * 
+	 * @return true if the user contains the target String in the specified
+	 * field
+	 * 
+	 * @throws UnsupportedOperationException if the field is invalid
+	 */
 	@Override
 	public boolean accepts(User user) {
 		if (fieldName.equals("Username")) {

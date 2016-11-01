@@ -60,6 +60,12 @@ public class Date {
 		return true;
 	}
 
+	/**
+	 * Checks to see if the data is an unknown date
+	 * in the form of 0/0/0000
+	 * 
+	 * @return boolean true if date is 0/0/000
+	 */
 	public boolean isUnknownDate() {
 		if (day == 0 && month == 0 && year == 0000) {
 			return true;
