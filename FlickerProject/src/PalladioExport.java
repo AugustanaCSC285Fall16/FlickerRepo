@@ -36,26 +36,26 @@ public class PalladioExport implements Exporter {
 	public void exportPalladio(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer;
-		writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName + ".csv"), "UTF-8"));
-		writer.writeNext(new String[] { "Source", "Target" });
-		for (Connection connection : list) {
-			String direction = connection.getDirection();
-			List<Person> personList = connection.getPeopleList();
-			if (direction.equals("One-to-One")) {
-				writer.writeNext(connection.toPalladioArray(personList.get(0), personList.get(1)));
-			} else if (direction.equals("One-to-Many")) {
-				for (int i = 1; i < personList.size(); i++) {
-					writer.writeNext(connection.toPalladioArray(personList.get(0), personList.get(i)));
-				}
-			} else if (direction.equals("Many-to-Many")) {
-				for (int i = 0; i < personList.size() - 1; i++) {
-					for (int j = i + 1; j < personList.size(); j++) {
-						writer.writeNext(connection.toPalladioArray(personList.get(i), personList.get(j)));
+			writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName + "-palladio.csv"), "UTF-8"));
+			writer.writeNext(new String[] { "Source", "Target" });
+			for (Connection connection : list) {
+				String direction = connection.getDirection();
+				List<Person> personList = connection.getPeopleList();
+				if (direction.equals("One-to-One")) {
+					writer.writeNext(connection.toPalladioArray(personList.get(0), personList.get(1)));
+				} else if (direction.equals("One-to-Many")) {
+					for (int i = 1; i < personList.size(); i++) {
+						writer.writeNext(connection.toPalladioArray(personList.get(0), personList.get(i)));
+					}
+				} else if (direction.equals("Many-to-Many")) {
+					for (int i = 0; i < personList.size() - 1; i++) {
+						for (int j = i + 1; j < personList.size(); j++) {
+							writer.writeNext(connection.toPalladioArray(personList.get(i), personList.get(j)));
+						}
 					}
 				}
 			}
+			writer.close();
 		}
-		writer.close();
-	}
-
 }
+		

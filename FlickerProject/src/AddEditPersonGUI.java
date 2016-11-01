@@ -324,7 +324,7 @@ public class AddEditPersonGUI implements ActionListener {
 			try {
 				submitClicked();
 				if (dataStorage.isFiltered()) {
-					home.updateTable(home.getFilteredStorage());
+					home.updateTable(home.getStorage());
 				} else {
 					home.updateTable(dataStorage);
 				}

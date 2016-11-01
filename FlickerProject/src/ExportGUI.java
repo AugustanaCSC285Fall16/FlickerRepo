@@ -96,11 +96,11 @@ public class ExportGUI implements ActionListener {
 													// i.e. "H: ..."
 			if (palladio.isSelected() && pathName != "cancel") {
 				export = new PalladioExport();
-				export.export(home.getFilteredStorage(), pathName);
+				export.export(home.getStorage(), pathName);
 				return true;
 			} else if (gephi.isSelected() && pathName != "cancel") {
 				export = new GephiExport();
-				export.export(home.getFilteredStorage(), pathName);
+				export.export(home.getStorage(), pathName);
 				return true;
 			} else {
 				return false;

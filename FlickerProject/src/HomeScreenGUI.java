@@ -19,7 +19,7 @@ public class HomeScreenGUI implements ActionListener {
 	private ExportGUI exportGUI;
 
 	private static final String[] FIELDS = new String[] { "Name", "Node Name", "Cultural ID", "Gender", "Occupation",
-			"Date", "Location", "Type" };
+			"Date", "Location", "Interaction Type" };
 
 	private JFrame frame;
 	private JButton add;
@@ -67,8 +67,13 @@ public class HomeScreenGUI implements ActionListener {
 
 		save = new JButton("Save Changes");
 		add = new JButton("Add");
+		add.setBackground(new Color(255,153,153));
 		edit = new JButton("Edit");
+		edit.setBackground(new Color(255,204,153));
+		databases = new JTabbedPane();
+		databases.setBackground(Color.LIGHT_GRAY);
 		export = new JButton("Export");
+		export.setBackground(new Color(204,255,204));
 		dateRange = new JButton("Date Range");
 
 		databases = new JTabbedPane();
@@ -269,7 +274,7 @@ public class HomeScreenGUI implements ActionListener {
 	 * 
 	 * @return a data storage object of just the filtered data.
 	 */
-	public DataStorage getFilteredStorage() {
+	public DataStorage getStorage() {
 		if (mainStorage.isFiltered()) {
 			return filtered;
 		} else {
@@ -346,10 +351,11 @@ public class HomeScreenGUI implements ActionListener {
 
 	/**
 	 * Checks to see if the date is in the right format and updates the table
-	 * with data from that dat or date range.
+	 * with data from that data or date range.
 	 * 
 	 * @throws IOException
 	 */
+
 	public void dateQuery() throws IOException {
 		if (isDateRange) {
 			if (checkIfFilledDate()) {
@@ -359,25 +365,28 @@ public class HomeScreenGUI implements ActionListener {
 						Integer.parseInt(searchMonth2.getText()), Integer.parseInt(searchDay2.getText()));
 				if (!targetDate.isValidDate() || !targetDate2.isValidDate()) {
 					JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
-				} else {
-					ConnectionQuery connectionQuery = new DateQuery(targetDate, targetDate2);
-					filtered = mainStorage.connectionFilter(connectionQuery);
-					if (!filtered.getConnectionArrayList().isEmpty()) {
-						updateTable(filtered);
 					} else {
-						JOptionPane.showMessageDialog(null, "No results found");
+						resetFilter.setEnabled(true);
+						ConnectionQuery connectionQuery = new DateQuery(targetDate, targetDate2);
+						filtered = mainStorage.connectionFilter(connectionQuery);
+						if (!filtered.getConnectionArrayList().isEmpty()) {
+							updateTable(filtered);
+						} else {
+								JOptionPane.showMessageDialog(null, "No results found");
+						}
 					}
 				}
-			} else {
-				if (searchDay.getText().equals("") || searchMonth.getText().equals("")
+		} else {
+			if (searchDay.getText().equals("") || searchMonth.getText().equals("")
 						|| searchYear.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Please enter a full date");
-				} else {
+			} else {
 					Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
 							Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
 					if (!targetDate.isValidDate()) {
 						JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
 					} else {
+						resetFilter.setEnabled(true);
 						ConnectionQuery connectionQuery = new DateQuery(targetDate, null);
 						filtered = mainStorage.connectionFilter(connectionQuery);
 						if (!filtered.getConnectionArrayList().isEmpty()) {
@@ -389,7 +398,6 @@ public class HomeScreenGUI implements ActionListener {
 				}
 			}
 		}
-	}
 
 	/**
 	 * When submit in search is clicked, checks to see if the user is in the
@@ -409,44 +417,35 @@ public class HomeScreenGUI implements ActionListener {
 			} else {
 				if (newData.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Please enter search criteria");
+				} else {
+					resetFilter.setEnabled(true);
+					export.setEnabled(false);
+					PersonQuery personQuery = new ContainsQuery(newData.getText(),
+							filterOptions.getSelectedItem().toString());
+					filtered = mainStorage.personFilter(personQuery);
+					updateTable(filtered);
 				}
-				export.setEnabled(false);
-				PersonQuery personQuery = new ContainsQuery(newData.getText(),
-						filterOptions.getSelectedItem().toString());
-				filtered = mainStorage.personFilter(personQuery);
-				System.out.println("update");
-				updateTable(filtered);
 			}
 		} else { // is connectionTableDisplay
 			export.setEnabled(true);
 			if (option == 5) { // date
 				dateQuery();
 			} else {
-				ConnectionQuery connectionQuery = new ContainsQuery(newData.getText(),
-						filterOptions.getSelectedItem().toString());
-				filtered = mainStorage.connectionFilter(connectionQuery);
-				if (!filtered.getConnectionArrayList().isEmpty()) {
-					updateTable(filtered);
+				if (newData.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter search criteria");
 				} else {
-					JOptionPane.showMessageDialog(null, "No results found");
+					resetFilter.setEnabled(true);
+					ConnectionQuery connectionQuery = new ContainsQuery(newData.getText(),
+							filterOptions.getSelectedItem().toString());
+					filtered = mainStorage.connectionFilter(connectionQuery);
+					if (!filtered.getConnectionArrayList().isEmpty()) {
+						updateTable(filtered);
+					} else {
+						JOptionPane.showMessageDialog(null, "No results found");
+					}
 				}
 			}
-
 		}
-
-	}
-
-	/**
-	 * Sets the default text to blanks.
-	 */
-	public void setSearchDefaultText() {
-		newData.setText("");
-		searchDay.setText("");
-		searchMonth.setText("");
-		searchYear.setText("");
-		searchDay2.setText("");
-		searchMonth2.setText("");
-		searchYear2.setText("");
 	}
 
 	/**
@@ -460,12 +459,10 @@ public class HomeScreenGUI implements ActionListener {
 		try {
 			Object source = event.getSource();
 			if (source == submit) {
-				resetFilter.setEnabled(true);
 				submitSearch();
 				mainStorage.setFiltered(true);
 			} else if (source == resetFilter) {
 				updateTable(mainStorage);
-				setSearchDefaultText();
 				resetFilter.setEnabled(false);
 				mainStorage.setFiltered(false);
 				export.setEnabled(true);

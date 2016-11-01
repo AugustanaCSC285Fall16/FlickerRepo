@@ -35,8 +35,8 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 			return false;
 		} else if (fieldName.equals("Location")) {
 			return connection.getLocation().contains(target);
-		} else if (fieldName.equals("Type")) {
-			return connection.getTypeInteraction().contains(target);
+		} else if (fieldName.equals("Interaction Type")) {
+			return connection.getTypeInteraction().toLowerCase().contains(target.toLowerCase());
 		} else {
 			throw new UnsupportedOperationException("Invalid query field");
 		}
