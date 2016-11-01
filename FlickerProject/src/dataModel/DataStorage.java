@@ -1,6 +1,16 @@
 package dataModel;
-import java.io.*;
-import java.util.*;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -21,7 +31,7 @@ public class DataStorage {
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
 	private static final String TEST_PERSON_FILE_NAME = "TestPersonData.csv";
 	private static final String TEST_CONNECTION_FILE_NAME = "TestConnectionData.csv";
-	
+
 	private static DataStorage testDataStorage = null;
 
 	private boolean isFiltered = false;
@@ -48,9 +58,9 @@ public class DataStorage {
 		}
 		return primaryDataStorage;
 	}
-	
+
 	public static DataStorage getTestDataStorage() {
-		if(testDataStorage == null) {
+		if (testDataStorage == null) {
 			try {
 				testDataStorage = new DataStorage();
 				testDataStorage.loadPeople(TEST_PERSON_FILE_NAME);
@@ -74,12 +84,12 @@ public class DataStorage {
 		connectionsMap = new TreeMap<>();
 	}
 
-
 	/**
 	 * Checks to see if the Person is in the data
 	 * 
 	 * @param query
-	 * @return DataStorage - a new data storage object with just the filtered data
+	 * @return DataStorage - a new data storage object with just the filtered
+	 *         data
 	 * @throws IOException
 	 */
 	public DataStorage personFilter(PersonQuery query) throws IOException {
@@ -151,6 +161,7 @@ public class DataStorage {
 
 	/**
 	 * Converts the PersonMap to a collection of type Person
+	 * 
 	 * @return Collection<Person>
 	 */
 	public Collection<Person> getPeopleList() {
@@ -159,6 +170,7 @@ public class DataStorage {
 
 	/**
 	 * Converts the personMap to an arrayList of type Person
+	 * 
 	 * @return ArrayList<Person>
 	 */
 	public ArrayList<Person> getPeopleArrayList() {
@@ -168,6 +180,7 @@ public class DataStorage {
 
 	/**
 	 * Adds a person to the personMap
+	 * 
 	 * @param person
 	 */
 	public void addPerson(Person person) {
@@ -176,6 +189,7 @@ public class DataStorage {
 
 	/**
 	 * Loads all of the people from a csv and stores them in the personMap
+	 * 
 	 * @throws IOException
 	 */
 	void loadPeople(String fileName) throws IOException {
@@ -192,6 +206,7 @@ public class DataStorage {
 
 	/**
 	 * Writes the personMap to the csv
+	 * 
 	 * @throws IOException
 	 */
 	public void savePeople() throws IOException {
@@ -206,6 +221,7 @@ public class DataStorage {
 
 	/**
 	 * Loads the connections from the csv and stores them in ConnectionMap
+	 * 
 	 * @throws IOException
 	 */
 	void loadConnections(String fileName) throws IOException {
@@ -239,10 +255,10 @@ public class DataStorage {
 		}
 
 	}
-	
 
 	/**
 	 * Adds a connection to the connectionMap
+	 * 
 	 * @param connection
 	 */
 	public void addConnection(Connection connection) {
@@ -251,8 +267,9 @@ public class DataStorage {
 
 	/**
 	 * Retrieves and Returns the Connection from the ID parameter
+	 * 
 	 * @param ID
-	 * @return Connection 
+	 * @return Connection
 	 */
 	public Connection getConnectionFromID(int ID) {
 		return connectionsMap.get(ID);
@@ -269,6 +286,7 @@ public class DataStorage {
 
 	/**
 	 * Converts the connectionsMap to a Collection of type connection
+	 * 
 	 * @return Collection<Connection>
 	 */
 	public Collection<Connection> getConnectionList() {
@@ -277,6 +295,7 @@ public class DataStorage {
 
 	/**
 	 * Converts the connectionMap to an arrayList of type Connection
+	 * 
 	 * @return Collection<Connetion>
 	 */
 	public ArrayList<Connection> getConnectionArrayList() {
@@ -285,9 +304,10 @@ public class DataStorage {
 	}
 
 	/**
-	 * Returns a person based on if the parameter name is in the prersonMap. 
+	 * Returns a person based on if the parameter name is in the prersonMap.
+	 * 
 	 * @param name
-	 * @return Person 
+	 * @return Person
 	 */
 	public Person getPersonListForConnection(String name) {
 		for (Person person : personMap.values()) {
@@ -301,6 +321,7 @@ public class DataStorage {
 
 	/**
 	 * Writes the connectionMap to the csv
+	 * 
 	 * @throws IOException
 	 */
 	public void saveConnections() throws IOException {
@@ -315,6 +336,7 @@ public class DataStorage {
 
 	/**
 	 * Reads in the ID, connection number, and user number
+	 * 
 	 * @throws IOException
 	 */
 	void loadIdConnUserNum() throws IOException {
@@ -330,7 +352,8 @@ public class DataStorage {
 	}
 
 	/**
-	 * Writes the ID, connection number, and user number to the csv. 
+	 * Writes the ID, connection number, and user number to the csv.
+	 * 
 	 * @throws IOException
 	 */
 	private void saveIdConnUserNum() throws IOException {

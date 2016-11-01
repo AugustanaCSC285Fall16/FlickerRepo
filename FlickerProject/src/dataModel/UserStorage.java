@@ -1,5 +1,10 @@
 package dataModel;
-import java.io.*;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,8 +20,7 @@ public class UserStorage {
 	private String[] userHeaderRow;
 	private static final String USER_DATA_FILE_NAME = "UserData.csv";
 	private static UserStorage primaryUserStorage = null;
-	
-	
+
 	/**
 	 * Creates our main User Storage Object that will be used all over in the
 	 * program to call methods related to the data of users
@@ -41,15 +45,15 @@ public class UserStorage {
 	private UserStorage() throws IOException {
 		userMap = new TreeMap<>();
 	}
-	
+
 	/**
 	 * loads the Users from the csv file
 	 * 
 	 * @throws IOException
 	 */
 	private void loadUsers() throws IOException {
-		CSVReader reader = new CSVReader(
-				new InputStreamReader(new FileInputStream((DataStorage.DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
+		CSVReader reader = new CSVReader(new InputStreamReader(
+				new FileInputStream((DataStorage.DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
 
 		List<String[]> myRows = reader.readAll();
 		userHeaderRow = myRows.remove(0); // remove header row
@@ -61,11 +65,12 @@ public class UserStorage {
 
 	/**
 	 * Saves the users to the csv file
+	 * 
 	 * @throws IOException
 	 */
 	public void saveUsers() throws IOException {
-		CSVWriter writer = new CSVWriter(
-				new OutputStreamWriter(new FileOutputStream((DataStorage.DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
+		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
+				new FileOutputStream((DataStorage.DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
 		writer.writeNext(userHeaderRow);
 		for (User user : userMap.values()) {
 			writer.writeNext(user.toCSVRowArray());
@@ -74,7 +79,8 @@ public class UserStorage {
 	}
 
 	/**
-	 * Adds the user parameter to the user map. 
+	 * Adds the user parameter to the user map.
+	 * 
 	 * @param user
 	 */
 	public void addUser(User user) {
@@ -83,6 +89,7 @@ public class UserStorage {
 
 	/**
 	 * Converts the userMap to an arrayList
+	 * 
 	 * @return ArrayList<User>
 	 */
 	public ArrayList<User> getUserArrayList() {
@@ -92,6 +99,7 @@ public class UserStorage {
 
 	/**
 	 * Converts the UserMap to a collection of type user
+	 * 
 	 * @return Collection<User>
 	 */
 	public Collection<User> getUserList() {
@@ -115,8 +123,8 @@ public class UserStorage {
 	}
 
 	/**
-	 * Checks to see if the  user is in the data.
-	 *  
+	 * Checks to see if the user is in the data.
+	 * 
 	 * @param query
 	 * @return boolean true if in data
 	 * @throws IOException

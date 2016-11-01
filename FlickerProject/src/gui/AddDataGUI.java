@@ -1,8 +1,19 @@
 package gui;
-import java.awt.*;
-import java.awt.event.*;
+
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import dataModel.VocabStorage;
 
@@ -26,7 +37,7 @@ public class AddDataGUI implements ActionListener {
 	 */
 	public AddDataGUI() {
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setSize(600, 100);
 		frame.setTitle("Home");
 		frame.setLayout(new GridLayout(2, 1));
@@ -58,7 +69,7 @@ public class AddDataGUI implements ActionListener {
 
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		
+
 		try {
 			storage = VocabStorage.getMainVocabStorage();
 		} catch (IOException e) {

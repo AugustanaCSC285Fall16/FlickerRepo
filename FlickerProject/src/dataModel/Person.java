@@ -1,4 +1,5 @@
 package dataModel;
+
 import java.io.IOException;
 
 public class Person implements TableRowViewable {
@@ -71,6 +72,7 @@ public class Person implements TableRowViewable {
 	 * 
 	 * @return String[] of the person information
 	 */
+	@Override
 	public String[] toTableRowArray() {
 		return new String[] { Integer.toString(id), name, nodeName, occupation, gender, culturalId, biographicalNotes };
 	}

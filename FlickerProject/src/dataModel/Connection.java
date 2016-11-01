@@ -1,5 +1,6 @@
 package dataModel;
-import java.util.*;
+
+import java.util.List;
 
 public class Connection implements TableRowViewable {
 
@@ -75,7 +76,6 @@ public class Connection implements TableRowViewable {
 		String result = "";
 		for (Person person : peopleList) {
 			result += person.getID() + ":";
-			// FIXME: Make it so there is not an extra colon at the end.
 		}
 		return result;
 	}
@@ -86,6 +86,7 @@ public class Connection implements TableRowViewable {
 	 * 
 	 * @return String array of table row connection
 	 */
+	@Override
 	public String[] toTableRowArray() {
 		return new String[] { Integer.toString(edgeId), peopleList.toString(), date.toString(), typeInteraction,
 				location, citation, socialNotes, direction };

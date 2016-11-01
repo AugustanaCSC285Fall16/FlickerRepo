@@ -1,4 +1,5 @@
 package dataModel;
+
 public class Date {
 	// constants
 	private static final int[] DAYS_IN_MONTH = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -36,7 +37,7 @@ public class Date {
 	 */
 	public boolean isValidDate() {
 		boolean leapYear = isLeapYear(year);
-		if(day == 0 && month == 0 && year == 0000) {
+		if (day == 0 && month == 0 && year == 0000) {
 			return true;
 		}
 		if (day < 1) {
@@ -58,9 +59,9 @@ public class Date {
 		}
 		return true;
 	}
-	
+
 	public boolean isUnknownDate() {
-		if(day == 0 && month == 0 && year == 0000) {
+		if (day == 0 && month == 0 && year == 0000) {
 			return true;
 		} else {
 			return false;
@@ -118,6 +119,7 @@ public class Date {
 	 * @return true if the implicit parameter has the same data fields as the
 	 *         formal parameter
 	 */
+	@Override
 	public boolean equals(Object date) {
 		if (date instanceof Date) {
 			Date other = (Date) date;
@@ -188,6 +190,7 @@ public class Date {
 	 * 
 	 * @return String representation of the date
 	 */
+	@Override
 	public String toString() {
 		String returnValue = month + "/" + day + "/" + year;
 		return returnValue;

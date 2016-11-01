@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -8,7 +9,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 
 import dataModel.DataStorage;
 import dataModel.Person;
@@ -74,10 +86,10 @@ public class AddEditPersonGUI implements ActionListener {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Could not load Data!");
 		}
-		
+
 		this.personEdited = person;
 		this.home = home;
-		
+
 		if (person == null) {
 			editing = false;
 		} else {
@@ -91,7 +103,7 @@ public class AddEditPersonGUI implements ActionListener {
 		occupationChoices = vocabStorage.getOccupationChoices();
 
 		initContainers();
-		
+
 		notes.setLineWrap(true);
 
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -117,7 +129,7 @@ public class AddEditPersonGUI implements ActionListener {
 		resetButton.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		if (personEdited == null) {
 			setDefault();
@@ -125,35 +137,35 @@ public class AddEditPersonGUI implements ActionListener {
 			setPersonData(personEdited);
 		}
 	}
-	
-	private void initContainers(){
+
+	private void initContainers() {
 		name = new JTextField(15);
 		nodeName = new JTextField(15);
-		
+
 		culture = new JComboBox<>(cultureChoices.toArray());
 		gender = new JComboBox<>(new String[] { "Unknown", "Male", "Female" });
 		occupation = new JComboBox<>(occupationChoices.toArray());
-		
+
 		notes = new JTextArea(2, 15);
-		
+
 		nameLabel = new JLabel("Person Name:");
 		nodeNameLabel = new JLabel("Node Name:");
 		culturalLabel = new JLabel("Cultural ID:");
 		genderLabel = new JLabel("Gender:");
 		occupationLabel = new JLabel("Occupation:");
 		biographyLabel = new JLabel("Biography:");
-		
+
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 		resetButton = new JButton("Reset");
-		
+
 		namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		culturePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		genderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		occupationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		notesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		
+
 		scroll = new JScrollPane(notes);
 	}
 
@@ -336,6 +348,7 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @param ActionEvent
 	 *            - event from the Add/Edit PersonGUI
 	 */
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {
