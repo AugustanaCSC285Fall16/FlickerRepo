@@ -23,9 +23,9 @@ public class HomeScreenGUI implements ActionListener {
 	private JFrame frame;
 	private JButton add;
 	private JButton edit;
-	private JButton save;
 	private JButton resetFilter;
 	private JButton export;
+	private JButton submit;
 	private JPanel searchPanel;
 	private JPanel criteriaPanel;
 	private JLabel filterOptionsLabel;
@@ -35,7 +35,7 @@ public class HomeScreenGUI implements ActionListener {
 	private JTextField searchDay;
 	private JTextField searchMonth;
 	private JTextField searchYear;
-	private JButton submit;
+
 	private JTabbedPane databases;
 	private JPanel centerPanel;
 	private JTable personTableDisplay;
@@ -47,7 +47,6 @@ public class HomeScreenGUI implements ActionListener {
 
 	public HomeScreenGUI(String permission) throws IOException {
 
-		save = new JButton("Save Changes");
 		add = new JButton("Add");
 		edit = new JButton("Edit");
 		databases = new JTabbedPane();
@@ -68,7 +67,6 @@ public class HomeScreenGUI implements ActionListener {
 		edit.addActionListener(this);
 		resetFilter.addActionListener(this);
 		export.addActionListener(this);
-		save.addActionListener(this);
 		submit.addActionListener(this);
 		resetFilter.addActionListener(this);
 		filterOptions.addActionListener(this);
@@ -231,7 +229,7 @@ public class HomeScreenGUI implements ActionListener {
 	 */
 	public void addClicked() {
 		Object[] options = { "Add Person", "Add Connection", "Add Controlled Vocab" };
-		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Answer me",
+		int val = JOptionPane.showOptionDialog(frame, "What would you like to add?", "Add...",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 		if (val == 0) { // if artist
 			AddEditPersonGUI personGUI = new AddEditPersonGUI(this, null);
