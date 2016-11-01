@@ -79,35 +79,16 @@ public class AddEditPersonGUI implements ActionListener {
 			editing = true;
 		}
 
-		name = new JTextField(15);
-		nodeName = new JTextField(15);
 		cultureChoices = vocabStorage.getCultureChoices();
-		culture = new JComboBox<>(cultureChoices.toArray());
+
 		genderChoices = new Vector<String>(Arrays.asList("Unknown", "Male", "Female"));
-		gender = new JComboBox<>(new String[] { "Unknown", "Male", "Female" });
+
 		occupationChoices = vocabStorage.getOccupationChoices();
-		occupation = new JComboBox<>(occupationChoices.toArray());
-		notes = new JTextArea(2, 15);
+
+		initContainers();
+		
 		notes.setLineWrap(true);
-		submitButton = new JButton("Submit");
-		cancel = new JButton("Cancel");
-		resetButton = new JButton("Reset");
 
-		nameLabel = new JLabel("Person Name:");
-		nodeNameLabel = new JLabel("Node Name:");
-		culturalLabel = new JLabel("Cultural ID:");
-		genderLabel = new JLabel("Gender:");
-		occupationLabel = new JLabel("Occupation:");
-		biographyLabel = new JLabel("Biography:");
-
-		namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		culturePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		genderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		occupationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		notesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-
-		scroll = new JScrollPane(notes);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		namePanel.add(name);
@@ -138,6 +119,37 @@ public class AddEditPersonGUI implements ActionListener {
 		} else {
 			setPersonData(personEdited);
 		}
+	}
+	
+	private void initContainers(){
+		name = new JTextField(15);
+		nodeName = new JTextField(15);
+		
+		culture = new JComboBox<>(cultureChoices.toArray());
+		gender = new JComboBox<>(new String[] { "Unknown", "Male", "Female" });
+		occupation = new JComboBox<>(occupationChoices.toArray());
+		
+		notes = new JTextArea(2, 15);
+		
+		nameLabel = new JLabel("Person Name:");
+		nodeNameLabel = new JLabel("Node Name:");
+		culturalLabel = new JLabel("Cultural ID:");
+		genderLabel = new JLabel("Gender:");
+		occupationLabel = new JLabel("Occupation:");
+		biographyLabel = new JLabel("Biography:");
+		
+		submitButton = new JButton("Submit");
+		cancel = new JButton("Cancel");
+		resetButton = new JButton("Reset");
+		
+		namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		culturePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		genderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		occupationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		notesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		
+		scroll = new JScrollPane(notes);
 	}
 
 	/**
