@@ -4,42 +4,33 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 public class DataStorage {
-	// data fields
 	public Map<Integer, User> userMap;
 	public Map<Integer, Person> personMap;
 	private Map<Integer, Connection> connectionsMap;
-	private String[] personHeaderRow = { "Id", "Name", "Node Name", "Occupation", "Gender", "Cultural ID",
-			"Biographical Notes" };
-	private String[] connectionHeaderRow = { "Edge", "Connecting Name List", "Date", "Type of Interaction", "Location",
-			"Citation", "Social Notes", "Direction" };
+
+	private String[] personHeaderRow;
+	private String[] connectionHeaderRow;
 	private String[] userHeaderRow;
-	private ArrayList<String> interactionChoices;
-	private ArrayList<String> locationChoices;
-	private ArrayList<String> cultureChoices;
-	private ArrayList<String> occupationChoices;
-	private boolean isFiltered = false;
+
 
 	private int nextIdNum;
 	private int nextConnNum;
 	private int nextUserNum;
 
-	private static final String DATA_FOLDER = "DataFiles";
+	public static final String DATA_FOLDER = "DataFiles";
 	private static final String USER_DATA_FILE_NAME = "UserData.csv";
 	private static final String PERSON_FILE_NAME = "PersonData.csv";
 	private static final String CONNECTION_FILE_NAME = "ConnectionData.csv";
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
-	private static final String INTERACTION_CHOICES_FILE_NAME = "InteractionChoices.csv";
-	private static final String LOCATION_CHOICES_FILE_NAME = "LocationChoices.csv";
-	private static final String CULTURE_CHOICES_FILE_NAME = "CultureChoices.csv";
-	private static final String OCCUPATION_CHOICES_FILE_NAME = "OccupationChoices.csv";
 
+	private boolean isFiltered = false;
 	private static DataStorage primaryDataStorage = null;
 
 	/**
 	 * Creates our main Data Storage Object that will be used all over in the
-	 * program to call methods.
+	 * program to call methods related to the data of connections and persons
 	 * 
-	 * @return Data Storage object that will be our singleton
+	 * @return Data Storage object that will be a singleton
 	 * @throws IOException
 	 */
 	public static DataStorage getMainDataStorage() throws IOException {
@@ -48,26 +39,28 @@ public class DataStorage {
 			primaryDataStorage.loadPeople();
 			primaryDataStorage.loadConnections();
 			primaryDataStorage.loadUsers();
-			primaryDataStorage.loadIdAndConnNum();
+			primaryDataStorage.loadIdConnUserNum();
 		}
 		return primaryDataStorage;
 	}
 
-	// constructor
+	/**
+	 * The Private constructor only Initializes the data fields but doesn't fill
+	 * them in This allows for the singleton pattern
+	 * 
+	 * @throws IOException
+	 */
 	private DataStorage() throws IOException {
 		personMap = new TreeMap<>();
 		connectionsMap = new TreeMap<>();
 		userMap = new TreeMap<>();
-		interactionChoices = new ArrayList<>();
-		locationChoices = new ArrayList<>();
-		cultureChoices = new ArrayList<>();
-		occupationChoices = new ArrayList<>();
-		loadDataTypes(INTERACTION_CHOICES_FILE_NAME, interactionChoices);
-		loadDataTypes(LOCATION_CHOICES_FILE_NAME, locationChoices);
-		loadDataTypes(CULTURE_CHOICES_FILE_NAME, cultureChoices);
-		loadDataTypes(OCCUPATION_CHOICES_FILE_NAME, occupationChoices);
 	}
 
+	/**
+	 * loads the Users from the csv file
+	 * 
+	 * @throws IOException
+	 */
 	private void loadUsers() throws IOException {
 		CSVReader reader = new CSVReader(
 				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
@@ -80,6 +73,10 @@ public class DataStorage {
 		}
 	}
 
+	/**
+	 * Saves the users to the csv file
+	 * @throws IOException
+	 */
 	public void saveUsers() throws IOException {
 		CSVWriter writer = new CSVWriter(
 				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
@@ -90,24 +87,36 @@ public class DataStorage {
 		writer.close();
 	}
 
+	/**
+	 * Adds the user parameter to the user map. 
+	 * @param user
+	 */
 	public void addUser(User user) {
 		userMap.put(user.getId(), user);
 	}
 
+	/**
+	 * Converts the userMap to an arrayList
+	 * @return ArrayList<User>
+	 */
 	public ArrayList<User> getUserArrayList() {
 		ArrayList<User> userList = new ArrayList<>(userMap.values());
 		return userList;
 	}
 
+	/**
+	 * Converts the UserMap to a collection of type user
+	 * @return Collection<User>
+	 */
 	public Collection<User> getUserList() {
 		return userMap.values();
 	}
 
 	/**
-	 * 
+	 * Checks to see if the user is in the data and then returns the user
 	 * 
 	 * @param query
-	 * @return
+	 * @return user in data
 	 * @throws IOException
 	 */
 	public User getUserFromFiltered(UserQuery query) throws IOException {
@@ -119,6 +128,13 @@ public class DataStorage {
 		return null;
 	}
 
+	/**
+	 * Checks to see if the  user is in the data.
+	 *  
+	 * @param query
+	 * @return boolean true if in data
+	 * @throws IOException
+	 */
 	public boolean userFilter(UserQuery query) throws IOException {
 		for (User user : primaryDataStorage.getUserList()) {
 			if (query.accepts(user)) {
@@ -128,6 +144,13 @@ public class DataStorage {
 		return false;
 	}
 
+	/**
+	 * Checks to see if the Person is in the data
+	 * 
+	 * @param query
+	 * @return DataStorage - a new data storage object with just the filtered data
+	 * @throws IOException
+	 */
 	public DataStorage personFilter(PersonQuery query) throws IOException {
 		DataStorage filteredData = new DataStorage();
 		for (Person person : primaryDataStorage.getPeopleList()) {
@@ -138,6 +161,13 @@ public class DataStorage {
 		return filteredData;
 	}
 
+	/**
+	 * Checks to see if the connection is in the data
+	 * 
+	 * @param query
+	 * @return DataStorage - new data storage object with the filtered data
+	 * @throws IOException
+	 */
 	public DataStorage connectionFilter(ConnectionQuery query) throws IOException {
 		DataStorage filteredData = new DataStorage();
 		for (Connection connection : primaryDataStorage.getConnectionList()) {
@@ -151,37 +181,70 @@ public class DataStorage {
 		return filteredData;
 	}
 
+	/**
+	 * Sets the isFiltered operator to the parameter
+	 * 
+	 * @param operator
+	 */
 	public void setFiltered(boolean operator) {
 		isFiltered = operator;
 	}
 
+	/**
+	 * Retrieves and returns the isFiltered boolean
+	 * 
+	 * @return boolean isFiltered
+	 */
 	public boolean isFiltered() {
 		return isFiltered;
 	}
 
+	/**
+	 * Retrieves and returns the PersonHeaderRow
+	 * 
+	 * @return String []
+	 */
 	public String[] getPersonHeaderRow() {
 		return personHeaderRow;
 	}
 
+	/**
+	 * Retrieves and returns the Person that matches the parameterId
+	 * 
+	 * @param ID
+	 * @return Person
+	 */
 	public Person getPersonFromID(int ID) {
 		return personMap.get(ID);
 	}
 
+	/**
+	 * Converts the PersonMap to a collection of type Person
+	 * @return Collection<Person>
+	 */
 	public Collection<Person> getPeopleList() {
 		return personMap.values();
 	}
 
+	/**
+	 * Converts the personMap to an arrayList of type Person
+	 * @return ArrayList<Person>
+	 */
 	public ArrayList<Person> getPeopleArrayList() {
 		ArrayList<Person> personList = new ArrayList<>(personMap.values());
 		return personList;
 	}
 
+	/**
+	 * Adds a person to the personMap
+	 * @param person
+	 */
 	public void addPerson(Person person) {
 		personMap.put(person.getID(), person);
 	}
 
 	/**
-	 * 
+	 * Loads all of the people from a csv and stores them in the personMap
 	 * @throws IOException
 	 */
 	void loadPeople() throws IOException {
@@ -196,6 +259,10 @@ public class DataStorage {
 		}
 	}
 
+	/**
+	 * Writes the personMap to the csv
+	 * @throws IOException
+	 */
 	public void savePeople() throws IOException {
 		CSVWriter writer = new CSVWriter(
 				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + PERSON_FILE_NAME)), "UTF-8"));
@@ -206,12 +273,15 @@ public class DataStorage {
 		writer.close();
 	}
 
+	/**
+	 * Loads the connections from the csv and stores them in ConnectionMap
+	 * @throws IOException
+	 */
 	void loadConnections() throws IOException {
 		CSVReader reader = new CSVReader(
 				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + CONNECTION_FILE_NAME)), "UTF-8"));
 		List<String[]> myRows = reader.readAll();
 		connectionHeaderRow = myRows.remove(0);
-
 		for (String[] row : myRows) {
 			int edgeID = Integer.parseInt(row[0]);
 			String baseIdListText = row[1];
@@ -221,12 +291,9 @@ public class DataStorage {
 			String citation = row[5];
 			String socialNotes = row[6];
 			String direction = row[7];
-
 			String[] idArray = baseIdListText.split(":");
 			List<Person> peopleConnectingNamesList = new ArrayList<Person>();
-
 			String[] dateArray = dateText.split(":");
-			// System.out.println(dateArray.toString());
 			String month = dateArray[0];
 			String day = dateArray[1];
 			String year = dateArray[2];
@@ -236,35 +303,60 @@ public class DataStorage {
 				Person person = personMap.get(id);
 				peopleConnectingNamesList.add(person);
 			}
-
 			addConnection(new Connection(edgeID, day, month, year, typeInteraction, location, citation, socialNotes,
 					peopleConnectingNamesList, direction));
-
 		}
 
 	}
 
+	/**
+	 * Adds a connection to the connectionMap
+	 * @param connection
+	 */
 	public void addConnection(Connection connection) {
 		connectionsMap.put(connection.getEdgeId(), connection);
 	}
 
+	/**
+	 * Retrieves and Returns the Connection from the ID parameter
+	 * @param ID
+	 * @return Connection 
+	 */
 	public Connection getConnectionFromID(int ID) {
 		return connectionsMap.get(ID);
 	}
 
+	/**
+	 * Retrieves and returns the HeaderRow for the connection csv
+	 * 
+	 * @return String[] of header
+	 */
 	public String[] getConnectionHeaderRow() {
 		return connectionHeaderRow;
 	}
 
+	/**
+	 * Converts the connectionsMap to a Collection of type connection
+	 * @return Collection<Connection>
+	 */
 	public Collection<Connection> getConnectionList() {
 		return connectionsMap.values();
 	}
 
+	/**
+	 * Converts the connectionMap to an arrayList of type Connection
+	 * @return Collection<Connetion>
+	 */
 	public ArrayList<Connection> getConnectionArrayList() {
 		ArrayList<Connection> connectionList = new ArrayList<>(connectionsMap.values());
 		return connectionList;
 	}
 
+	/**
+	 * Returns a person based on if the parameter name is in the prersonMap. 
+	 * @param name
+	 * @return Person 
+	 */
 	public Person getPersonListForConnection(String name) {
 		for (Person person : personMap.values()) {
 			if (name.equals(person.getName())) {
@@ -275,6 +367,10 @@ public class DataStorage {
 		return null;
 	}
 
+	/**
+	 * Writes the connectionMap to the csv
+	 * @throws IOException
+	 */
 	public void saveConnections() throws IOException {
 		CSVWriter writer = new CSVWriter(
 				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + CONNECTION_FILE_NAME)), "UTF-8"));
@@ -285,101 +381,11 @@ public class DataStorage {
 		writer.close();
 	}
 
-	private void loadDataTypes(String fileName, ArrayList<String> list) throws IOException {
-		CSVReader reader = new CSVReader(
-				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + fileName)), "UTF-8"));
-		String[] nextLine;
-		while ((nextLine = reader.readNext()) != null) {
-			// nextLine[] is an array of values from the line
-			String item = nextLine[0];
-			list.add(item);
-		}
-	}
-
-	// Could we make these next 4 methods into one and have the parameters be
-	// the file name
-	// and the ArrayList<String> that is being saved???
-	public void saveOccupationControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
-				new FileOutputStream((DATA_FOLDER + "/" + OCCUPATION_CHOICES_FILE_NAME)), "UTF-8"));
-		List<String[]> choicesArray = new ArrayList<>();
-		for (int i = 0; i < occupationChoices.size(); i++) {
-			choicesArray.add(this.toCSVControlledVocabArray(occupationChoices.get(i).toLowerCase()));
-		}
-		writer.writeAll(choicesArray);
-		writer.close();
-	}
-
-	public void saveCulturalIDControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(
-				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + CULTURE_CHOICES_FILE_NAME)), "UTF-8"));
-		List<String[]> choicesArray = new ArrayList<>();
-		for (int i = 0; i < cultureChoices.size(); i++) {
-			choicesArray.add(this.toCSVControlledVocabArray(cultureChoices.get(i).toLowerCase()));
-		}
-		writer.writeAll(choicesArray);
-		writer.close();
-	}
-
-	public void saveLocationControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
-				new FileOutputStream((DATA_FOLDER + "/" + LOCATION_CHOICES_FILE_NAME)), "UTF-8"));
-		List<String[]> choicesArray = new ArrayList<>();
-		for (int i = 0; i < locationChoices.size(); i++) {
-			choicesArray.add(this.toCSVControlledVocabArray(locationChoices.get(i).toLowerCase()));
-		}
-		writer.writeAll(choicesArray);
-		writer.close();
-	}
-
-	public void saveInteractionControlledVocab() throws IOException {
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
-				new FileOutputStream((DATA_FOLDER + "/" + INTERACTION_CHOICES_FILE_NAME)), "UTF-8"));
-		List<String[]> choicesArray = new ArrayList<>();
-		for (int i = 0; i < interactionChoices.size(); i++) {
-			choicesArray.add(this.toCSVControlledVocabArray(interactionChoices.get(i).toLowerCase()));
-		}
-		writer.writeAll(choicesArray);
-		writer.close();
-	}
-
-	public String[] toCSVControlledVocabArray(String item) {
-		return new String[] { item };
-	}
-
-	public void addOccupationChoice(String item) {
-		occupationChoices.add(item.toLowerCase());
-	}
-
-	public void addCulteralIdChoice(String item) {
-		cultureChoices.add(item.toLowerCase());
-	}
-
-	public void addLocationChoice(String item) {
-		locationChoices.add(item.toLowerCase());
-	}
-
-	public void addInteractionChoice(String item) {
-		interactionChoices.add(item.toLowerCase());
-	}
-
-	public ArrayList<String> getInteractionTypes() {
-		return interactionChoices;
-	}
-
-	public ArrayList<String> getLocationTypes() {
-		return locationChoices;
-	}
-
-	public ArrayList<String> getCultureChoices() {
-		return cultureChoices;
-	}
-
-	public ArrayList<String> getOccupationChoices() {
-		return occupationChoices;
-	}
-
-	void loadIdAndConnNum() throws IOException {
+	/**
+	 * Reads in the ID, connection number, and user number
+	 * @throws IOException
+	 */
+	void loadIdConnUserNum() throws IOException {
 		CSVReader reader = new CSVReader(
 				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + NEXT_ID_FILE_NAME)), "UTF-8"));
 		String[] nextLine;
@@ -391,7 +397,11 @@ public class DataStorage {
 		}
 	}
 
-	private void saveIdAndConnNum() throws IOException {
+	/**
+	 * Writes the ID, connection number, and user number to the csv. 
+	 * @throws IOException
+	 */
+	private void saveIdConnUserNum() throws IOException {
 		CSVWriter writer = new CSVWriter(
 				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + NEXT_ID_FILE_NAME)), "UTF-8"));
 		String[] entries = { Integer.toString(nextIdNum), Integer.toString(nextConnNum),
@@ -408,7 +418,7 @@ public class DataStorage {
 	 */
 	public int incrementAndGetNextPersonIdNum() throws IOException {
 		nextIdNum++;
-		saveIdAndConnNum();
+		saveIdConnUserNum();
 
 		return nextIdNum;
 	}
@@ -421,7 +431,7 @@ public class DataStorage {
 	 */
 	public int incrementAndGetNextConnectionIdNum() throws IOException {
 		nextConnNum++;
-		saveIdAndConnNum();
+		saveIdConnUserNum();
 
 		return nextConnNum;
 	}
@@ -434,7 +444,7 @@ public class DataStorage {
 	 */
 	public int incrementAndGetNextUserIdNum() throws IOException {
 		nextUserNum++;
-		saveIdAndConnNum();
+		saveIdConnUserNum();
 
 		return nextUserNum;
 	}

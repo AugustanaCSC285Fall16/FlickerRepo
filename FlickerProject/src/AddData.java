@@ -14,16 +14,14 @@ public class AddData implements ActionListener {
 	JTextField newData;
 	JButton submit;
 	JButton cancel;
-	DataStorage storage;
+	VocabStorage storage;
 
+	/**
+	 * Creates an Add Data gui for the user to make new vocab options for the
+	 * program
+	 * 
+	 */
 	public AddData() {
-		try {
-			storage = DataStorage.getMainDataStorage();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(600, 100);
@@ -57,8 +55,19 @@ public class AddData implements ActionListener {
 
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		try {
+			storage = VocabStorage.getMainVocabStorage();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unable to load data!");
+		}
 	}
 
+	/**
+	 * This method saves new, inputed data from the add data GUI
+	 * 
+	 * @throws IOException
+	 */
 	public void submitClicked() throws IOException {
 		if (options.getSelectedIndex() == 0) {
 			if (!storage.getCultureChoices().contains(newData.getText().toLowerCase())) {
@@ -100,17 +109,21 @@ public class AddData implements ActionListener {
 	}
 
 	@Override
+	/**
+	 * This method overrides the actionPerformed method from Action Listener
+	 * 
+	 * @param -
+	 *            an action event from the GUI
+	 */
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if (source == submit) {
 			try {
 				submitClicked();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Could Not save Data!");
 			}
 		} else {
-			// CLOSES THE WHOLE PROGRAM???
 			frame.dispose();
 		}
 	}

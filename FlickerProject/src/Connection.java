@@ -1,8 +1,7 @@
 import java.util.*;
 
 public class Connection implements TableRowViewable {
-	// data fields
-	// private String date;
+
 	private String day;
 	private String month;
 	private String year;
@@ -15,7 +14,20 @@ public class Connection implements TableRowViewable {
 	private String direction;
 	private int edgeId;
 
-	// default constructor
+	/**
+	 * Creates a connection object with all of the parameters.
+	 * 
+	 * @param edgeID
+	 * @param day
+	 * @param month
+	 * @param year
+	 * @param typeInteraction
+	 * @param location
+	 * @param citation
+	 * @param socialNotes
+	 * @param people
+	 * @param direction
+	 */
 	public Connection(int edgeID, String day, String month, String year, String typeInteraction, String location,
 			String citation, String socialNotes, List<Person> people, String direction) {
 		this.edgeId = edgeID;
@@ -43,6 +55,11 @@ public class Connection implements TableRowViewable {
 				socialNotes, direction };
 	}
 
+	/**
+	 * This creates a String date that is to the CSV format
+	 * 
+	 * @return String - String that will be printed to CSV
+	 */
 	public String dateToCSVText() {
 		String result = month + ":" + day + ":" + year;
 		return result;
@@ -95,10 +112,37 @@ public class Connection implements TableRowViewable {
 	/**
 	 * Retrieves and returns the edge Id of the connection.
 	 * 
-	 * @return int edge id
+	 * @return integer edge id
 	 */
 	public int getEdgeId() {
 		return edgeId;
+	}
+
+	/**
+	 * Retrieves and returns the day of the connection as a string.
+	 * 
+	 * @return String day of connection
+	 */
+	public String getDay() {
+		return day;
+	}
+
+	/**
+	 * Retrieves and returns the month of the connection as a string
+	 * 
+	 * @return String month of connection
+	 */
+	public String getMonth() {
+		return month;
+	}
+
+	/**
+	 * Retrieves and returns the year of the connection as a string.
+	 * 
+	 * @return String year of connection
+	 */
+	public String getYear() {
+		return year;
 	}
 
 	/**
@@ -106,40 +150,46 @@ public class Connection implements TableRowViewable {
 	 * 
 	 * @return String date of connection
 	 */
-	public String getDay() {
-		return day;
-	}
-
-	public String getMonth() {
-		return month;
-	}
-
-	public String getYear() {
-		return year;
-	}
-
 	public Date getDate() {
 		return date;
 	}
 
 	/**
-	 * Takes in a date of type String and sets the data field date, which is the
-	 * date the interaction occurred.
+	 * Sets the data field day, which is the day the interaction occurred.
 	 * 
-	 * @param date
+	 * @param String
+	 *            day
 	 */
 	public void setDay(String day) {
 		this.day = day;
 	}
 
+	/**
+	 * Sets the data field month, which is the month the interaction occurred.
+	 * 
+	 * @param String
+	 *            month
+	 */
 	public void setMonth(String month) {
 		this.month = month;
 	}
 
+	/**
+	 * Sets the data field year, which is the year the interaction occurred.
+	 * 
+	 * @param String
+	 *            year
+	 */
 	public void setYear(String year) {
 		this.year = year;
 	}
 
+	/**
+	 * Sets the data field date, which is the date the interaction occurred.
+	 * 
+	 * @param String
+	 *            Date
+	 */
 	public void setDate() {
 		date.setDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
 	}
@@ -155,7 +205,7 @@ public class Connection implements TableRowViewable {
 
 	/**
 	 * Takes in a type of interaction of type String and sets the data field
-	 * typeInteraction, which is the type of interaction that occured in the
+	 * typeInteraction, which is the type of interaction that occurred in the
 	 * connection.
 	 * 
 	 * @param typeInteraction
@@ -240,10 +290,41 @@ public class Connection implements TableRowViewable {
 		this.socialNotes = socialNotes;
 	}
 
+	/**
+	 * Creates a string array to be used with Palladio with the source and
+	 * target person and returns it
+	 * 
+	 * @param Person
+	 *            source
+	 * @param Person
+	 *            target
+	 * @return String[] to be used in exporting the data to Palladio
+	 */
 	public String[] toPalladioArray(Person source, Person target) {
 		return new String[] { source.getNodeName(), target.getNodeName() };
 	}
 
+	/**
+	 * Creates a string array to be used with Gephi with all of the Parameters
+	 * 
+	 * @param Person
+	 *            source
+	 * @param Person
+	 *            target
+	 * @param integer
+	 *            edgeId
+	 * @param String
+	 *            day
+	 * @param String
+	 *            month
+	 * @param String
+	 *            year
+	 * @param String
+	 *            location
+	 * @param String
+	 *            typeInteraction
+	 * @return String [] to be used in exporting the data to Gephi
+	 */
 	public String[] toGephiEdgeArray(Person source, Person target, int edgeId, String day, String month, String year,
 			String location, String typeInteraction) {
 		return new String[] { Integer.toString(source.getID()), Integer.toString(target.getID()),

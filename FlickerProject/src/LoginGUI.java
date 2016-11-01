@@ -8,14 +8,23 @@ public class LoginGUI implements ActionListener {
 	private JFrame frame;
 	private JTextField username;
 	private JPasswordField password;
+
 	private JButton add;
 	private JButton submit;
 	private JButton about;
+
 	private JLabel usernameLabel;
 	private JLabel passwordLabel;
+
 	private boolean isAdmin;
 	private static boolean adminApproved;
 
+	/**
+	 * Makes a Login GUI. Will disable buttons based on parameter.
+	 * 
+	 * @param isAdmin
+	 *            true - will disable the add and about buttons.
+	 */
 	public LoginGUI(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 		this.adminApproved = false;
@@ -54,7 +63,6 @@ public class LoginGUI implements ActionListener {
 	 * 
 	 * @return JPanel This returns the completed center panel.
 	 */
-
 	private JPanel createCenterPanel() {
 		JPanel centerPanel = new JPanel(new FlowLayout());
 		centerPanel.add(usernameLabel);
@@ -70,7 +78,6 @@ public class LoginGUI implements ActionListener {
 	 * 
 	 * @return JPanel This returns the completed south panel.
 	 */
-
 	private JPanel createSouthPanel() {
 		JPanel southPanel = new JPanel(new FlowLayout());
 		southPanel.add(submit);
@@ -79,11 +86,27 @@ public class LoginGUI implements ActionListener {
 		return southPanel;
 	}
 
+	/**
+	 * Checks to see if the User name and password are in the data and and
+	 * starts the program. If isAdmin is true, and the username and password are
+	 * correct, will approve the making of an admin.
+	 * 
+	 * @throws IOException
+	 */
 	private void isCorrectUsernamePassword() throws IOException {
 		DataStorage storage = DataStorage.getMainDataStorage();
 		UserQuery usernameQuery = new ContainsQuery(username.getText(), "Username");
 		UserQuery passwordQuery = new ContainsQuery(password.getText(), "Password");
-		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) {
+		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) { // NEED
+																						// TO
+																						// CHECK
+																						// IF
+																						// USERNAME
+																						// MATCHES
+																						// TO
+																						// PASSWORD.
+			// RIGHT NOW YOU CAN PUT IN A USER NAME AND SOMEONE ELSE's PASSWORD
+			// AND IT WORKS
 			if (isAdmin) {
 				setAdminApproved(true);
 				frame.dispose();
@@ -97,14 +120,26 @@ public class LoginGUI implements ActionListener {
 		}
 	}
 
+	/**
+	 * Retrieves and returns the adminApproved boolean
+	 */
 	public static boolean getAdminApproved() {
 		return adminApproved;
 	}
 
+	/**
+	 * Sets the adminApproved boolean to the parameter
+	 * 
+	 * @param adminApproved
+	 */
 	public static void setAdminApproved(boolean adminApproved) {
 		LoginGUI.adminApproved = adminApproved;
 	}
 
+	@Override
+	/**
+	 * overides the action performed method from ActionListener
+	 */
 	public void actionPerformed(ActionEvent event) {
 		try {
 			if (event.getSource() == add) {

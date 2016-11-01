@@ -10,8 +10,13 @@ public class AboutScreen {
 	private JLabel supervisor;
 	private JLabel specialThanks;
 
+	/**
+	 * Creates an about screen!
+	 * 
+	 * @throws IOException
+	 */
 	public AboutScreen() throws IOException {
-		title = new JLabel("Title");
+		title = new JLabel("World Connections");
 		version = new JLabel("Version 1.0. November 2, 2016. Augustana College.");
 		body = new JLabel("Created by: Lauren Johnson, Andrew Bainter, Megan Janssen, and Tony Learmann");
 		supervisor = new JLabel("Supervised by Forrest Stonedahl.");
