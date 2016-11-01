@@ -14,6 +14,12 @@ public class SplashScreenGUI {
 		}
 	}
 	
+	/**
+	 * Creates a new splash screen GUI
+	 * 
+	 * @throws MalformedURLException
+	 */
+	
 	public SplashScreenGUI() throws MalformedURLException {
 	JWindow window = new JWindow();
 	window.getContentPane().add(

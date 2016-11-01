@@ -89,52 +89,21 @@ public class AddEditConnectionGUI implements ActionListener {
 
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
-		if (connection == null) {
-			editing = false;
-		} else {
-			editing = true;
-		}
 
 		baseNameChoices = dataStorage.getPeopleArrayList();
-		baseName = new JComboBox<>(baseNameChoices.toArray());
-		month = new JTextField(2);
-		day = new JTextField(2);
-		year = new JTextField(4);
 		typeChoices = vocabStorage.getInteractionTypes();
-		type = new JComboBox<>(typeChoices.toArray());
 		locationChoices = vocabStorage.getLocationTypes();
-		location = new JComboBox<>(locationChoices.toArray());
+
 		directionChoices = new Vector<String>(Arrays.asList("One-to-One", "One-to-Many", "Many-to-Many"));
-		direction = new JComboBox<>(new String[] { "One-to-One", "One-to-Many", "Many-to-Many" });
-		socialNotes = new JTextArea(2, 10);
+		
+		initContainers();
+		
 		socialNotes.setLineWrap(true);
-		citation = new JTextArea(2, 10);
+
 		citation.setLineWrap(true);
 
-		submitButton = new JButton("Submit");
-		cancel = new JButton("Cancel");
-		moreNames = new JButton("+");
-		reset = new JButton("Reset");
-
-		baseNameLabel = new JLabel("Base Name:");
-		dateLabel = new JLabel("Date:");
-		typeLabel = new JLabel("Type of Interaction:");
-		locationLabel = new JLabel("Location:");
-		socialLabel = new JLabel("Social Notes:");
-		bibLabel = new JLabel("Bibliography Citation:");
-
-		baseNamePanel = new JPanel(new BorderLayout());
-		namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		moreNamesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		datePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		typePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		socialPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		bibPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-
-		socialScroll = new JScrollPane(socialNotes);
 		socialScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		bibScroll = new JScrollPane(citation);
+
 		bibScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		moreNamesPanel.add(moreNames);
@@ -159,14 +128,11 @@ public class AddEditConnectionGUI implements ActionListener {
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
 
 		if (connectionEdited == null) {
-			frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
-			frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
+			editing = false;
 			setDefault();
 		} else {
-			List<Person> peopleList = connectionEdited.getPeopleList();
-			additionalNames = peopleList.size() - 1;
-			refreshPanel();
-			setConnectionData(connectionEdited);
+			editing = true;
+			setDefault();
 		}
 
 		submitButton.addActionListener(this);
@@ -176,6 +142,48 @@ public class AddEditConnectionGUI implements ActionListener {
 
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+	}
+	/**
+	 * Initializes the containers that are data fields.
+	 */
+	private void initContainers(){
+		month = new JTextField(2);
+		day = new JTextField(2);
+		year = new JTextField(4);
+		
+		baseName = new JComboBox<>(baseNameChoices.toArray());
+		type = new JComboBox<>(typeChoices.toArray());
+		location = new JComboBox<>(locationChoices.toArray());
+		
+		direction = new JComboBox<>(new String[] { "One-to-One", "One-to-Many", "Many-to-Many" });
+		
+		socialNotes = new JTextArea(2, 10);
+		citation = new JTextArea(2, 10);
+		
+		submitButton = new JButton("Submit");
+		cancel = new JButton("Cancel");
+		moreNames = new JButton("+");
+		reset = new JButton("Reset");
+		
+		baseNamePanel = new JPanel(new BorderLayout());
+		namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		moreNamesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		datePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		typePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		socialPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		bibPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
+		
+		baseNameLabel = new JLabel("Base Name:");
+		dateLabel = new JLabel("Date:");
+		typeLabel = new JLabel("Type of Interaction:");
+		locationLabel = new JLabel("Location:");
+		socialLabel = new JLabel("Social Notes:");
+		bibLabel = new JLabel("Bibliography Citation:");
+		
+		socialScroll = new JScrollPane(socialNotes);
+		bibScroll = new JScrollPane(citation);
 
 	}
 
