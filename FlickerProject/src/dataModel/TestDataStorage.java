@@ -1,4 +1,5 @@
 package dataModel;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,16 +18,15 @@ public class TestDataStorage {
 			"Biographical Notes" };
 	private String[] connectionHeaderRow = { "Edge", "Connecting Name List", "Date", "Type of Interaction", "Location",
 			"Citation", "Social Notes", "Direction" };
-	
+
 	private static final String DATA_FOLDER = "DataFiles";
 	private static final String TEST_PERSON_FILE_NAME = "TestPersonData.csv";
 	private static final String TEST_CONNECTION_FILE_NAME = "TestConnectionData.csv";
-	
+
 	private static TestDataStorage testDataStorage = null;
-	
-	
+
 	public static TestDataStorage getTestDataStorage() {
-		if(testDataStorage == null) {
+		if (testDataStorage == null) {
 			try {
 				testDataStorage.loadPeople();
 				testDataStorage.loadConnections();
@@ -37,14 +37,13 @@ public class TestDataStorage {
 		}
 		return testDataStorage;
 	}
-	
-	 // constructor
+
+	// constructor
 	private TestDataStorage() throws IOException {
 		personMap = new TreeMap<>();
 		connectionsMap = new TreeMap<>();
 	}
-	
-	
+
 	public TestDataStorage personFilter(PersonQuery query) throws IOException {
 		TestDataStorage filteredData = new TestDataStorage();
 		for (Person person : testDataStorage.getPeopleList()) {
@@ -67,15 +66,15 @@ public class TestDataStorage {
 		}
 		return filteredData;
 	}
-	
+
 	public void addPerson(Person person) {
 		personMap.put(person.getID(), person);
 	}
-	
+
 	public void addConnection(Connection connection) {
 		connectionsMap.put(connection.getEdgeId(), connection);
 	}
-	
+
 	void loadConnections() throws IOException {
 		CSVReader reader = new CSVReader(
 				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + TEST_CONNECTION_FILE_NAME)), "UTF-8"));
@@ -113,7 +112,7 @@ public class TestDataStorage {
 		}
 
 	}
-	
+
 	void loadPeople() throws IOException {
 		CSVReader reader = new CSVReader(
 				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + TEST_PERSON_FILE_NAME)), "UTF-8"));
@@ -125,18 +124,18 @@ public class TestDataStorage {
 			addPerson(new Person(row));
 		}
 	}
-	
+
 	public ArrayList<Person> getPeopleArrayList() {
 		ArrayList<Person> personList = new ArrayList<>(personMap.values());
 		return personList;
 	}
-	
+
 	public Collection<Person> getPeopleList() {
 		return personMap.values();
 	}
-	
+
 	public Collection<Connection> getConnectionList() {
 		return connectionsMap.values();
 	}
-	
+
 }

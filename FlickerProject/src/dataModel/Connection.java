@@ -1,5 +1,6 @@
 package dataModel;
-import java.util.*;
+
+import java.util.List;
 
 public class Connection implements TableRowViewable {
 
@@ -85,6 +86,7 @@ public class Connection implements TableRowViewable {
 	 * 
 	 * @return String array of table row connection
 	 */
+	@Override
 	public String[] toTableRowArray() {
 		return new String[] { Integer.toString(edgeId), peopleList.toString(), date.toString(), typeInteraction,
 				location, citation, socialNotes, direction };

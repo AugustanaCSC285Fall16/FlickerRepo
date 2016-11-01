@@ -1,8 +1,17 @@
 package gui;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.WindowConstants;
 
 import dataModel.Exporter;
 import dataModel.GephiExport;
@@ -57,7 +66,7 @@ public class ExportGUI implements ActionListener {
 		cancel.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	/**
@@ -124,6 +133,7 @@ public class ExportGUI implements ActionListener {
 	 * @param ActionEvent
 	 *            from GUI
 	 */
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == palladio) {
 			palladio.setSelected(true);

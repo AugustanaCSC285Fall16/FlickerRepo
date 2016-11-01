@@ -1,7 +1,11 @@
 package gui;
+
 import java.awt.FlowLayout;
 import java.io.IOException;
-import javax.swing.*;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.WindowConstants;
 
 public class AboutScreenGUI {
 	private JFrame frame;
@@ -24,7 +28,7 @@ public class AboutScreenGUI {
 		specialThanks = new JLabel("Acknowledgements: openCSV");
 
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setSize(500, 100);
 		frame.setTitle("About");
 		frame.setLayout(new FlowLayout());

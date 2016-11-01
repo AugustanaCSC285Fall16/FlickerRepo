@@ -1,4 +1,5 @@
 package dataModel;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class VocabStorage {
 	private ArrayList<String> locationChoices;
 	private ArrayList<String> cultureChoices;
 	private ArrayList<String> occupationChoices;
-	
+
 	private static final String INTERACTION_CHOICES_FILE_NAME = "InteractionChoices.csv";
 	private static final String LOCATION_CHOICES_FILE_NAME = "LocationChoices.csv";
 	private static final String CULTURE_CHOICES_FILE_NAME = "CultureChoices.csv";
@@ -31,20 +32,20 @@ public class VocabStorage {
 	 * @return VocabStorage object that will be a singleton
 	 * @throws IOException
 	 */
-	public static VocabStorage getMainVocabStorage() throws IOException{
+	public static VocabStorage getMainVocabStorage() throws IOException {
 		if (primaryVocabStorage == null) {
 			primaryVocabStorage = new VocabStorage();
 		}
 		return primaryVocabStorage;
 	}
-	
+
 	/**
-	 * The Private constructor only Initializes the vocab data fields but doesn't fill
-	 * them in This allows for the singleton pattern
+	 * The Private constructor only Initializes the vocab data fields but
+	 * doesn't fill them in This allows for the singleton pattern
 	 * 
 	 * @throws IOException
 	 */
-	private VocabStorage() throws IOException{
+	private VocabStorage() throws IOException {
 		interactionChoices = new ArrayList<>();
 		locationChoices = new ArrayList<>();
 		cultureChoices = new ArrayList<>();
@@ -54,11 +55,15 @@ public class VocabStorage {
 		loadControlledVocab(CULTURE_CHOICES_FILE_NAME, cultureChoices);
 		loadControlledVocab(OCCUPATION_CHOICES_FILE_NAME, occupationChoices);
 	}
-	
+
 	/**
 	 * Reads in vocabulary data from the csv
-	 * @param String fileName - a csv file that contains ONE column of data, with a vocab word on each row,
-	 * @param ArrayList<String> list - the destination where the vocab words get stored
+	 * 
+	 * @param String
+	 *            fileName - a csv file that contains ONE column of data, with a
+	 *            vocab word on each row,
+	 * @param ArrayList<String>
+	 *            list - the destination where the vocab words get stored
 	 * @throws IOException
 	 */
 	private void loadControlledVocab(String fileName, ArrayList<String> list) throws IOException {
@@ -73,13 +78,18 @@ public class VocabStorage {
 
 	/**
 	 * Writes the vocabulary data to a csv
-	 * @param String fileName - a csv file that will be written to having only ONE column of data, one vocab word a row. 
-	 * @param ArrayList<String> vocabChoices - the source of the vocab words that will be written. 
+	 * 
+	 * @param String
+	 *            fileName - a csv file that will be written to having only ONE
+	 *            column of data, one vocab word a row.
+	 * @param ArrayList<String>
+	 *            vocabChoices - the source of the vocab words that will be
+	 *            written.
 	 * @throws IOException
 	 */
 	public void saveControlledVocab(String fileName, ArrayList<String> vocabChoices) throws IOException {
-		CSVWriter writer = new CSVWriter(new OutputStreamWriter(
-				new FileOutputStream((DataStorage.DATA_FOLDER + "/" + fileName)), "UTF-8"));
+		CSVWriter writer = new CSVWriter(
+				new OutputStreamWriter(new FileOutputStream((DataStorage.DATA_FOLDER + "/" + fileName)), "UTF-8"));
 		List<String[]> choicesArray = new ArrayList<>();
 		for (int i = 0; i < vocabChoices.size(); i++) {
 			choicesArray.add(this.toCSVControlledVocabArray(vocabChoices.get(i).toLowerCase()));
@@ -87,9 +97,10 @@ public class VocabStorage {
 		writer.writeAll(choicesArray);
 		writer.close();
 	}
-	
+
 	/**
 	 * Saves the Occupation choices to the correct file
+	 * 
 	 * @throws IOException
 	 */
 	public void saveOccupationControlledVocab() throws IOException {
@@ -98,6 +109,7 @@ public class VocabStorage {
 
 	/**
 	 * Saves the CulturalID choices to the correct file
+	 * 
 	 * @throws IOException
 	 */
 	public void saveCulturalIDControlledVocab() throws IOException {
@@ -106,6 +118,7 @@ public class VocabStorage {
 
 	/**
 	 * Saves the Location choices to the correct file
+	 * 
 	 * @throws IOException
 	 */
 	public void saveLocationControlledVocab() throws IOException {
@@ -114,6 +127,7 @@ public class VocabStorage {
 
 	/**
 	 * Saves the Interaction choices to the correct file
+	 * 
 	 * @throws IOExeption
 	 */
 	public void saveInteractionControlledVocab() throws IOException {
@@ -122,6 +136,7 @@ public class VocabStorage {
 
 	/**
 	 * Converts the parameter into a string array
+	 * 
 	 * @return String[]
 	 */
 	public String[] toCSVControlledVocabArray(String item) {
@@ -130,6 +145,7 @@ public class VocabStorage {
 
 	/**
 	 * Adds the parameter to the occupationChocies
+	 * 
 	 * @param item
 	 */
 	public void addOccupationChoice(String item) {
@@ -138,6 +154,7 @@ public class VocabStorage {
 
 	/**
 	 * Adds the parameter to the cultureChoices
+	 * 
 	 * @param item
 	 */
 	public void addCulteralIdChoice(String item) {
@@ -146,6 +163,7 @@ public class VocabStorage {
 
 	/**
 	 * Adds the parameter to the locationChoices
+	 * 
 	 * @param item
 	 */
 	public void addLocationChoice(String item) {
@@ -154,6 +172,7 @@ public class VocabStorage {
 
 	/**
 	 * Adds the parameter to the interactionChoices
+	 * 
 	 * @param item
 	 */
 	public void addInteractionChoice(String item) {
@@ -162,15 +181,17 @@ public class VocabStorage {
 
 	/**
 	 * Retrieves and returns the InteractionChoices ArrayList
-	 * @return ArrayList<String> 
+	 * 
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getInteractionTypes() {
 		return interactionChoices;
 	}
-	
+
 	/**
 	 * Retrieves and returns the locationChoices ArrayList
-	 * @return ArrayList<String> 
+	 * 
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getLocationTypes() {
 		return locationChoices;
@@ -178,7 +199,8 @@ public class VocabStorage {
 
 	/**
 	 * Retrieves and returns the cultureChoices ArrayList
-	 * @return ArrayList<String> 
+	 * 
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getCultureChoices() {
 		return cultureChoices;
@@ -186,11 +208,11 @@ public class VocabStorage {
 
 	/**
 	 * Retrieves and returns the occupationChoices ArrayList
-	 * @return ArrayList<String> 
+	 * 
+	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> getOccupationChoices() {
 		return occupationChoices;
 	}
 
-	
 }

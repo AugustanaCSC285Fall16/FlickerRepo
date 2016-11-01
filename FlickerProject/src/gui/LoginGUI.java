@@ -1,9 +1,18 @@
 package gui;
-import java.awt.*;
-import java.awt.event.*;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import dataModel.ContainsQuery;
 import dataModel.User;
@@ -33,7 +42,7 @@ public class LoginGUI implements ActionListener {
 	 */
 	public LoginGUI(boolean isAdmin) {
 		this.isAdmin = isAdmin;
-		this.adminApproved = false;
+		LoginGUI.adminApproved = false;
 		username = new JTextField(15);
 		password = new JPasswordField(15);
 		add = new JButton("Add User");
@@ -103,9 +112,9 @@ public class LoginGUI implements ActionListener {
 		UserStorage storage = UserStorage.getMainUserStorage();
 		UserQuery usernameQuery = new ContainsQuery(username.getText(), "Username");
 		UserQuery passwordQuery = new ContainsQuery(password.getText(), "Password");
-		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) { 
+		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) {
 			User loginUser = storage.getUserFromFiltered(usernameQuery);
-			if (loginUser.getPassword().equals(password.getText())){
+			if (loginUser.getPassword().equals(password.getText())) {
 				if (isAdmin) {
 					setAdminApproved(true);
 					frame.dispose();

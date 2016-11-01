@@ -9,6 +9,7 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 		this.fieldName = fieldName;
 	}
 
+	@Override
 	public boolean accepts(Person person) {
 		if (fieldName.equals("Name")) {
 			return person.getName().toLowerCase().contains(target.toLowerCase());
@@ -25,6 +26,7 @@ public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 		}
 	}
 
+	@Override
 	public boolean accepts(Connection connection) {
 		if (fieldName.equals("Name") || fieldName.equals("Node Name") || fieldName.equals("CulturalID")
 				|| fieldName.equals("Gender") || fieldName.equals("Occupation")) {

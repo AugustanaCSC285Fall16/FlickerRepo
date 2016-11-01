@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -7,7 +8,15 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Arrays;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import dataModel.DataStorage;
 import dataModel.User;
@@ -39,7 +48,7 @@ public class NewUserGUI implements ActionListener {
 		}
 
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setSize(300, 200);
 		frame.setTitle("New User");
 		frame.setLayout(new BorderLayout());

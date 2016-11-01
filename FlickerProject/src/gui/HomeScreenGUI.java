@@ -7,12 +7,30 @@ package gui;
  * on the larger part of the screen for the user to
  * browse through.
  */
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 import dataModel.ConnectionQuery;
 import dataModel.ContainsQuery;
@@ -39,7 +57,6 @@ public class HomeScreenGUI implements ActionListener {
 
 	private JButton dateRange;
 
-
 	private JPanel searchPanel;
 	private JPanel criteriaPanel;
 	private JPanel centerPanel;
@@ -55,7 +72,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JTextField searchDay2;
 	private JTextField searchMonth2;
 	private JTextField searchYear2;
-
 
 	private JTabbedPane databases;
 	private JScrollPane personPane;
@@ -78,13 +94,13 @@ public class HomeScreenGUI implements ActionListener {
 	public HomeScreenGUI(String permission) throws IOException {
 
 		add = new JButton("Add");
-		add.setBackground(new Color(255,153,153));
+		add.setBackground(new Color(255, 153, 153));
 		edit = new JButton("Edit");
-		edit.setBackground(new Color(255,204,153));
+		edit.setBackground(new Color(255, 204, 153));
 		databases = new JTabbedPane();
 		databases.setBackground(Color.LIGHT_GRAY);
 		export = new JButton("Export");
-		export.setBackground(new Color(204,255,204));
+		export.setBackground(new Color(204, 255, 204));
 		dateRange = new JButton("Date Range");
 
 		databases = new JTabbedPane();
@@ -150,7 +166,7 @@ public class HomeScreenGUI implements ActionListener {
 		table.setModel(nonEditableTableModel);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 		table.setDefaultRenderer(Object.class, centerRenderer);
 		return table;
 	}
@@ -374,39 +390,38 @@ public class HomeScreenGUI implements ActionListener {
 						Integer.parseInt(searchMonth2.getText()), Integer.parseInt(searchDay2.getText()));
 				if (!targetDate.isValidDate() || !targetDate2.isValidDate()) {
 					JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
+				} else {
+					resetFilter.setEnabled(true);
+					ConnectionQuery connectionQuery = new DateQuery(targetDate, targetDate2);
+					filtered = mainStorage.connectionFilter(connectionQuery);
+					if (!filtered.getConnectionArrayList().isEmpty()) {
+						updateTable(filtered);
 					} else {
-						resetFilter.setEnabled(true);
-						ConnectionQuery connectionQuery = new DateQuery(targetDate, targetDate2);
-						filtered = mainStorage.connectionFilter(connectionQuery);
-						if (!filtered.getConnectionArrayList().isEmpty()) {
-							updateTable(filtered);
-						} else {
-								JOptionPane.showMessageDialog(null, "No results found");
-						}
+						JOptionPane.showMessageDialog(null, "No results found");
 					}
 				}
+			}
 		} else {
-			if (searchDay.getText().equals("") || searchMonth.getText().equals("")
-						|| searchYear.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Please enter a full date");
+			if (searchDay.getText().equals("") || searchMonth.getText().equals("") || searchYear.getText().equals("")) {
+				JOptionPane.showMessageDialog(null, "Please enter a full date");
 			} else {
-					Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
-							Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
-					if (!targetDate.isValidDate()) {
-						JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
+				Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
+						Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
+				if (!targetDate.isValidDate()) {
+					JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
+				} else {
+					resetFilter.setEnabled(true);
+					ConnectionQuery connectionQuery = new DateQuery(targetDate, null);
+					filtered = mainStorage.connectionFilter(connectionQuery);
+					if (!filtered.getConnectionArrayList().isEmpty()) {
+						updateTable(filtered);
 					} else {
-						resetFilter.setEnabled(true);
-						ConnectionQuery connectionQuery = new DateQuery(targetDate, null);
-						filtered = mainStorage.connectionFilter(connectionQuery);
-						if (!filtered.getConnectionArrayList().isEmpty()) {
-							updateTable(filtered);
-						} else {
-							JOptionPane.showMessageDialog(null, "No results found");
-						}
+						JOptionPane.showMessageDialog(null, "No results found");
 					}
 				}
 			}
 		}
+	}
 
 	/**
 	 * When submit in search is clicked, checks to see if the user is in the
@@ -464,6 +479,7 @@ public class HomeScreenGUI implements ActionListener {
 	 * @param ActionEvent
 	 *            - event from the HomeScreenGUI
 	 */
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		try {
 			Object source = event.getSource();

@@ -1,14 +1,27 @@
 package gui;
-import java.awt.*;
-import java.awt.event.*;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 
 import dataModel.Connection;
 import dataModel.DataStorage;
@@ -101,9 +114,9 @@ public class AddEditConnectionGUI implements ActionListener {
 		locationChoices = vocabStorage.getLocationTypes();
 
 		directionChoices = new Vector<String>(Arrays.asList("One-to-One", "One-to-Many", "Many-to-Many"));
-		
+
 		initContainers();
-		
+
 		socialNotes.setLineWrap(true);
 
 		citation.setLineWrap(true);
@@ -147,31 +160,32 @@ public class AddEditConnectionGUI implements ActionListener {
 		reset.addActionListener(this);
 
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 	}
+
 	/**
 	 * Initializes the containers that are data fields.
 	 */
-	private void initContainers(){
+	private void initContainers() {
 		month = new JTextField(2);
 		day = new JTextField(2);
 		year = new JTextField(4);
-		
+
 		baseName = new JComboBox<>(baseNameChoices.toArray());
 		type = new JComboBox<>(typeChoices.toArray());
 		location = new JComboBox<>(locationChoices.toArray());
-		
+
 		direction = new JComboBox<>(new String[] { "One-to-One", "One-to-Many", "Many-to-Many" });
-		
+
 		socialNotes = new JTextArea(2, 10);
 		citation = new JTextArea(2, 10);
-		
+
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 		moreNames = new JButton("+");
 		reset = new JButton("Reset");
-		
+
 		baseNamePanel = new JPanel(new BorderLayout());
 		namePanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		moreNamesPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -180,14 +194,14 @@ public class AddEditConnectionGUI implements ActionListener {
 		locationPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		socialPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 		bibPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
-		
+
 		baseNameLabel = new JLabel("Base Name:");
 		dateLabel = new JLabel("Date:");
 		typeLabel = new JLabel("Type of Interaction:");
 		locationLabel = new JLabel("Location:");
 		socialLabel = new JLabel("Social Notes:");
 		bibLabel = new JLabel("Bibliography Citation:");
-		
+
 		socialScroll = new JScrollPane(socialNotes);
 		bibScroll = new JScrollPane(citation);
 
@@ -374,7 +388,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		personListForConn.add(dataStorage.getPersonListForConnection(baseName.getSelectedItem().toString()));
 
 		for (int i = 0; i < targetNames.size(); i++) {
-			personListForConn.add(dataStorage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
+			personListForConn
+					.add(dataStorage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
 		}
 
 		if (connectionEdited != null) {
@@ -414,11 +429,13 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * @param ActionEvent
 	 *            - event from the Add/Edit ConnectionGUI
 	 */
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == submitButton) {
 			try {
 				if (month.getText().equals("") || day.getText().equals("") || year.getText().equals("")) {
-					JOptionPane.showMessageDialog(null, "Please enter a full date. \nOr for an unknown date enter 0/0/0000");
+					JOptionPane.showMessageDialog(null,
+							"Please enter a full date. \nOr for an unknown date enter 0/0/0000");
 				} else {
 					submitClicked();
 					if (dataStorage.isFiltered()) {
