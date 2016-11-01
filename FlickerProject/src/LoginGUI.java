@@ -94,7 +94,7 @@ public class LoginGUI implements ActionListener {
 	 * @throws IOException
 	 */
 	private void isCorrectUsernamePassword() throws IOException {
-		DataStorage storage = DataStorage.getMainDataStorage();
+		UserStorage storage = UserStorage.getMainUserStorage();
 		UserQuery usernameQuery = new ContainsQuery(username.getText(), "Username");
 		UserQuery passwordQuery = new ContainsQuery(password.getText(), "Password");
 		if (storage.userFilter(usernameQuery) && storage.userFilter(passwordQuery)) { // NEED

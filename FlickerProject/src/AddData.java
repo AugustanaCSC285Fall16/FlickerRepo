@@ -59,7 +59,7 @@ public class AddData implements ActionListener {
 		try {
 			storage = VocabStorage.getMainVocabStorage();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Unable to load data!");
+			JOptionPane.showMessageDialog(null, "Unable to load vocab!");
 		}
 	}
 

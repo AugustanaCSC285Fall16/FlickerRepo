@@ -4,21 +4,17 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 public class DataStorage {
-	public Map<Integer, User> userMap;
 	public Map<Integer, Person> personMap;
 	private Map<Integer, Connection> connectionsMap;
 
 	private String[] personHeaderRow;
 	private String[] connectionHeaderRow;
-	private String[] userHeaderRow;
-
 
 	private int nextIdNum;
 	private int nextConnNum;
 	private int nextUserNum;
 
 	public static final String DATA_FOLDER = "DataFiles";
-	private static final String USER_DATA_FILE_NAME = "UserData.csv";
 	private static final String PERSON_FILE_NAME = "PersonData.csv";
 	private static final String CONNECTION_FILE_NAME = "ConnectionData.csv";
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
@@ -37,13 +33,12 @@ public class DataStorage {
 	 * @return Data Storage object that will be a singleton
 	 * @throws IOException
 	 */
-	public static DataStorage getMainDataStorage() {
+	public static DataStorage getMainDataStorage() throws IOException {
 		if (primaryDataStorage == null) {
 			try {
 				primaryDataStorage = new DataStorage();
 				primaryDataStorage.loadPeople(PERSON_FILE_NAME);
 				primaryDataStorage.loadConnections(CONNECTION_FILE_NAME);
-				primaryDataStorage.loadUsers();
 				primaryDataStorage.loadIdConnUserNum();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -76,96 +71,8 @@ public class DataStorage {
 	private DataStorage() throws IOException {
 		personMap = new TreeMap<>();
 		connectionsMap = new TreeMap<>();
-		userMap = new TreeMap<>();
 	}
 
-	/**
-	 * loads the Users from the csv file
-	 * 
-	 * @throws IOException
-	 */
-	private void loadUsers() throws IOException {
-		CSVReader reader = new CSVReader(
-				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
-
-		List<String[]> myRows = reader.readAll();
-		userHeaderRow = myRows.remove(0); // remove header row
-
-		for (String[] row : myRows) {
-			addUser(new User(row));
-		}
-	}
-
-	/**
-	 * Saves the users to the csv file
-	 * @throws IOException
-	 */
-	public void saveUsers() throws IOException {
-		CSVWriter writer = new CSVWriter(
-				new OutputStreamWriter(new FileOutputStream((DATA_FOLDER + "/" + USER_DATA_FILE_NAME)), "UTF-8"));
-		writer.writeNext(userHeaderRow);
-		for (User user : userMap.values()) {
-			writer.writeNext(user.toCSVRowArray());
-		}
-		writer.close();
-	}
-
-	/**
-	 * Adds the user parameter to the user map. 
-	 * @param user
-	 */
-	public void addUser(User user) {
-		userMap.put(user.getId(), user);
-	}
-
-	/**
-	 * Converts the userMap to an arrayList
-	 * @return ArrayList<User>
-	 */
-	public ArrayList<User> getUserArrayList() {
-		ArrayList<User> userList = new ArrayList<>(userMap.values());
-		return userList;
-	}
-
-	/**
-	 * Converts the UserMap to a collection of type user
-	 * @return Collection<User>
-	 */
-	public Collection<User> getUserList() {
-		return userMap.values();
-	}
-
-	/**
-	 * Checks to see if the user is in the data and then returns the user
-	 * 
-	 * @param query
-	 * @return user in data
-	 * @throws IOException
-	 */
-	public User getUserFromFiltered(UserQuery query) throws IOException {
-		for (User user : getUserList()) {
-			if (query.accepts(user)) {
-				return user;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Checks to see if the  user is in the data.
-	 *  
-	 * @param query
-	 * @return boolean true if in data
-	 * @throws IOException
-	 */
-	public boolean userFilter(UserQuery query) throws IOException {
-		for (User user : getUserList()) {
-			if (query.accepts(user)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	/**
 	 * Checks to see if the Person is in the data
