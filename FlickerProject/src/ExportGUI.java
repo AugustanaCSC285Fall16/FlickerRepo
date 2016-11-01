@@ -6,7 +6,6 @@ import javax.swing.*;
 public class ExportGUI implements ActionListener {
 
 	private JFrame frame;
-
 	private JPanel northPanel;
 	private JPanel southPanel;
 	private JRadioButton palladio;
@@ -16,8 +15,14 @@ public class ExportGUI implements ActionListener {
 
 	private JFileChooser chooser;
 
-	HomeScreenGUI home;
+	private HomeScreenGUI home;
 
+	/**
+	 * Creates an exportGUI
+	 * 
+	 * @param HomeScreenGUI
+	 *            home
+	 */
 	public ExportGUI(HomeScreenGUI home) {
 		this.home = home;
 
@@ -33,7 +38,7 @@ public class ExportGUI implements ActionListener {
 		southPanel.add(export);
 		southPanel.add(cancel);
 
-		frame = new JFrame("Export As:");
+		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(200, 100);
 		frame.setTitle("Export");
@@ -51,30 +56,35 @@ public class ExportGUI implements ActionListener {
 	}
 
 	/**
-	 * Makes the frame visible.
+	 * Makes the frame visible. Used in our HomeScreenGUI
 	 */
-
 	void makeVisible() {
 		frame.setVisible(true);
 	}
 
 	/**
-	 * Makes the browse gui
+	 * Makes the browse GUI
+	 * 
+	 * @return String the path name or cancel if cancelled
 	 */
-
 	public String makeChooser() {
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setDialogTitle("Save");
 		int option = chooser.showSaveDialog(frame);
-		if(option == JFileChooser.APPROVE_OPTION){
-			return chooser.getSelectedFile().getAbsolutePath(); // the string of the file path
-		} else {
-			// they clicked cancel
+		if (option == JFileChooser.APPROVE_OPTION) {
+			return chooser.getSelectedFile().getAbsolutePath(); // the string of
+																// the file path
+		} else { // they clicked cancel
 			return "cancel";
 		}
 	}
 
+	/**
+	 * Sees what option was selected and exports based on that
+	 * 
+	 * @return boolean true if export worked
+	 */
 	public boolean export() {
 		if (!palladio.isSelected() && !gephi.isSelected()) {
 			JOptionPane.showMessageDialog(null, "Pick a file type!");
@@ -82,7 +92,8 @@ public class ExportGUI implements ActionListener {
 		}
 		Exporter export;
 		String pathName = makeChooser();
-		if (!pathName.substring(2).contains(":")) { // skip the drive semicolon i.e. "H: ..."
+		if (!pathName.substring(2).contains(":")) { // skip the drive semicolon
+													// i.e. "H: ..."
 			if (palladio.isSelected() && pathName != "cancel") {
 				export = new PalladioExport();
 				export.export(home.getStorage(), pathName);
@@ -102,6 +113,12 @@ public class ExportGUI implements ActionListener {
 
 	}
 
+	/**
+	 * Overrides the actionPerformed method in ActionListener
+	 * 
+	 * @param ActionEvent
+	 *            from GUI
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == palladio) {
 			palladio.setSelected(true);

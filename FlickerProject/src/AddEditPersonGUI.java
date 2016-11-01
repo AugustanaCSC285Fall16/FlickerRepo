@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -14,7 +13,6 @@ public class AddEditPersonGUI implements ActionListener {
 
 	private static final int WIDTH = 350;
 	private static final int HEIGHT = 300;
-	private static final String[] FIELDS = new String[] { "", "Cultural ID", "Gender", "Occupation" };
 
 	private JFrame frame;
 	private JTextField name;
@@ -27,8 +25,6 @@ public class AddEditPersonGUI implements ActionListener {
 	private JPanel namePanel;
 	private JPanel nodeNamePanel;
 	private JPanel culturePanel;
-	private JPanel cultureFlowPanel;
-	private JPanel newCultureFlowPanel;
 	private JPanel genderPanel;
 	private JPanel occupationPanel;
 	private JPanel notesPanel;
@@ -43,21 +39,20 @@ public class AddEditPersonGUI implements ActionListener {
 	private JLabel occupationLabel;
 	private JLabel biographyLabel;
 
-	JButton submitButton;
-	JButton resetButton;
+	private JButton submitButton;
+	private JButton resetButton;
 	private JButton cancel;
-	HomeScreenGUI home;
+	private HomeScreenGUI home;
 	private JScrollPane scroll;
 
-	DataStorage storage;
+	private DataStorage dataStorage;
+	private VocabStorage vocabStorage;
 	private boolean editing;
+	private Person personEdited;
 
-	// class that relates to controlled vocabulary
 	private ArrayList<String> cultureChoices;
 	private Vector<String> genderChoices;
 	private ArrayList<String> occupationChoices;
-
-	private Person personEdited;
 
 	/**
 	 * Creates the add/edit person GUI
@@ -68,11 +63,17 @@ public class AddEditPersonGUI implements ActionListener {
 	 *            - to be edited or null if we are adding a new person
 	 */
 	public AddEditPersonGUI(HomeScreenGUI home, Person person) {
+		try {
+			dataStorage = DataStorage.getMainDataStorage();
+			vocabStorage = VocabStorage.getMainVocabStorage();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not load Data!");
+		}
+		
 		this.personEdited = person;
 		this.home = home;
-
-		storage = DataStorage.getMainDataStorage();
-		if(person == null){
+		
+		if (person == null) {
 			editing = false;
 		} else {
 			editing = true;
@@ -80,11 +81,11 @@ public class AddEditPersonGUI implements ActionListener {
 
 		name = new JTextField(15);
 		nodeName = new JTextField(15);
-		cultureChoices = storage.getCultureChoices();
+		cultureChoices = vocabStorage.getCultureChoices();
 		culture = new JComboBox<>(cultureChoices.toArray());
 		genderChoices = new Vector<String>(Arrays.asList("Unknown", "Male", "Female"));
 		gender = new JComboBox<>(new String[] { "Unknown", "Male", "Female" });
-		occupationChoices = storage.getOccupationChoices();
+		occupationChoices = vocabStorage.getOccupationChoices();
 		occupation = new JComboBox<>(occupationChoices.toArray());
 		notes = new JTextArea(2, 15);
 		notes.setLineWrap(true);
@@ -116,10 +117,10 @@ public class AddEditPersonGUI implements ActionListener {
 		occupationPanel.add(occupation);
 		notesPanel.add(scroll);
 
-		frame = new JFrame("Frame");
+		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(WIDTH, HEIGHT);
-		frame.setTitle("Frame");
+		frame.setTitle("Person");
 		frame.setLayout(new BorderLayout());
 		frame.add(createCenterPanel(), BorderLayout.CENTER);
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
@@ -137,7 +138,6 @@ public class AddEditPersonGUI implements ActionListener {
 		} else {
 			setPersonData(personEdited);
 		}
-
 	}
 
 	/**
@@ -146,7 +146,6 @@ public class AddEditPersonGUI implements ActionListener {
 	 * 
 	 * @return JPanel This returns the completed center panel.
 	 */
-
 	private JPanel createCenterPanel() {
 		centerPanel = new JPanel(new GridLayout(6, 1));
 		centerPanel.add(namePanel);
@@ -159,6 +158,20 @@ public class AddEditPersonGUI implements ActionListener {
 	}
 
 	/**
+	 * creates a panel with the label and adds it to the passed in panel
+	 * 
+	 * @param panel
+	 *            - panel to add the new panel with label to
+	 * @param label
+	 *            - new label to add to new panel.
+	 */
+	private void createPanelsInsideWest(JPanel panel, JLabel label) {
+		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		labelPanel.add(label);
+		panel.add(labelPanel);
+	}
+
+	/**
 	 * This method creates the west panel. It adds the appropriate buttons to
 	 * the panel.
 	 * 
@@ -166,24 +179,12 @@ public class AddEditPersonGUI implements ActionListener {
 	 */
 	private JPanel createWestPanel() {
 		westPanel = new JPanel(new GridLayout(6, 1));
-		JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		namePanel.add(nameLabel);
-		westPanel.add(namePanel);
-		JPanel nodeNamePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		nodeNamePanel.add(nodeNameLabel);
-		westPanel.add(nodeNamePanel);
-		JPanel culturalPanel = new JPanel (new FlowLayout(FlowLayout.RIGHT));
-		culturalPanel.add(culturalLabel);
-		westPanel.add(culturalPanel);
-		JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		genderPanel.add(genderLabel);
-		westPanel.add(genderPanel);
-		JPanel occupationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		occupationPanel.add(occupationLabel);
-		westPanel.add(occupationPanel);
-		JPanel biographyPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		biographyPanel.add(biographyLabel);
-		westPanel.add(biographyPanel);
+		createPanelsInsideWest(westPanel, nameLabel);
+		createPanelsInsideWest(westPanel, nodeNameLabel);
+		createPanelsInsideWest(westPanel, culturalLabel);
+		createPanelsInsideWest(westPanel, genderLabel);
+		createPanelsInsideWest(westPanel, occupationLabel);
+		createPanelsInsideWest(westPanel, biographyLabel);
 		return westPanel;
 	}
 
@@ -202,17 +203,18 @@ public class AddEditPersonGUI implements ActionListener {
 	}
 
 	/**
-	 * Makes the frame visible
+	 * Makes the frame visible This is used in our home screen GUI
 	 */
-	void makeVisible() {
+	public void makeVisible() {
 		frame.setVisible(true);
 	}
 
 	/**
-	 * Sets the edit GUI all back to blanks to fill in
+	 * Sets the edit GUI all back to blanks to be filled in
+	 *
 	 */
-	void setDefault() {
-		if(editing){
+	private void setDefault() {
+		if (editing) {
 			setPersonData(personEdited);
 		} else {
 			name.setText("");
@@ -273,10 +275,10 @@ public class AddEditPersonGUI implements ActionListener {
 			personEdited.setCulturalId(culture.getSelectedItem().toString());
 			personEdited.setBiographicalNotes(notes.getText());
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-			storage.savePeople();
+			dataStorage.savePeople();
 			frame.dispose();
 		} else {
-			int nextID = storage.incrementAndGetNextPersonIdNum();
+			int nextID = dataStorage.incrementAndGetNextPersonIdNum();
 			if (name.getText().equals("") || nodeName.getText().equals("")) {
 				JOptionPane.showMessageDialog(frame, "Name and Node Name have to be filled in");
 			} else {
@@ -286,9 +288,9 @@ public class AddEditPersonGUI implements ActionListener {
 				if (personExists(newPerson)) {
 					JOptionPane.showMessageDialog(frame, "Person already exists in database!");
 				} else {
-					storage.addPerson(newPerson);
+					dataStorage.addPerson(newPerson);
 					JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-					storage.savePeople();
+					dataStorage.savePeople();
 					frame.dispose();
 				}
 			}
@@ -302,7 +304,7 @@ public class AddEditPersonGUI implements ActionListener {
 	 * @return true if the person already exists in our data
 	 */
 	public boolean personExists(Person newPerson) {
-		for (Person person : storage.getPeopleArrayList()) {
+		for (Person person : dataStorage.getPeopleArrayList()) {
 			if (person.getName().equals(newPerson.getName()) || person.getNodeName().equals(newPerson.getNodeName())) {
 				return true;
 			}
@@ -321,18 +323,18 @@ public class AddEditPersonGUI implements ActionListener {
 		if (event.getSource() == submitButton) {
 			try {
 				submitClicked();
-				if (storage.isFiltered()) {
+				if (dataStorage.isFiltered()) {
 					home.updateTable(home.getStorage());
 				} else {
-					home.updateTable(storage);
+					home.updateTable(dataStorage);
 				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "There was an Error Saving your Person! Please try again.");
 			}
 			home.actionPerformed(event);
-		} else if (event.getSource() == resetButton){
+		} else if (event.getSource() == resetButton) {
 			setDefault();
-		} else {			 // cancel
+		} else { // cancel
 			frame.dispose();
 		}
 	}

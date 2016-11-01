@@ -14,8 +14,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class HomeScreenGUI implements ActionListener {
-	DataStorage mainStorage = DataStorage.getMainDataStorage();
-	DataStorage filtered;
+	private DataStorage mainStorage = DataStorage.getMainDataStorage();
+	private DataStorage filtered;
+	private ExportGUI exportGUI;
 
 	private static final String[] FIELDS = new String[] { "Name", "Node Name", "Cultural ID", "Gender", "Occupation",
 			"Date", "Location", "Interaction Type" };
@@ -26,11 +27,16 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton save;
 	private JButton resetFilter;
 	private JButton export;
+	private JButton submit;
+	private JButton dateRange;
+
 	private JPanel searchPanel;
 	private JPanel criteriaPanel;
+	private JPanel centerPanel;
+
 	private JLabel filterOptionsLabel;
-	private JComboBox<String> filterOptions;
 	private JLabel newDataLabel;
+
 	private JTextField newData;
 	private JTextField searchDay;
 	private JTextField searchMonth;
@@ -38,18 +44,25 @@ public class HomeScreenGUI implements ActionListener {
 	private JTextField searchDay2;
 	private JTextField searchMonth2;
 	private JTextField searchYear2;
-	private JButton submit;
+
 	private JTabbedPane databases;
-	private JPanel centerPanel;
-	private JTable personTableDisplay;
-	private JTable connectionTableDisplay;
 	private JScrollPane personPane;
 	private JScrollPane connectionPane;
-	private JButton dateRange;
+
+	private JTable personTableDisplay;
+	private JTable connectionTableDisplay;
+
+	private JComboBox<String> filterOptions;
 	private boolean isDateRange = false;
 
-	private ExportGUI exportGUI;
-
+	/**
+	 * Creates a home screen GUI and depending on the permission passed in, will
+	 * enable or disable add/edit
+	 * 
+	 * @param permission
+	 *            if "Student" then buttons disabled
+	 * @throws IOException
+	 */
 	public HomeScreenGUI(String permission) throws IOException {
 
 		save = new JButton("Save Changes");
@@ -63,6 +76,7 @@ public class HomeScreenGUI implements ActionListener {
 		export.setBackground(new Color(204,255,204));
 		dateRange = new JButton("Date Range");
 
+		databases = new JTabbedPane();
 		exportGUI = new ExportGUI(this);
 
 		frame = new JFrame();
@@ -106,9 +120,7 @@ public class HomeScreenGUI implements ActionListener {
 	 */
 	private JTable createDisplayTable(String[] columnNamesArray, Collection<? extends TableRowViewable> rowItems)
 			throws IOException {
-
 		Vector<String> columnNames = new Vector<>(Arrays.asList(columnNamesArray));
-
 		Vector<Vector<String>> tableData = new Vector<>();
 
 		for (TableRowViewable item : rowItems) {
@@ -116,11 +128,11 @@ public class HomeScreenGUI implements ActionListener {
 			tableData.addElement(new Vector(Arrays.asList(nextRow)));
 		}
 
-		JTable table = new JTable(); // tableData, columnNames);
+		JTable table = new JTable();
 		DefaultTableModel nonEditableTableModel = new DefaultTableModel() {
 			@Override
+			// makes all cells unable to be edited
 			public boolean isCellEditable(int row, int column) {
-				// all cells false
 				return false;
 			}
 		};
@@ -139,7 +151,6 @@ public class HomeScreenGUI implements ActionListener {
 	 * 
 	 * @return JPanel This returns the completed west panel.
 	 */
-
 	private JPanel createWestPanel() {
 		JPanel westPanel = new JPanel(new GridLayout(3, 1));
 		westPanel.add(add);
@@ -151,7 +162,7 @@ public class HomeScreenGUI implements ActionListener {
 	/**
 	 * Creates the center panel and adds the appropriate display tables to it.
 	 * 
-	 * @return JPanel Returns a completed CenterPanel.
+	 * @return JPanel a completed CenterPanel.
 	 * @throws IOException
 	 */
 	private JPanel createCenterPanel(DataStorage storage) throws IOException {
@@ -169,6 +180,11 @@ public class HomeScreenGUI implements ActionListener {
 		return centerPanel;
 	}
 
+	/**
+	 * Creates the search panel and adds the appropriate panels and labels
+	 * 
+	 * @return JPanel completed search panel
+	 */
 	private JPanel createSearchPanel() {
 		searchPanel = new JPanel(new FlowLayout());
 		submit = new JButton("Submit");
@@ -180,6 +196,11 @@ public class HomeScreenGUI implements ActionListener {
 		return searchPanel;
 	}
 
+	/**
+	 * Creates a criteria panel and adds the appropriate panels and labels
+	 * 
+	 * @return JPanel a completed criteria panel
+	 */
 	public JPanel createCriteriaPanel() {
 		criteriaPanel = new JPanel();
 		filterOptionsLabel = new JLabel("Filter option: ");
@@ -193,6 +214,9 @@ public class HomeScreenGUI implements ActionListener {
 		return criteriaPanel;
 	}
 
+	/**
+	 * changes the search panel based on if the option selected is date or not
+	 */
 	private void changeSearchPanel() {
 		int option = filterOptions.getSelectedIndex();
 		isDateRange = false;
@@ -216,6 +240,9 @@ public class HomeScreenGUI implements ActionListener {
 		}
 	}
 
+	/**
+	 * Adds the new fields for the date range
+	 */
 	public void addDateRangeData() {
 		criteriaPanel.remove(dateRange);
 		searchDay2 = new JTextField(2);
@@ -242,6 +269,11 @@ public class HomeScreenGUI implements ActionListener {
 		frame.revalidate();
 	}
 
+	/**
+	 * Retrieves and returns the filtered storage.
+	 * 
+	 * @return a data storage object of just the filtered data.
+	 */
 	public DataStorage getStorage() {
 		if (mainStorage.isFiltered()) {
 			return filtered;
@@ -273,7 +305,6 @@ public class HomeScreenGUI implements ActionListener {
 	 * A Popup with either the a person information filled in or a connection
 	 * information filled in will pop up. If no row is selected, a message will
 	 * pop up informing the user to click a row to edit.
-	 * 
 	 */
 	public void editClicked() {
 		if (databases.getSelectedComponent() == personPane) {
@@ -299,60 +330,88 @@ public class HomeScreenGUI implements ActionListener {
 				JOptionPane.showMessageDialog(frame, "Click a row first!");
 			}
 		}
-
 	}
+
+	/**
+	 * Checks to see if any of the date fields are blank. Alerts user if some
+	 * left blank.
+	 * 
+	 * @return boolean true if all the fields have something in them.
+	 */
+	public boolean checkIfFilledDate() {
+		if (searchDay.getText().equals("") || searchMonth.getText().equals("") || searchYear.getText().equals("")
+				|| searchDay2.getText().equals("") || searchMonth2.getText().equals("")
+				|| searchYear2.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Please enter a full date for both dates");
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Checks to see if the date is in the right format and updates the table
+	 * with data from that data or date range.
+	 * 
+	 * @throws IOException
+	 */
 
 	public void dateQuery() throws IOException {
 		if (isDateRange) {
-			if (searchDay.getText().equals("") || searchMonth.getText().equals("") || searchYear.getText().equals("")
-					|| searchDay2.getText().equals("") || searchMonth2.getText().equals("")
-					|| searchYear2.getText().equals("")) {
-				JOptionPane.showMessageDialog(null, "Please enter a full date for both dates");
-			} else {
+			if (checkIfFilledDate()) {
 				Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
 						Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
 				Date targetDate2 = new Date(Integer.parseInt(searchYear2.getText()),
 						Integer.parseInt(searchMonth2.getText()), Integer.parseInt(searchDay2.getText()));
 				if (!targetDate.isValidDate() || !targetDate2.isValidDate()) {
 					JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
-				} else {
-					resetFilter.setEnabled(true);
-					ConnectionQuery connectionQuery = new DateQuery(targetDate, targetDate2);
-					filtered = mainStorage.connectionFilter(connectionQuery);
-					if (!filtered.getConnectionArrayList().isEmpty()) {
-						updateTable(filtered);
 					} else {
-						JOptionPane.showMessageDialog(null, "No results found");
+						resetFilter.setEnabled(true);
+						ConnectionQuery connectionQuery = new DateQuery(targetDate, targetDate2);
+						filtered = mainStorage.connectionFilter(connectionQuery);
+						if (!filtered.getConnectionArrayList().isEmpty()) {
+							updateTable(filtered);
+						} else {
+								JOptionPane.showMessageDialog(null, "No results found");
+						}
 					}
 				}
-			}
 		} else {
-			if (searchDay.getText().equals("") || searchMonth.getText().equals("") || searchYear.getText().equals("")) {
-				JOptionPane.showMessageDialog(null, "Please enter a full date");
+			if (searchDay.getText().equals("") || searchMonth.getText().equals("")
+						|| searchYear.getText().equals("")) {
+					JOptionPane.showMessageDialog(null, "Please enter a full date");
 			} else {
-				Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
-						Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
-				if (!targetDate.isValidDate()) {
-					JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
-				} else {
-					resetFilter.setEnabled(true);
-					ConnectionQuery connectionQuery = new DateQuery(targetDate, null);
-					filtered = mainStorage.connectionFilter(connectionQuery);
-					if (!filtered.getConnectionArrayList().isEmpty()) {
-						updateTable(filtered);
+					Date targetDate = new Date(Integer.parseInt(searchYear.getText()),
+							Integer.parseInt(searchMonth.getText()), Integer.parseInt(searchDay.getText()));
+					if (!targetDate.isValidDate()) {
+						JOptionPane.showMessageDialog(null, "Invalid date \n(i.e. m/d/yyyy)");
 					} else {
-						JOptionPane.showMessageDialog(null, "No results found");
+						resetFilter.setEnabled(true);
+						ConnectionQuery connectionQuery = new DateQuery(targetDate, null);
+						filtered = mainStorage.connectionFilter(connectionQuery);
+						if (!filtered.getConnectionArrayList().isEmpty()) {
+							updateTable(filtered);
+						} else {
+							JOptionPane.showMessageDialog(null, "No results found");
+						}
 					}
 				}
 			}
-
 		}
-	}
 
+	/**
+	 * When submit in search is clicked, checks to see if the user is in the
+	 * right tab for the data they are searching for and filters/displays the
+	 * data for the criteria
+	 * 
+	 * @throws IOException
+	 */
 	public void submitSearch() throws IOException {
 		int option = filterOptions.getSelectedIndex();
 		if (databases.getSelectedComponent() == personPane) {
-			if (option == 5 || option == 6 || option == 7) {
+			if (option == 5 || option == 6 || option == 7) { // date, location,
+																// type
+																// Interaction
 				JOptionPane.showMessageDialog(null,
 						"Invalid query option. \nPlease move to connections tab or pick a new query option.");
 			} else {
@@ -367,10 +426,9 @@ public class HomeScreenGUI implements ActionListener {
 					updateTable(filtered);
 				}
 			}
-
 		} else { // is connectionTableDisplay
 			export.setEnabled(true);
-			if (option == 5) {
+			if (option == 5) { // date
 				dateQuery();
 			} else {
 				if (newData.getText().equals("")) {
@@ -387,9 +445,7 @@ public class HomeScreenGUI implements ActionListener {
 					}
 				}
 			}
-
 		}
-
 	}
 
 	/**
@@ -415,7 +471,6 @@ public class HomeScreenGUI implements ActionListener {
 			} else if (source == edit) {
 				editClicked();
 			} else if (source == export) {
-				ExportGUI exportGui = new ExportGUI(this);
 				exportGUI.makeVisible();
 			} else if (source == filterOptions) {
 				changeSearchPanel();

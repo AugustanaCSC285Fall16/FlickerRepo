@@ -4,35 +4,55 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import com.opencsv.CSVWriter;
 
 public class GephiExport implements Exporter {
 
 	@Override
-	public void export(DataStorage storage, String pathName) {
 
+	/**
+	 * Overrides the export method from exporter. Exports the gephiEdges and
+	 * gephiNodes data
+	 * 
+	 * @param DataStorage
+	 *            storage get data from
+	 * @param String
+	 *            path name to store as
+	 */
+	public void export(DataStorage storage, String pathName) {
 		try {
 			exportToGephiEdges(storage, pathName);
 			exportToGephiNodes(storage, pathName);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Could not save data");
 		}
 
 	}
 
+	/**
+	 * Creates a new csv based on the path name and writes all the connections
+	 * to the csv for the nodes
+	 * 
+	 * @param storage
+	 *            to get data
+	 * @param pathName
+	 *            what to name file
+	 * @throws IOException
+	 */
 	public void exportToGephiNodes(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName+"-gephi-nodes.csv"), "UTF-8"));
 		writer.writeNext(new String[] { "Id", "Label" });
 		List<Person> personList = new ArrayList<>();
 		List<Person> gephiNodeList = new ArrayList<>();
-		for(Connection connection: list) {
+		for (Connection connection : list) {
 			personList = connection.getPeopleList();
 			for (Person person : personList) {
-				if(!gephiNodeList.contains(person)) {
+				if (!gephiNodeList.contains(person)) {
 					gephiNodeList.add(person);
-					System.out.println(person);
 					writer.writeNext(person.toGephiNodeArray());
 				}
 			}
@@ -40,6 +60,16 @@ public class GephiExport implements Exporter {
 		writer.close();
 	}
 
+	/**
+	 * Creates a new csv based on the path name and writes all the connections
+	 * to the csv for the edges
+	 * 
+	 * @param storage
+	 *            to get data
+	 * @param pathName
+	 *            what to name file
+	 * @throws IOException
+	 */
 	public void exportToGephiEdges(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName+"-gephi-edges.csv"), "UTF-8"));

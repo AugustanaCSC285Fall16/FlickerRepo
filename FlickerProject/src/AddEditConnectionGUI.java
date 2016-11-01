@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -8,19 +7,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-
 import javax.swing.*;
 
 public class AddEditConnectionGUI implements ActionListener {
 
-
-	private static final String[] FIELDS = new String[] { "", "Type of Interaction", "Location" };
 	private static final int WIDTH = 350;
 	private static final int HEIGHT = 300;
 
 	// data fields
 	private JFrame frame;
 	private JComboBox<Object> baseName;
+	private JComboBox<String> direction;
+	private JComboBox<String> targetName;
 	private JTextField month;
 	private JTextField day;
 	private JTextField year;
@@ -28,8 +26,6 @@ public class AddEditConnectionGUI implements ActionListener {
 	private JComboBox<Object> location;
 	private JTextArea socialNotes;
 	private JTextArea citation;
-	private JComboBox<String> direction;
-	private JComboBox<String> targetName;
 
 	private JLabel baseNameLabel;
 	private JLabel dateLabel;
@@ -54,22 +50,22 @@ public class AddEditConnectionGUI implements ActionListener {
 	private JScrollPane socialScroll;
 	private JScrollPane bibScroll;
 
-	JButton submitButton;
+	private JButton submitButton;
 	private JButton cancel;
 	private JButton moreNames;
 	private JButton reset;
 	private int additionalNames;
 	private ArrayList<JComboBox> targetNames;
-	HomeScreenGUI home;
 
+	private HomeScreenGUI home;
 	private boolean editing;
-	DataStorage storage;
+	private DataStorage dataStorage;
+	private VocabStorage vocabStorage;
 
-	// class that relates to controlled vocabulary
-	ArrayList<Person> baseNameChoices;
-	ArrayList<String> typeChoices;
-	ArrayList<String> locationChoices;
-	Vector<String> directionChoices;
+	private ArrayList<Person> baseNameChoices;
+	private ArrayList<String> typeChoices;
+	private ArrayList<String> locationChoices;
+	private Vector<String> directionChoices;
 
 	private Connection connectionEdited;
 
@@ -82,27 +78,31 @@ public class AddEditConnectionGUI implements ActionListener {
 	 *            - to be edited or null if we are adding a new connection
 	 */
 	public AddEditConnectionGUI(HomeScreenGUI home, Connection connection) {
-		storage = DataStorage.getMainDataStorage();
+		try {
+			dataStorage = DataStorage.getMainDataStorage();
+			vocabStorage = VocabStorage.getMainVocabStorage();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Unable to load data!");
+		}
 		this.connectionEdited = connection;
 		this.home = home;
 
 		additionalNames = 1;
 		targetNames = new ArrayList<>();
-		if(connection == null){
+		if (connection == null) {
 			editing = false;
 		} else {
 			editing = true;
 		}
 
-
-		baseNameChoices = storage.getPeopleArrayList();
+		baseNameChoices = dataStorage.getPeopleArrayList();
 		baseName = new JComboBox<>(baseNameChoices.toArray());
 		month = new JTextField(2);
 		day = new JTextField(2);
 		year = new JTextField(4);
-		typeChoices = storage.getInteractionTypes();
+		typeChoices = vocabStorage.getInteractionTypes();
 		type = new JComboBox<>(typeChoices.toArray());
-		locationChoices = storage.getLocationTypes();
+		locationChoices = vocabStorage.getLocationTypes();
 		location = new JComboBox<>(locationChoices.toArray());
 		directionChoices = new Vector<String>(Arrays.asList("One-to-One", "One-to-Many", "Many-to-Many"));
 		direction = new JComboBox<>(new String[] { "One-to-One", "One-to-Many", "Many-to-Many" });
@@ -110,6 +110,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		socialNotes.setLineWrap(true);
 		citation = new JTextArea(2, 10);
 		citation.setLineWrap(true);
+
 		submitButton = new JButton("Submit");
 		cancel = new JButton("Cancel");
 		moreNames = new JButton("+");
@@ -148,10 +149,10 @@ public class AddEditConnectionGUI implements ActionListener {
 		socialPanel.add(socialScroll);
 		bibPanel.add(bibScroll);
 
-		frame = new JFrame("Search");
+		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(WIDTH, HEIGHT);
-		frame.setTitle("Frame");
+		frame.setTitle("Connection");
 		frame.setLayout(new BorderLayout());
 		frame.add(createCenterPanel(additionalNames), BorderLayout.CENTER);
 		frame.add(createWestPanel(additionalNames), BorderLayout.WEST);
@@ -213,6 +214,20 @@ public class AddEditConnectionGUI implements ActionListener {
 	}
 
 	/**
+	 * creates a panel with the label and adds it to the passed in panel
+	 * 
+	 * @param panel
+	 *            - panel to add the new panel with label to
+	 * @param label
+	 *            - new label to add to new panel.
+	 */
+	private void createPanelsInsideWest(JPanel panel, JLabel label) {
+		JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		labelPanel.add(label);
+		panel.add(labelPanel);
+	}
+
+	/**
 	 * This method is used to create the west panel. It adds the appropriate
 	 * labels to the panel.
 	 * 
@@ -222,9 +237,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 */
 	private JPanel createWestPanel(int numNames) {
 		westPanel = new JPanel(new GridLayout(6 + numNames, 1));
-		JPanel baseNamePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		baseNamePanel.add(baseNameLabel);
-		westPanel.add(baseNamePanel);
+		createPanelsInsideWest(westPanel, baseNameLabel);
 		if (numNames > 0) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEADING));
 			JPanel toFromPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
@@ -236,21 +249,11 @@ public class AddEditConnectionGUI implements ActionListener {
 			JPanel tempPanel = new JPanel();
 			westPanel.add(tempPanel);
 		}
-		JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		datePanel.add(dateLabel);
-		westPanel.add(datePanel);
-		JPanel typePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		typePanel.add(typeLabel);
-		westPanel.add(typePanel);
-		JPanel locationPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		locationPanel.add(locationLabel);
-		westPanel.add(locationPanel);
-		JPanel socialPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		socialPanel.add(socialLabel);
-		westPanel.add(socialPanel);
-		JPanel bibPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		bibPanel.add(bibLabel);
-		westPanel.add(bibPanel);
+		createPanelsInsideWest(westPanel, dateLabel);
+		createPanelsInsideWest(westPanel, typeLabel);
+		createPanelsInsideWest(westPanel, locationLabel);
+		createPanelsInsideWest(westPanel, socialLabel);
+		createPanelsInsideWest(westPanel, bibLabel);
 		return westPanel;
 	}
 
@@ -268,9 +271,9 @@ public class AddEditConnectionGUI implements ActionListener {
 	}
 
 	/**
-	 * Makes the frame visible.
+	 * Makes the frame visible. Used in home screen GUI
 	 */
-	void makeVisible() {
+	public void makeVisible() {
 		frame.setVisible(true);
 	}
 
@@ -279,7 +282,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	 * the refreshPanel() method.
 	 */
 	void setDefault() {
-		if(editing){
+		if (editing) {
 			additionalNames = connectionEdited.getPeopleList().size() - 1;
 			targetNames.clear();
 			refreshPanel();
@@ -340,9 +343,8 @@ public class AddEditConnectionGUI implements ActionListener {
 		frame.add(createSouthPanel(), BorderLayout.SOUTH);
 
 		frame.setSize(WIDTH, HEIGHT + 40 * (additionalNames));
-		makeVisible();
+		frame.setVisible(true);
 	}
-
 
 	/**
 	 * Will set the edited connection's data to whatever was put into the GUI if
@@ -355,10 +357,10 @@ public class AddEditConnectionGUI implements ActionListener {
 
 	private void submitClicked() throws IOException {
 		ArrayList<Person> personListForConn = new ArrayList<>();
-		personListForConn.add(storage.getPersonListForConnection(baseName.getSelectedItem().toString()));
+		personListForConn.add(dataStorage.getPersonListForConnection(baseName.getSelectedItem().toString()));
 
 		for (int i = 0; i < targetNames.size(); i++) {
-			personListForConn.add(storage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
+			personListForConn.add(dataStorage.getPersonListForConnection(targetNames.get(i).getSelectedItem().toString()));
 		}
 
 		if (connectionEdited != null) {
@@ -372,19 +374,19 @@ public class AddEditConnectionGUI implements ActionListener {
 			connectionEdited.setDay(day.getText());
 			connectionEdited.setYear(year.getText());
 			connectionEdited.setDate();
-			storage.saveConnections();
+			dataStorage.saveConnections();
 			frame.dispose();
 			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 		} else {
-			int nextID = storage.incrementAndGetNextConnectionIdNum();
+			int nextID = dataStorage.incrementAndGetNextConnectionIdNum();
 			Connection newConnection = new Connection(nextID, day.getText(), month.getText(), year.getText(),
 					type.getSelectedItem().toString(), location.getSelectedItem().toString(), citation.getText(),
 					socialNotes.getText(), personListForConn, direction.getSelectedItem().toString());
 			if (!newConnection.getDate().isValidDate()) {
 				JOptionPane.showMessageDialog(null, "Invalid Date");
 			} else {
-				storage.addConnection(newConnection);
-				storage.saveConnections();
+				dataStorage.addConnection(newConnection);
+				dataStorage.saveConnections();
 				frame.dispose();
 				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
 			}
@@ -405,10 +407,10 @@ public class AddEditConnectionGUI implements ActionListener {
 					JOptionPane.showMessageDialog(null, "Please enter a full date. \nOr for an unknown date enter 0/0/0000");
 				} else {
 					submitClicked();
-					if (storage.isFiltered()) {
+					if (dataStorage.isFiltered()) {
 						home.updateTable(home.getStorage());
 					} else {
-						home.updateTable(storage);
+						home.updateTable(dataStorage);
 					}
 				}
 			} catch (IOException e) {
@@ -420,7 +422,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		} else if (event.getSource() == moreNames) {
 			additionalNames++;
 			refreshPanel();
-		} else if (event.getSource() == reset){
+		} else if (event.getSource() == reset) {
 			setDefault();
 		}
 	}

@@ -1,17 +1,41 @@
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import com.opencsv.CSVWriter;
 
 public class PalladioExport implements Exporter {
 
 	@Override
+	/**
+	 * Overrides the export method from Exporter. Creates a new csv based on
+	 * path name and writes the data to the file.
+	 */
 	public void export(DataStorage storage, String pathName) {
+		try {
+			exportPalladio(storage, pathName);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not save data!");
+		}
+	}
+
+	/**
+	 * Creates a new csv based on the path name and writes all the connections
+	 * to the csv for palladio
+	 * 
+	 * @param storage
+	 * @param pathName
+	 * @throws IOException
+	 */
+	public void exportPalladio(DataStorage storage, String pathName) throws IOException {
 		Collection<Connection> list = storage.getConnectionList();
 		CSVWriter writer;
-		try {
 			writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(pathName + "-palladio.csv"), "UTF-8"));
 			writer.writeNext(new String[] { "Source", "Target" });
 			for (Connection connection : list) {
@@ -32,11 +56,6 @@ public class PalladioExport implements Exporter {
 				}
 			}
 			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-
-	}
-
 }
+		
