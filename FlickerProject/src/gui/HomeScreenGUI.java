@@ -54,7 +54,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JButton resetFilter;
 	private JButton export;
 	private JButton submit;
-
 	private JButton dateRange;
 
 	private JPanel searchPanel;
@@ -68,7 +67,6 @@ public class HomeScreenGUI implements ActionListener {
 	private JTextField searchDay;
 	private JTextField searchMonth;
 	private JTextField searchYear;
-
 	private JTextField searchDay2;
 	private JTextField searchMonth2;
 	private JTextField searchYear2;
@@ -97,13 +95,12 @@ public class HomeScreenGUI implements ActionListener {
 		add.setBackground(new Color(255, 153, 153));
 		edit = new JButton("Edit");
 		edit.setBackground(new Color(255, 204, 153));
-		databases = new JTabbedPane();
-		databases.setBackground(Color.LIGHT_GRAY);
 		export = new JButton("Export");
 		export.setBackground(new Color(204, 255, 204));
 		dateRange = new JButton("Date Range");
-
 		databases = new JTabbedPane();
+		databases.setBackground(Color.LIGHT_GRAY);
+		
 		exportGUI = new ExportGUI(this);
 
 		frame = new JFrame();
