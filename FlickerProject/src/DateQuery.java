@@ -13,13 +13,13 @@ public class DateQuery implements ConnectionQuery {
 	@Override
 	public boolean accepts(Connection connection) {
 		Date date = connection.getDate();
-		if(targetDate2 == null) {
+		if (targetDate2 == null) {
 			return date.equals(targetDate);
 		} else {
-			
+
 			return date.after(targetDate) && date.before(targetDate2);
 		}
-		
+
 	}
 
 }

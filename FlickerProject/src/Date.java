@@ -28,6 +28,11 @@ public class Date {
 		this.day = day;
 	}
 
+	/**
+	 * Checks to see if the date is valid
+	 * 
+	 * @return boolean true if valid date
+	 */
 	public boolean isValidDate() {
 		boolean leapYear = isLeapYear(year);
 		if (day < 1) {
@@ -50,31 +55,57 @@ public class Date {
 		return true;
 	}
 
-	// accessor methods
-	// returns year
+	/**
+	 * Retrieves and returns the data for year
+	 * 
+	 * @return integer for the year
+	 */
 	public int getYear() {
 		return year;
 	}
 
-	// returns month
+	/**
+	 * Retrieves and returns the data for month
+	 * 
+	 * @return integer for the month
+	 */
 	public int getMonth() {
 		return month;
 	}
 
-	// return day
+	/**
+	 * Retrieves and returns the data for day
+	 * 
+	 * @return integer for the day
+	 */
 	public int getDay() {
 		return day;
 	}
 
+	/**
+	 * Sets the year, month, and day to the parameters
+	 * 
+	 * @param integer
+	 *            year
+	 * @param integer
+	 *            month
+	 * @param integer
+	 *            day
+	 */
 	public void setDate(int year, int month, int day) {
 		this.year = year;
 		this.month = month;
 		this.day = day;
 	}
 
-	// other instance methods
-	// returns true if the implicit parameter has the same data fields as the
-	// formal parameter, false otherwise
+	/**
+	 * Checks to see if the dates are equal
+	 * 
+	 * @param Object
+	 *            date
+	 * @return true if the implicit parameter has the same data fields as the
+	 *         formal parameter
+	 */
 	public boolean equals(Object date) {
 		if (date instanceof Date) {
 			Date other = (Date) date;
@@ -84,16 +115,22 @@ public class Date {
 		}
 	}
 
-	// returns true if the implicit parameter comes before the formal parameter
-	// on a calendar, false otherwise
-	public boolean before(Date other) {
-		if (year < other.year) {
+	/**
+	 * Checks to see if the date is before the formal parameter
+	 * 
+	 * @param Date
+	 *            date
+	 * @return returns true if the implicit parameter comes before the formal
+	 *         parameter on a calendar
+	 */
+	public boolean before(Date date) {
+		if (year < date.year) {
 			return true;
-		} else if (year == other.year) {
-			if (month < other.month) {
+		} else if (year == date.year) {
+			if (month < date.month) {
 				return true;
-			} else if (month == other.month) {
-				if (day < other.day) {
+			} else if (month == date.month) {
+				if (day < date.day) {
 					return true;
 				} else {
 					return false;
@@ -106,16 +143,22 @@ public class Date {
 		}
 	}
 
-	// returns true if the implicit parameter comes after the formal parameter
-	// on a calendar, false otherwise
-	public boolean after(Date other) {
-		if (year > other.year) {
+	/**
+	 * Checks to see if the date if after the formal parameter
+	 * 
+	 * @param Date
+	 *            date
+	 * @return true if the implicit parameter comes after the formal parameter
+	 *         on a calendar
+	 */
+	public boolean after(Date date) {
+		if (year > date.year) {
 			return true;
-		} else if (year == other.year) {
-			if (month > other.month) {
+		} else if (year == date.year) {
+			if (month > date.month) {
 				return true;
-			} else if (month == other.month) {
-				if (day > other.day) {
+			} else if (month == date.month) {
+				if (day > date.day) {
 					return true;
 				} else {
 					return false;
@@ -128,13 +171,22 @@ public class Date {
 		}
 	}
 
-	// returns string representation of date
+	/**
+	 * Makes the day, month, year into a formated String
+	 * 
+	 * @return String representation of the date
+	 */
 	public String toString() {
 		String returnValue = month + "/" + day + "/" + year;
 		return returnValue;
 	}
 
-	// returns true if leap year based on criteria, false otherwise
+	/**
+	 * Checks to see if the passed in year is a leap year
+	 * 
+	 * @param year
+	 * @return true if leap year based on criteria
+	 */
 	private boolean isLeapYear(int year) {
 		if (year % 400 == 0) {
 			return true;

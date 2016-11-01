@@ -9,7 +9,6 @@ import java.util.Arrays;
 import javax.swing.*;
 
 public class NewUserGUI implements ActionListener {
-
 	private DataStorage storage;
 	private JFrame frame;
 	private JTextField fullName;
@@ -21,9 +20,17 @@ public class NewUserGUI implements ActionListener {
 	private JButton cancel;
 	private boolean adminApproved;
 
-	public NewUserGUI() throws IOException {
+	/**
+	 * Creates a new user GUI
+	 */
+	public NewUserGUI() {
 		adminApproved = LoginGUI.getAdminApproved();
-		storage = DataStorage.getMainDataStorage();
+		try {
+			storage = DataStorage.getMainDataStorage();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not load data!");
+		}
+
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(300, 200);
@@ -71,8 +78,13 @@ public class NewUserGUI implements ActionListener {
 
 	}
 
-	public boolean userExists(User newUser) throws IOException {
-		DataStorage storage = DataStorage.getMainDataStorage();
+	/**
+	 * Checks to see if the user exists in the data already.
+	 * 
+	 * @param newUser
+	 * @return boolean true if the user already exists.
+	 */
+	public boolean userExists(User newUser) {
 		for (User user : storage.getUserArrayList()) {
 			if (user.getUsername().equals(newUser.getUsername()) || user.getFullName().equals(newUser.getFullName())) {
 				return true;
@@ -81,20 +93,33 @@ public class NewUserGUI implements ActionListener {
 		return false;
 	}
 
-	public void addAndSaveUser() throws IOException {
-		int nextID = storage.incrementAndGetNextUserIdNum();
-		User newUser = new User(nextID, fullName.getText(), userName.getText(), password.getText(),
-				permissions.getSelectedItem().toString());
-		if (userExists(newUser)) {
-			JOptionPane.showMessageDialog(frame, "User already exists in database!");
-		} else {
-			storage.addUser(newUser);
-			JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-			storage.saveUsers();
-			frame.dispose();
+	/**
+	 * Makes, adds, and saves the new user.
+	 * 
+	 * @throws IOException
+	 */
+	public void addAndSaveUser() {
+		try {
+			int nextID = storage.incrementAndGetNextUserIdNum();
+			User newUser = new User(nextID, fullName.getText(), userName.getText(), password.getText(),
+					permissions.getSelectedItem().toString());
+			if (userExists(newUser)) {
+				JOptionPane.showMessageDialog(frame, "User already exists in database!");
+			} else {
+				storage.addUser(newUser);
+				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
+				storage.saveUsers();
+				frame.dispose();
+			}
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not add user");
 		}
 	}
 
+	@Override
+	/**
+	 * Overrides the actionPerformed method from the ActionListener class.
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == create) {
 			if (fullName.getText().equals("") || userName.getText().equals("") || password.getPassword().equals(null)
@@ -109,11 +134,7 @@ public class NewUserGUI implements ActionListener {
 						LoginGUI adminLogin = new LoginGUI(true);
 					} else {
 						frame.dispose();
-						try {
-							addAndSaveUser();
-						} catch (IOException e) {
-							JOptionPane.showMessageDialog(null, "Could not add user");
-						}
+						addAndSaveUser();
 						LoginGUI login = new LoginGUI(false);
 					}
 				}
