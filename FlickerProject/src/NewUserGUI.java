@@ -9,7 +9,8 @@ import java.util.Arrays;
 import javax.swing.*;
 
 public class NewUserGUI implements ActionListener {
-	private DataStorage storage;
+	private UserStorage userStorage;
+	private DataStorage dataStorage;
 	private JFrame frame;
 	private JTextField fullName;
 	private JTextField userName;
@@ -26,7 +27,8 @@ public class NewUserGUI implements ActionListener {
 	public NewUserGUI() {
 		adminApproved = LoginGUI.getAdminApproved();
 		try {
-			storage = DataStorage.getMainDataStorage();
+			userStorage = UserStorage.getMainUserStorage();
+			dataStorage = DataStorage.getMainDataStorage();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Could not load data!");
 		}
@@ -85,7 +87,7 @@ public class NewUserGUI implements ActionListener {
 	 * @return boolean true if the user already exists.
 	 */
 	public boolean userExists(User newUser) {
-		for (User user : storage.getUserArrayList()) {
+		for (User user : userStorage.getUserArrayList()) {
 			if (user.getUsername().equals(newUser.getUsername()) || user.getFullName().equals(newUser.getFullName())) {
 				return true;
 			}
@@ -100,15 +102,15 @@ public class NewUserGUI implements ActionListener {
 	 */
 	public void addAndSaveUser() {
 		try {
-			int nextID = storage.incrementAndGetNextUserIdNum();
+			int nextID = dataStorage.incrementAndGetNextUserIdNum();
 			User newUser = new User(nextID, fullName.getText(), userName.getText(), password.getText(),
 					permissions.getSelectedItem().toString());
 			if (userExists(newUser)) {
 				JOptionPane.showMessageDialog(frame, "User already exists in database!");
 			} else {
-				storage.addUser(newUser);
+				userStorage.addUser(newUser);
 				JOptionPane.showMessageDialog(frame, "Successfully Saved!");
-				storage.saveUsers();
+				userStorage.saveUsers();
 				frame.dispose();
 			}
 		} catch (IOException e) {
