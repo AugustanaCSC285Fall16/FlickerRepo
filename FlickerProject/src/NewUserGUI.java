@@ -25,11 +25,7 @@ public class NewUserGUI implements ActionListener {
 	 */
 	public NewUserGUI() {
 		adminApproved = LoginGUI.getAdminApproved();
-		try {
-			storage = DataStorage.getMainDataStorage();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Could not load data!");
-		}
+		storage = DataStorage.getMainDataStorage();
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
