@@ -18,6 +18,10 @@ public class DataStorage {
 	private static final String PERSON_FILE_NAME = "PersonData.csv";
 	private static final String CONNECTION_FILE_NAME = "ConnectionData.csv";
 	private static final String NEXT_ID_FILE_NAME = "NodeAndEdgeNumber.csv";
+	private static final String TEST_PERSON_FILE_NAME = "TestPersonData.csv";
+	private static final String TEST_CONNECTION_FILE_NAME = "TestConnectionData.csv";
+	
+	private static DataStorage testDataStorage = null;
 
 	private boolean isFiltered = false;
 	private static DataStorage primaryDataStorage = null;
@@ -31,12 +35,31 @@ public class DataStorage {
 	 */
 	public static DataStorage getMainDataStorage() throws IOException {
 		if (primaryDataStorage == null) {
-			primaryDataStorage = new DataStorage();
-			primaryDataStorage.loadPeople();
-			primaryDataStorage.loadConnections();
-			primaryDataStorage.loadIdConnUserNum();
+			try {
+				primaryDataStorage = new DataStorage();
+				primaryDataStorage.loadPeople(PERSON_FILE_NAME);
+				primaryDataStorage.loadConnections(CONNECTION_FILE_NAME);
+				primaryDataStorage.loadIdConnUserNum();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return primaryDataStorage;
+	}
+	
+	public static DataStorage getTestDataStorage() {
+		if(testDataStorage == null) {
+			try {
+				testDataStorage = new DataStorage();
+				testDataStorage.loadPeople(TEST_PERSON_FILE_NAME);
+				testDataStorage.loadConnections(TEST_CONNECTION_FILE_NAME);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return testDataStorage;
 	}
 
 	/**
@@ -50,7 +73,7 @@ public class DataStorage {
 		connectionsMap = new TreeMap<>();
 	}
 
-	
+
 	/**
 	 * Checks to see if the Person is in the data
 	 * 
@@ -60,7 +83,7 @@ public class DataStorage {
 	 */
 	public DataStorage personFilter(PersonQuery query) throws IOException {
 		DataStorage filteredData = new DataStorage();
-		for (Person person : primaryDataStorage.getPeopleList()) {
+		for (Person person : getPeopleList()) {
 			if (query.accepts(person)) {
 				filteredData.addPerson(person);
 			}
@@ -77,7 +100,7 @@ public class DataStorage {
 	 */
 	public DataStorage connectionFilter(ConnectionQuery query) throws IOException {
 		DataStorage filteredData = new DataStorage();
-		for (Connection connection : primaryDataStorage.getConnectionList()) {
+		for (Connection connection : getConnectionList()) {
 			if (query.accepts(connection)) {
 				for (Person person : connection.getPeopleList()) {
 					filteredData.addPerson(person);
@@ -154,9 +177,9 @@ public class DataStorage {
 	 * Loads all of the people from a csv and stores them in the personMap
 	 * @throws IOException
 	 */
-	void loadPeople() throws IOException {
+	void loadPeople(String fileName) throws IOException {
 		CSVReader reader = new CSVReader(
-				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + PERSON_FILE_NAME)), "UTF-8"));
+				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + fileName)), "UTF-8"));
 
 		List<String[]> myRows = reader.readAll();
 		personHeaderRow = myRows.remove(0); // remove header row
@@ -184,9 +207,9 @@ public class DataStorage {
 	 * Loads the connections from the csv and stores them in ConnectionMap
 	 * @throws IOException
 	 */
-	void loadConnections() throws IOException {
+	void loadConnections(String fileName) throws IOException {
 		CSVReader reader = new CSVReader(
-				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + CONNECTION_FILE_NAME)), "UTF-8"));
+				new InputStreamReader(new FileInputStream((DATA_FOLDER + "/" + fileName)), "UTF-8"));
 		List<String[]> myRows = reader.readAll();
 		connectionHeaderRow = myRows.remove(0);
 		for (String[] row : myRows) {
