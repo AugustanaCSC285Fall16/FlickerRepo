@@ -1,7 +1,12 @@
+package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import dataModel.Exporter;
+import dataModel.GephiExport;
+import dataModel.PalladioExport;
 
 public class ExportGUI implements ActionListener {
 

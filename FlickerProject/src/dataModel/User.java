@@ -1,3 +1,4 @@
+package dataModel;
 
 public class User {
 	private int id;

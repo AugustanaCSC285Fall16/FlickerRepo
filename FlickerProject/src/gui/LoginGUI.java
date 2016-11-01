@@ -1,8 +1,14 @@
+package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 
 import javax.swing.*;
+
+import dataModel.ContainsQuery;
+import dataModel.User;
+import dataModel.UserQuery;
+import dataModel.UserStorage;
 
 public class LoginGUI implements ActionListener {
 	private JFrame frame;
@@ -145,7 +151,7 @@ public class LoginGUI implements ActionListener {
 			if (event.getSource() == add) {
 				NewUserGUI newUserGUI = new NewUserGUI();
 			} else if (event.getSource() == about) {
-				AboutScreen aboutScreen = new AboutScreen();
+				AboutScreenGUI aboutScreenGUI = new AboutScreenGUI();
 			} else {
 				isCorrectUsernamePassword();
 			}

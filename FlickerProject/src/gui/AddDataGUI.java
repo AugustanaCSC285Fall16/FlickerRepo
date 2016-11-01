@@ -1,9 +1,12 @@
+package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
 
-public class AddData implements ActionListener {
+import dataModel.VocabStorage;
+
+public class AddDataGUI implements ActionListener {
 
 	JFrame frame;
 	JPanel panel;
@@ -21,7 +24,7 @@ public class AddData implements ActionListener {
 	 * program
 	 * 
 	 */
-	public AddData() {
+	public AddDataGUI() {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(600, 100);

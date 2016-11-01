@@ -1,3 +1,4 @@
+package gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -8,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.*;
+
+import dataModel.DataStorage;
+import dataModel.Person;
+import dataModel.VocabStorage;
 
 public class AddEditPersonGUI implements ActionListener {
 

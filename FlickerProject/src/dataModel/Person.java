@@ -1,3 +1,4 @@
+package dataModel;
 import java.io.IOException;
 
 public class Person implements TableRowViewable {

@@ -1,3 +1,4 @@
+package gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -7,6 +8,10 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import javax.swing.*;
+
+import dataModel.DataStorage;
+import dataModel.User;
+import dataModel.UserStorage;
 
 public class NewUserGUI implements ActionListener {
 	private UserStorage userStorage;

@@ -1,3 +1,4 @@
+package gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -8,6 +9,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.*;
+
+import dataModel.Connection;
+import dataModel.DataStorage;
+import dataModel.Person;
+import dataModel.VocabStorage;
 
 public class AddEditConnectionGUI implements ActionListener {
 

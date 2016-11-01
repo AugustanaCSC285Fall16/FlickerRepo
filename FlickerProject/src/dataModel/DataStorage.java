@@ -1,3 +1,4 @@
+package dataModel;
 import java.io.*;
 import java.util.*;
 import com.opencsv.CSVReader;

@@ -1,3 +1,4 @@
+package dataModel;
 
 public class DateQuery implements ConnectionQuery {
 

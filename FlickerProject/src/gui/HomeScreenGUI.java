@@ -1,3 +1,4 @@
+package gui;
 
 /*
  * Creates the home screen for the program. From here,
@@ -12,6 +13,14 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
+
+import dataModel.ConnectionQuery;
+import dataModel.ContainsQuery;
+import dataModel.DataStorage;
+import dataModel.Date;
+import dataModel.DateQuery;
+import dataModel.PersonQuery;
+import dataModel.TableRowViewable;
 
 public class HomeScreenGUI implements ActionListener {
 	private DataStorage mainStorage = DataStorage.getMainDataStorage();
@@ -297,7 +306,7 @@ public class HomeScreenGUI implements ActionListener {
 			AddEditConnectionGUI connectionGUI = new AddEditConnectionGUI(this, null);
 			connectionGUI.makeVisible();
 		} else if (val == 2) { // if controlled vocabulary
-			AddData vocabGUI = new AddData();
+			AddDataGUI vocabGUI = new AddDataGUI();
 		}
 	}
 

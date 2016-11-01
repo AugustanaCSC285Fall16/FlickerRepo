@@ -1,8 +1,9 @@
+package gui;
 import java.awt.FlowLayout;
 import java.io.IOException;
 import javax.swing.*;
 
-public class AboutScreen {
+public class AboutScreenGUI {
 	private JFrame frame;
 	private JLabel title;
 	private JLabel version;
@@ -15,7 +16,7 @@ public class AboutScreen {
 	 * 
 	 * @throws IOException
 	 */
-	public AboutScreen() throws IOException {
+	public AboutScreenGUI() throws IOException {
 		title = new JLabel("World Connections");
 		version = new JLabel("Version 1.0. November 2, 2016. Augustana College.");
 		body = new JLabel("Created by: Lauren Johnson, Andrew Bainter, Megan Janssen, and Tony Learmann");

@@ -1,3 +1,4 @@
+package dataModel;
 import java.util.*;
 
 public class Connection implements TableRowViewable {

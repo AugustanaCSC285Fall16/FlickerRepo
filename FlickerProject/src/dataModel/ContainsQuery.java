@@ -1,3 +1,4 @@
+package dataModel;
 
 public class ContainsQuery implements PersonQuery, ConnectionQuery, UserQuery {
 	private String target;
