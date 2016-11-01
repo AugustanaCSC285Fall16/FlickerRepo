@@ -460,6 +460,7 @@ public class HomeScreenGUI implements ActionListener {
 							filterOptions.getSelectedItem().toString());
 					filtered = mainStorage.connectionFilter(connectionQuery);
 					if (!filtered.getConnectionArrayList().isEmpty()) {
+						System.out.println(filtered.getConnectionArrayList().toString());
 						updateTable(filtered);
 					} else {
 						JOptionPane.showMessageDialog(null, "No results found");

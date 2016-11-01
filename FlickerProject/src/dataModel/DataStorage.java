@@ -18,8 +18,8 @@ public class DataStorage {
 	public Map<Integer, Person> personMap;
 	private Map<Integer, Connection> connectionsMap;
 
-	private String[] personHeaderRow;
-	private String[] connectionHeaderRow;
+	private String[] personHeaderRow = {"Id","Name","Node Name","Occupation","Gender","Cultural ID","Biographical Notes"};
+	private String[] connectionHeaderRow = {"Edge","Connecting Name List","Date","Type of Interaction","Location","Citation","Social Notes","Direction"};
 
 	private int nextIdNum;
 	private int nextConnNum;
