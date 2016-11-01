@@ -1,10 +1,5 @@
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Collection;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import javax.swing.JOptionPane;
 

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class DataStorageQueryTest {
 	
-	private static TestDataStorage storage = TestDataStorage.getTestDataStorage();
+	private static DataStorage storage = DataStorage.getTestDataStorage();
 
 	public static void main(String[] args) {
 		testNameQuery();
@@ -18,7 +18,7 @@ public class DataStorageQueryTest {
 		PersonQuery nameQuery = new ContainsQuery("Lauren", "Name");
 		PersonQuery nameQuery2 = new ContainsQuery("megan", "Name");
 		PersonQuery nameQuery3 = new ContainsQuery("ToNy", "Name");
-		TestDataStorage filtered;
+		DataStorage filtered;
 		try {
 			filtered = storage.personFilter(nameQuery2);
 			System.out.println(filtered.getPeopleArrayList().toString());
@@ -33,7 +33,7 @@ public class DataStorageQueryTest {
 		PersonQuery nodeNameQuery = new ContainsQuery("LJ", "Node Name");
 		PersonQuery nodeNameQuery2 = new ContainsQuery("mj", "Node Name");
 		PersonQuery nodeNameQuery3 = new ContainsQuery("Tl", "Node Name");
-		TestDataStorage filtered;
+		DataStorage filtered;
 		try {
 			filtered = storage.personFilter(nodeNameQuery2);
 			System.out.println(filtered.getPeopleArrayList().toString());
@@ -48,7 +48,7 @@ public class DataStorageQueryTest {
 	public static void testGenderQuery() {
 		PersonQuery genderQuery = new ContainsQuery("female", "Gender");
 		PersonQuery genderQuery2 = new ContainsQuery("MALE", "Gender");
-		TestDataStorage filtered;
+		DataStorage filtered;
 		try {
 			filtered = storage.personFilter(genderQuery2);
 			System.out.println(filtered.getPeopleArrayList().toString());
