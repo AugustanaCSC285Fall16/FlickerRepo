@@ -52,6 +52,7 @@ public class AddEditConnectionGUI implements ActionListener {
 	private JLabel locationLabel;
 	private JLabel socialLabel;
 	private JLabel bibLabel;
+	private JLabel dateFormatLabel;
 
 	private JPanel centerPanel;
 	private JPanel westPanel;
@@ -132,6 +133,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		datePanel.add(month);
 		datePanel.add(day);
 		datePanel.add(year);
+		datePanel.add(dateFormatLabel);
 		typePanel.add(type);
 		locationPanel.add(location);
 		socialPanel.add(socialScroll);
@@ -201,6 +203,7 @@ public class AddEditConnectionGUI implements ActionListener {
 		locationLabel = new JLabel("Location:");
 		socialLabel = new JLabel("Social Notes:");
 		bibLabel = new JLabel("Bibliography Citation:");
+		dateFormatLabel = new JLabel("(M/D/YYYY)");
 
 		socialScroll = new JScrollPane(socialNotes);
 		bibScroll = new JScrollPane(citation);

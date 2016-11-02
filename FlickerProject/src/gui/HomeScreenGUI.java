@@ -62,6 +62,7 @@ public class HomeScreenGUI implements ActionListener {
 
 	private JLabel filterOptionsLabel;
 	private JLabel newDataLabel;
+	private JLabel dateFormatLabel;
 
 	private JTextField newData;
 	private JTextField searchDay;
@@ -228,11 +229,13 @@ public class HomeScreenGUI implements ActionListener {
 		filterOptionsLabel = new JLabel("Filter option: ");
 		filterOptions = new JComboBox<>(FIELDS);
 		newDataLabel = new JLabel("Criteria: ");
+		dateFormatLabel = new JLabel("(M/D/YYYY)");
 		newData = new JTextField(15);
 		criteriaPanel.add(filterOptionsLabel);
 		criteriaPanel.add(filterOptions);
 		criteriaPanel.add(newDataLabel);
 		criteriaPanel.add(newData);
+		criteriaPanel.add(dateFormatLabel);
 		return criteriaPanel;
 	}
 
@@ -253,6 +256,7 @@ public class HomeScreenGUI implements ActionListener {
 			criteriaPanel.add(searchMonth);
 			criteriaPanel.add(searchDay);
 			criteriaPanel.add(searchYear);
+			criteriaPanel.add(dateFormatLabel);
 			criteriaPanel.add(dateRange);
 			frame.revalidate();
 		} else {
@@ -267,6 +271,7 @@ public class HomeScreenGUI implements ActionListener {
 	 * Adds the new fields for the date range
 	 */
 	public void addDateRangeData() {
+		criteriaPanel.remove(dateFormatLabel);
 		criteriaPanel.remove(dateRange);
 		searchDay2 = new JTextField(2);
 		searchMonth2 = new JTextField(2);
@@ -276,6 +281,7 @@ public class HomeScreenGUI implements ActionListener {
 		criteriaPanel.add(searchMonth2);
 		criteriaPanel.add(searchDay2);
 		criteriaPanel.add(searchYear2);
+		criteriaPanel.add(dateFormatLabel);
 		frame.revalidate();
 	}
 
