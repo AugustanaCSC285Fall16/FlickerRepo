@@ -235,7 +235,6 @@ public class HomeScreenGUI implements ActionListener {
 		criteriaPanel.add(filterOptions);
 		criteriaPanel.add(newDataLabel);
 		criteriaPanel.add(newData);
-		criteriaPanel.add(dateFormatLabel);
 		return criteriaPanel;
 	}
 
